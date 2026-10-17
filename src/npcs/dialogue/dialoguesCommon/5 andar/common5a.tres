@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="NPCDialogue" format=3 uid="uid://g184fibsps7x"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_pwlk3"]
+
+[resource]
+script = ExtResource("1_pwlk3")
+texto = "Preciso ir ao setor de Pesquisa Avançada. Minha entrada já foi notificada à supervisão."
+andar_desejado = 5
+metadata/_custom_type_script = "uid://30jqbkcb4q5"

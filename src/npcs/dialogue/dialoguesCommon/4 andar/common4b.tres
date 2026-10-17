@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="NPCDialogue" format=3 uid="uid://cruf2n81kiwg0"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_g4ec3"]
+
+[resource]
+script = ExtResource("1_g4ec3")
+texto = "Aperta o quarto andar! Alguém da equipe postou um meme de 2012 na conta oficial da empresa e os comentários estão um campo de guerra."
+andar_desejado = 4
+metadata/_custom_type_script = "uid://30jqbkcb4q5"

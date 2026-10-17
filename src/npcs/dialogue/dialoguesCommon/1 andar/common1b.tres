@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="NPCDialogue" format=3 uid="uid://un6ed3n6rug6"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_q5sel"]
+
+[resource]
+script = ExtResource("1_q5sel")
+texto = "Primeiro andar, por gentileza! Combinei de almoçar com uma colega."
+metadata/_custom_type_script = "uid://30jqbkcb4q5"

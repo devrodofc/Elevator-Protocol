@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DayScheduleConfig" format=3 uid="uid://crs2g0lcexipn"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_7wgci"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_ha2se"]
+[ext_resource type="Resource" uid="uid://c6u578611k2mr" path="res://src/npcs/resources/birdTest.tres" id="2_00xs8"]
+[ext_resource type="Script" uid="uid://dw560omsfs2go" path="res://src/levels/day_schedule.gd" id="2_1agin"]
+[ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/common_npc_male1.tres" id="4_3djo4"]
+
+[sub_resource type="Resource" id="Resource_6es8l"]
+script = ExtResource("1_7wgci")
+texto = "Opa, entrega para o andar... 3... beleza? Me joga lá!"
+andar_desejado = 3
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[resource]
+script = ExtResource("2_1agin")
+pool_primeira_fase = Array[ExtResource("1_ha2se")]([ExtResource("4_3djo4")])
+npc_fixo = ExtResource("2_00xs8")
+dialogo_fixo = SubResource("Resource_6es8l")
+metadata/_custom_type_script = "uid://dw560omsfs2go"
