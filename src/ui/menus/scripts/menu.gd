@@ -1,6 +1,6 @@
 extends Control
 
-const GAME_SCENE := "res://src/levels/reception.tscn"
+const GAME_SCENE := "res://src/levels/scenes/reception.tscn"
 const OPTIONS_SCENE := "res://src/ui/menus/scenes/options.tscn"
 
 @onready var play_button: LinkButton = $Play
