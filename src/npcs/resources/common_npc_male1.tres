@@ -5,6 +5,6 @@
 
 [resource]
 script = ExtResource("1_n2dn3")
-correct_floor = 15
+correct_floor = 2
 animation_scene = ExtResource("1_0ndgi")
 metadata/_custom_type_script = "uid://c8k1xw7vuahns"
