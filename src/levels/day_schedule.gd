@@ -3,6 +3,11 @@ extends Resource
 
 @export var dia_numero: int = 1
 
+@export_group("Mensagens da Supervisora (Marta)")
+@export_multiline var mensagem_inicio: String = "Bom dia! Que alegria ter você aqui na nossa equipe! O trabalho é super tranquilo: tudo o que você precisa fazer é ouvir para onde o visitante quer ir e apertar o botão correto no painel."
+@export_multiline var mensagem_fim: String = "Excelente trabalho por hoje! Você pegou o jeito muito rápido. Descanse um pouco e até amanhã!"
+@export_multiline var mensagem_falha: String = "Você tinha um trabalho tão simples... mas falhou. Vamos tentar de novo, certo?"
+
 @export_group("Fase 1: Primeiros Normais")
 ## Quantidade de personagens normais a sortear na primeira leva (ex: 10)
 @export var qtd_primeira_fase: int = 10

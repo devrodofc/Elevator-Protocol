@@ -1,40 +1,63 @@
 [gd_scene format=3 uid="uid://ck6pn78lk8av7"]
 
 [ext_resource type="Script" uid="uid://bummgya0ukifq" path="res://src/levels/reception_manager.gd" id="1_2llwu"]
-[ext_resource type="Resource" uid="uid://crs2g0lcexipn" path="res://src/levels/schedules/day1.tres" id="2_d2spp"]
-[ext_resource type="PackedScene" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="2_2h4n3"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="3_44rsv"]
+[ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/common_npc_male1.tres" id="4_jq48f"]
+[ext_resource type="Resource" uid="uid://c6u578611k2mr" path="res://src/npcs/resources/birdTest.tres" id="5_jq48f"]
+[ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
+[ext_resource type="Script" uid="uid://dw560omsfs2go" path="res://src/levels/day_schedule.gd" id="6_f0k85"]
+[ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="7_katl8"]
+
+[sub_resource type="Resource" id="Resource_6es8l"]
+script = ExtResource("2_2h4n3")
+texto = "Opa, entrega para o andar... 3... beleza? Me joga lá!"
+andar_desejado = 3
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_g870x"]
+script = ExtResource("6_f0k85")
+mensagem_fim = "Excelente trabalho por hoje! ... Mas... você deixou aquele entregador ir para o terceiro andar, certo?... Tudo bem... você não sabia!"
+pool_primeira_fase = Array[ExtResource("3_44rsv")]([ExtResource("4_jq48f")])
+npc_fixo = ExtResource("5_jq48f")
+dialogo_fixo = SubResource("Resource_6es8l")
+metadata/_custom_type_script = "uid://dw560omsfs2go"
 
 [node name="Reception" type="Node2D" unique_id=1772593470]
 script = ExtResource("1_2llwu")
-schedule_config = ExtResource("2_d2spp")
+schedule_config = SubResource("Resource_g870x")
+marta_scene = ExtResource("7_katl8")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1097790414]
 offset_left = -19.0
-offset_top = -21.0
+offset_top = -20.0
 offset_right = 1627.0
-offset_bottom = 910.0
+offset_bottom = 911.0
 color = Color(0.12156863, 0.12941177, 0.14901961, 0.6666667)
 
 [node name="VisitorSpawnPoint" type="Marker2D" parent="." unique_id=764996381]
-position = Vector2(-158, -148)
+position = Vector2(246, -109)
 
 [node name="VisitorDeskPoint1" type="Marker2D" parent="." unique_id=1308736993]
-position = Vector2(314, 234)
+position = Vector2(231, 236)
 
 [node name="VisitorDeskPoint2" type="Marker2D" parent="." unique_id=494710076]
-position = Vector2(564, 98)
+position = Vector2(549, -67)
 
 [node name="VisitorDeskPoint3" type="Marker2D" parent="." unique_id=1740972590]
-position = Vector2(397, 96)
+position = Vector2(598, -60)
 
 [node name="VisitorDeskPoint4" type="Marker2D" parent="." unique_id=83516864]
-position = Vector2(211, 98)
+position = Vector2(659, -65)
 
 [node name="VisitorDeskPoint5" type="Marker2D" parent="." unique_id=1073765186]
-position = Vector2(54, 106)
+position = Vector2(706, -34)
 
 [node name="VisitorExitPoint" type="Marker2D" parent="." unique_id=484986941]
-position = Vector2(755, 287)
+position = Vector2(643, 413)
+
+[node name="MartaPoint" type="Marker2D" parent="." unique_id=449364708]
+position = Vector2(317, 246)
 
 [node name="UI_CanvasLayer" type="CanvasLayer" parent="." unique_id=333661408]
 
@@ -43,6 +66,10 @@ layout_mode = 3
 anchors_preset = 0
 
 [node name="ElevatorPanel" parent="UI_CanvasLayer" unique_id=1702898045 instance=ExtResource("6_elevator")]
+offset_left = 531.0
+offset_top = 112.0
+offset_right = -7.0
+offset_bottom = -15.0
 
 [node name="ManualPanel" type="Control" parent="UI_CanvasLayer" unique_id=341641184]
 layout_mode = 3
@@ -54,3 +81,4 @@ layout_mode = 3
 anchors_preset = 0
 
 [node name="FeedbackAudio" type="AudioStreamPlayer2D" parent="." unique_id=2050434788]
+position = Vector2(0, -3)
