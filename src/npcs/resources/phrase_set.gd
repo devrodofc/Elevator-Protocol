@@ -4,9 +4,9 @@ extends Resource
 ## Marcadores trocados automaticamente: {name} = nome do visitante, {floor} = andar pedido.
 
 ## Usadas quando o visitante diz o andar (mentions_floor = true). Use {floor}.
-@export_multiline var floor_phrases: PackedStringArray = []
+@export_multiline var floor_phrases: PackedStringArray
 ## Usadas quando o visitante NÃO diz o andar (mentions_floor = false).
-@export_multiline var no_floor_phrases: PackedStringArray = []
+@export_multiline var no_floor_phrases: PackedStringArray
 
 
 ## Sorteia uma frase da lista adequada.

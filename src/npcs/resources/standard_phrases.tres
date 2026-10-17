@@ -4,3 +4,5 @@
 
 [resource]
 script = ExtResource("1_phrases")
+floor_phrases = PackedStringArray("Olá, bom dia, gostaria de ir ao andar {floor}!!", "Bom dia. Andar {floor}, por favor.", "Olá, preciso subir para o andar {floor}.", "Tenho uma reunião no {floor}º andar.", "Oi! Vou para o {floor}º andar.", "Com licença, o andar {floor} está liberado?", "Sou {name}. Tenho horário marcado no andar {floor}.", "Me chamaram no andar {floor}.", "Andar {floor}, e rápido, por favor. Estou em cima da hora.")
+no_floor_phrases = PackedStringArray("Bom dia. Preciso subir.", "Oi. Pode liberar o elevador?", "Tenho uma reunião lá em cima.", "Sou {name}. Estão me esperando.", "Com licença... preciso passar.", "Vim para uma entrevista.")
