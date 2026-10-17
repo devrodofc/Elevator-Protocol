@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ck6pn78lk8av7"]
 
-[ext_resource type="Script" uid="uid://bummgya0ukifq" path="res://src/levels/reception_manager.gd" id="1_2llwu"]
+[ext_resource type="Script" uid="uid://bummgya0ukifq" path="res://src/levels/scripts/reception_manager.gd" id="1_2llwu"]
 [ext_resource type="Resource" uid="uid://crs2g0lcexipn" path="res://src/levels/schedules/day1.tres" id="2_d2spp"]
 [ext_resource type="PackedScene" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
 
