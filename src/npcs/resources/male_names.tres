@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="NameList" format=3]
+[gd_resource type="Resource" script_class="NameList" format=3 uid="uid://bv0ek7v8hadwd"]
 
-[ext_resource type="Script" path="res://src/npcs/resources/name_list.gd" id="1_names"]
+[ext_resource type="Script" uid="uid://dqqkx48suhb5s" path="res://src/npcs/resources/name_list.gd" id="1_names"]
 
 [resource]
 script = ExtResource("1_names")

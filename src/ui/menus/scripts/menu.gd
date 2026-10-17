@@ -22,5 +22,11 @@ func _on_options_pressed() -> void:
 	get_tree().change_scene_to_file(OPTIONS_SCENE)
 
 
+func _on_options_pressed() -> void:
+	get_tree().change_scene_to_file(
+        "res://src/ui/menus/scenes/options.tscn"
+	)
+
+
 func _on_quit_pressed() -> void:
 	get_tree().quit()
