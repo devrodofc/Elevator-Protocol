@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bb6a82yvw2cxp"
-path="res://.godot/imported/tela de fundo inicial.jpeg-cac9de350a6e626bd3c11423d2afb142.ctex"
+uid="uid://cf6fdhph148i3"
+path="res://.godot/imported/Npc2 frame 1.png-4492e8d2d0d3291140e29734f04cbd65.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/menus/assets/tela de fundo inicial.jpeg"
-dest_files=["res://.godot/imported/tela de fundo inicial.jpeg-cac9de350a6e626bd3c11423d2afb142.ctex"]
+source_file="res://src/npcs/assets/marta/Npc2 frame 1.png"
+dest_files=["res://.godot/imported/Npc2 frame 1.png-4492e8d2d0d3291140e29734f04cbd65.ctex"]
 
 [params]
 
