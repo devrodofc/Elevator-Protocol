@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://ck6pn78lk8av7"]
+
+[ext_resource type="Script" uid="uid://bummgya0ukifq" path="res://src/levels/reception_manager.gd" id="1_2llwu"]
+[ext_resource type="PackedScene" uid="uid://chstkpv13i6r1" path="res://src/npcs/scenes/visitor.tscn" id="2_nsoom"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="3_44rsv"]
+[ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/common_npc_male1.tres" id="4_jq48f"]
+[ext_resource type="Resource" uid="uid://c6u578611k2mr" path="res://src/npcs/resources/birdTest.tres" id="5_jq48f"]
+
+[node name="Reception" type="Node2D" unique_id=1772593470]
+script = ExtResource("1_2llwu")
+visitor_scene = ExtResource("2_nsoom")
+shift_visitors = Array[ExtResource("3_44rsv")]([ExtResource("4_jq48f"), ExtResource("5_jq48f"), ExtResource("4_jq48f"), ExtResource("5_jq48f"), ExtResource("4_jq48f"), ExtResource("4_jq48f")])
+
+[node name="Background" type="ColorRect" parent="." unique_id=1097790414]
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.12156863, 0.12941177, 0.14901961, 0.6666667)
+
+[node name="VisitorSpawnPoint" type="Marker2D" parent="." unique_id=764996381]
+position = Vector2(-141, -54)
+
+[node name="VisitorDeskPoint1" type="Marker2D" parent="." unique_id=1308736993]
+position = Vector2(545, 560)
+
+[node name="VisitorDeskPoint2" type="Marker2D" parent="." unique_id=494710076]
+position = Vector2(952, 240)
+
+[node name="VisitorDeskPoint3" type="Marker2D" parent="." unique_id=1740972590]
+position = Vector2(671, 240)
+
+[node name="VisitorDeskPoint4" type="Marker2D" parent="." unique_id=83516864]
+position = Vector2(403, 240)
+
+[node name="VisitorDeskPoint5" type="Marker2D" parent="." unique_id=1073765186]
+position = Vector2(145, 240)
+
+[node name="VisitorExitPoint" type="Marker2D" parent="." unique_id=484986941]
+position = Vector2(1300, 420)
+
+[node name="UI_CanvasLayer" type="CanvasLayer" parent="." unique_id=333661408]
+
+[node name="DialogueUI" type="Control" parent="UI_CanvasLayer" unique_id=260762140]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ElevatorPanel" type="Control" parent="UI_CanvasLayer" unique_id=1702898045]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ManualPanel" type="Control" parent="UI_CanvasLayer" unique_id=341641184]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ShiftSummary" type="Control" parent="UI_CanvasLayer" unique_id=162248258]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+
+[node name="FeedbackAudio" type="AudioStreamPlayer2D" parent="." unique_id=2050434788]

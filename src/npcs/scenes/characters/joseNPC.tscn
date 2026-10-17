@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dkr07sdxnwmoo"]
+
+[ext_resource type="Texture2D" uid="uid://2pn5jqcktxsw" path="res://src/npcs/assets/jose/npc.png" id="1_0esrv"]
+[ext_resource type="Texture2D" uid="uid://cgdcoisvlittj" path="res://src/npcs/assets/jose/npc_1_frame_2.png" id="2_a85vu"]
+[ext_resource type="Texture2D" uid="uid://tkelhqjxmmhk" path="res://src/npcs/assets/jose/npc_1_frame_3.png" id="3_6ylkl"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_15u54"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0esrv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_a85vu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_6ylkl")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="JoseNpc" type="Node2D" unique_id=677711227]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=68891245]
+position = Vector2(-1, -100)
+sprite_frames = SubResource("SpriteFrames_15u54")
+animation = &"walk"
+frame_progress = 0.32414562
