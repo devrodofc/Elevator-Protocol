@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://cqu76s68bvugf"]
 
-[ext_resource type="PackedScene" uid="uid://dkr07sdxnwmoo" path="res://src/enemies/joseNPC.tscn" id="1_0ndgi"]
-[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://data/visitor_data.gd" id="1_n2dn3"]
+[ext_resource type="PackedScene" uid="uid://dkr07sdxnwmoo" path="res://src/npcs/scenes/characters/joseNPC.tscn" id="1_0ndgi"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_n2dn3"]
 
 [resource]
 script = ExtResource("1_n2dn3")

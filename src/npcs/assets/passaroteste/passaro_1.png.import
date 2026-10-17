@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2pn5jqcktxsw"
-path="res://.godot/imported/npc.png-e881724c79f3618cfc119d21673ff02f.ctex"
+uid="uid://3qvngixk3klc"
+path="res://.godot/imported/passaro_1.png-d36903631530eb0a3dfe4a9049611c1f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/enemies/npc.png"
-dest_files=["res://.godot/imported/npc.png-e881724c79f3618cfc119d21673ff02f.ctex"]
+source_file="res://src/npcs/assets/passaroteste/passaro_1.png"
+dest_files=["res://.godot/imported/passaro_1.png-d36903631530eb0a3dfe4a9049611c1f.ctex"]
 
 [params]
 

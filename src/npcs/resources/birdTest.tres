@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://c6u578611k2mr"]
 
-[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://data/visitor_data.gd" id="1_5i0pw"]
-[ext_resource type="PackedScene" uid="uid://ck5iujkbuh1g0" path="res://src/enemies/PassaroTeste.tscn" id="1_7hyus"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_5i0pw"]
+[ext_resource type="PackedScene" uid="uid://ck5iujkbuh1g0" path="res://src/npcs/scenes/characters/PassaroTeste.tscn" id="1_7hyus"]
 
 [resource]
 script = ExtResource("1_5i0pw")
