@@ -27,4 +27,4 @@ animations = [{
 position = Vector2(-1, -100)
 sprite_frames = SubResource("SpriteFrames_15u54")
 animation = &"walk"
-frame_progress = 0.16885649
+frame_progress = 0.8311312
