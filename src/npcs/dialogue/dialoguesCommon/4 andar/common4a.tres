@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="NPCDialogue" format=3 uid="uid://b5qa6blw8wptq"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_ofd36"]
+
+[resource]
+script = ExtResource("1_ofd36")
+texto = "Quarto andar, por favor! A reunião com a agência de publicidade já vai começar."
+andar_desejado = 4
+metadata/_custom_type_script = "uid://30jqbkcb4q5"

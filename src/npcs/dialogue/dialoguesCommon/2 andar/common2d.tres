@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="NPCDialogue" format=3 uid="uid://c1kx18xbhdnwf"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_prxkt"]
+
+[resource]
+script = ExtResource("1_prxkt")
+texto = "Meu gato comeu a chave do meu carro, preciso ir correndo no RH ver se aceitam foto do raio-x como justificativa de atraso."
+andar_desejado = 2
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
