@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://chstkpv13i6r1"]
+
+[ext_resource type="Script" uid="uid://b4j5bkpoawhvf" path="res://visitor.gd" id="1_y7e7f"]
+
+[node name="Visitor" type="Node2D" unique_id=565373836]
+script = ExtResource("1_y7e7f")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2064176380]
