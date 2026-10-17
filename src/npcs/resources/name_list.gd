@@ -2,7 +2,7 @@ class_name NameList
 extends Resource
 ## Lista de nomes sorteados para os visitantes.
 
-@export var names: PackedStringArray = []
+@export var names: PackedStringArray
 
 
 func pick() -> String:
