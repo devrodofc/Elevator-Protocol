@@ -124,7 +124,7 @@ func _on_visitor_arrived_at_desk() -> void:
 	var v_data: VisitorData = current_entry["visitor"]
 	var d_data: NPCDialogue = current_entry["dialogue"]
 	
-	var speaker_name: String = v_data.nome if v_data else ""
+	var speaker_name: String = current_entry.get("nome", v_data.nome if v_data else "")
 	var speech_text: String = d_data.texto if d_data else ""
 	
 	_show_dialogue_via_autoload(speaker_name, speech_text)

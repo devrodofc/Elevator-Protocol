@@ -18,6 +18,7 @@
 script = ExtResource("1_n2dn3")
 id = "001"
 nome = "MaleNPC1"
+nome_aleatorio = true
 cena = ExtResource("1_0ndgi")
 tags = Array[String](["Common"])
 dialogos = Array[ExtResource("2_hfhpi")]([ExtResource("3_oxr1i"), ExtResource("4_7lpjs"), ExtResource("5_kdm6g"), ExtResource("6_mkliu"), ExtResource("7_wedsh"), ExtResource("8_4jo7d"), ExtResource("9_4fjkk"), ExtResource("10_hgkql"), ExtResource("11_ofk2d"), ExtResource("12_1ejof")])

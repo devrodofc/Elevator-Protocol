@@ -1,31 +1,13 @@
 [gd_scene format=3 uid="uid://ck6pn78lk8av7"]
 
-[ext_resource type="Script" uid="uid://bummgya0ukifq" path="res://src/levels/reception_manager.gd" id="1_2llwu"]
-[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="2_2h4n3"]
-[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="3_44rsv"]
-[ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/common_npc_male1.tres" id="4_jq48f"]
-[ext_resource type="Resource" uid="uid://c6u578611k2mr" path="res://src/npcs/resources/birdTest.tres" id="5_jq48f"]
+[ext_resource type="Script" uid="uid://bummgya0ukifq" path="res://src/levels/scripts/reception_manager.gd" id="1_2llwu"]
+[ext_resource type="Resource" uid="uid://crs2g0lcexipn" path="res://src/levels/schedules/day1.tres" id="2_d2spp"]
 [ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
-[ext_resource type="Script" uid="uid://dw560omsfs2go" path="res://src/levels/day_schedule.gd" id="6_f0k85"]
 [ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="7_katl8"]
-
-[sub_resource type="Resource" id="Resource_6es8l"]
-script = ExtResource("2_2h4n3")
-texto = "Opa, entrega para o andar... 3... beleza? Me joga lá!"
-andar_desejado = 3
-metadata/_custom_type_script = "uid://30jqbkcb4q5"
-
-[sub_resource type="Resource" id="Resource_g870x"]
-script = ExtResource("6_f0k85")
-mensagem_fim = "Excelente trabalho por hoje! ... Mas... você deixou aquele entregador ir para o terceiro andar, certo?... Tudo bem... você não sabia!"
-pool_primeira_fase = Array[ExtResource("3_44rsv")]([ExtResource("4_jq48f")])
-npc_fixo = ExtResource("5_jq48f")
-dialogo_fixo = SubResource("Resource_6es8l")
-metadata/_custom_type_script = "uid://dw560omsfs2go"
 
 [node name="Reception" type="Node2D" unique_id=1772593470]
 script = ExtResource("1_2llwu")
-schedule_config = SubResource("Resource_g870x")
+schedule_config = ExtResource("2_d2spp")
 marta_scene = ExtResource("7_katl8")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1097790414]
