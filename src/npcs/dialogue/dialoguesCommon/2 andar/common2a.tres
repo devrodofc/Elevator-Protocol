@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="NPCDialogue" format=3 uid="uid://d08fhsp3l45pm"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_d8s6p"]
+
+[resource]
+script = ExtResource("1_d8s6p")
+texto = "Segundo andar, por favor. Vim assinar a papelada da minha contratação."
+andar_desejado = 2
+metadata/_custom_type_script = "uid://30jqbkcb4q5"

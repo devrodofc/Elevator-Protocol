@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="PhraseSet" format=3 uid="uid://snjhmjc250"]
+
+[ext_resource type="Script" uid="uid://osmck7io0ln" path="res://src/npcs/resources/phrase_set.gd" id="1_phrases"]
+
+[resource]
+script = ExtResource("1_phrases")

@@ -1,0 +1,134 @@
+[gd_scene format=3 uid="uid://b6hgpbqqj2j76"]
+
+[ext_resource type="Script" uid="uid://d4iivy11yyffy" path="res://src/ui/menus/scripts/menu.gd" id="1_wcxd3"]
+[ext_resource type="Texture2D" uid="uid://dx268n3lhjdjl" path="res://src/ui/menus/assets/background_menu1.png" id="2_kl4nh"]
+[ext_resource type="Texture2D" uid="uid://14bkwadxycu1" path="res://src/ui/menus/assets/background_menu2.png" id="3_i33cf"]
+
+[sub_resource type="Animation" id="Animation_lrlgq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_kl4nh")]
+}
+
+[sub_resource type="Animation" id="Animation_22vns"]
+resource_name = "background_loop"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_kl4nh"), ExtResource("3_i33cf")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7pniv"]
+_data = {
+&"RESET": SubResource("Animation_lrlgq"),
+&"background_loop": SubResource("Animation_22vns")
+}
+
+[node name="Menu" type="Control" unique_id=1171505832]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wcxd3")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=987170725]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_kl4nh")
+expand_mode = 1
+stretch_mode = 6
+metadata/_edit_lock_ = true
+
+[node name="DarkOverlay" type="ColorRect" parent="." unique_id=1509569264]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.15686275)
+
+[node name="GameTitle" type="Label" parent="." unique_id=1936966435]
+layout_mode = 0
+offset_left = 218.0
+offset_top = 73.0
+offset_right = 428.0
+offset_bottom = 118.0
+theme_override_font_sizes/font_size = 32
+text = "Titulo do jogo"
+
+[node name="Play" type="LinkButton" parent="." unique_id=80030593]
+layout_mode = 0
+offset_left = 297.0
+offset_top = 136.0
+offset_right = 356.0
+offset_bottom = 170.0
+focus_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
+theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_font_sizes/font_size = 24
+text = "Jogar"
+underline = 2
+
+[node name="Options" type="LinkButton" parent="." unique_id=1845285801]
+layout_mode = 0
+offset_left = 284.0
+offset_top = 191.0
+offset_right = 370.0
+offset_bottom = 225.0
+focus_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
+theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_font_sizes/font_size = 24
+text = "Opções"
+underline = 2
+
+[node name="Quit" type="LinkButton" parent="." unique_id=2098872156]
+layout_mode = 0
+offset_left = 303.0
+offset_top = 241.0
+offset_right = 362.0
+offset_bottom = 275.0
+focus_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
+theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_font_sizes/font_size = 24
+text = "Sair"
+underline = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1482249748]
+libraries/ = SubResource("AnimationLibrary_7pniv")
+autoplay = &"background_loop"

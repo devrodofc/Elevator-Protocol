@@ -1,0 +1,180 @@
+[gd_scene format=3 uid="uid://0s2adho6lhr3"]
+
+[ext_resource type="Script" uid="uid://dycu3xihjorki" path="res://src/ui/menus/scripts/options.gd" id="1_jqr15"]
+[ext_resource type="Texture2D" uid="uid://dx268n3lhjdjl" path="res://src/ui/menus/assets/background_menu1.png" id="2_1um8p"]
+[ext_resource type="Texture2D" uid="uid://14bkwadxycu1" path="res://src/ui/menus/assets/background_menu2.png" id="3_quti6"]
+
+[sub_resource type="Animation" id="Animation_lrlgq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_1um8p")]
+}
+
+[sub_resource type="Animation" id="Animation_22vns"]
+resource_name = "background_loop"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_1um8p"), ExtResource("3_quti6")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7pniv"]
+_data = {
+&"RESET": SubResource("Animation_lrlgq"),
+&"background_loop": SubResource("Animation_22vns")
+}
+
+[node name="Options" type="Control" unique_id=1171505832]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jqr15")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=987170725]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_1um8p")
+expand_mode = 1
+stretch_mode = 6
+metadata/_edit_lock_ = true
+
+[node name="DarkOverlay" type="ColorRect" parent="." unique_id=1509569264]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.15686275)
+
+[node name="OptionsTitle" type="Label" parent="." unique_id=1936966435]
+layout_mode = 0
+offset_left = 218.0
+offset_top = 73.0
+offset_right = 428.0
+offset_bottom = 118.0
+theme_override_font_sizes/font_size = 32
+text = "Opções"
+horizontal_alignment = 1
+
+[node name="Fullscreen" type="LinkButton" parent="." unique_id=80030593]
+layout_mode = 0
+offset_left = 272.0
+offset_top = 123.0
+offset_right = 390.0
+offset_bottom = 157.0
+focus_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
+theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_font_sizes/font_size = 24
+text = "Fullscreen"
+underline = 2
+
+[node name="MasterText" type="Label" parent="." unique_id=720760481]
+layout_mode = 0
+offset_left = 191.0
+offset_top = 152.0
+offset_right = 296.0
+offset_bottom = 175.0
+text = "Volume Geral"
+
+[node name="MasterVolume" type="HSlider" parent="." unique_id=928112800]
+layout_mode = 0
+offset_left = 305.0
+offset_top = 158.0
+offset_right = 449.0
+offset_bottom = 174.0
+
+[node name="MusicText" type="Label" parent="." unique_id=369835611]
+layout_mode = 0
+offset_left = 189.0
+offset_top = 178.0
+offset_right = 307.0
+offset_bottom = 201.0
+text = "Volume Música"
+
+[node name="MusicVolume" type="HSlider" parent="." unique_id=1904012095]
+layout_mode = 0
+offset_left = 318.0
+offset_top = 183.0
+offset_right = 448.0
+offset_bottom = 199.0
+
+[node name="SFXText" type="Label" parent="." unique_id=1263696176]
+layout_mode = 0
+offset_left = 187.0
+offset_top = 198.0
+offset_right = 306.0
+offset_bottom = 221.0
+text = "Efeitos sonoros"
+
+[node name="SFXVolume" type="HSlider" parent="." unique_id=1879119154]
+layout_mode = 0
+offset_left = 316.0
+offset_top = 203.0
+offset_right = 449.0
+offset_bottom = 219.0
+
+[node name="Credits" type="LinkButton" parent="." unique_id=1845285801]
+layout_mode = 0
+offset_left = 293.0
+offset_top = 218.0
+offset_right = 379.0
+offset_bottom = 252.0
+focus_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
+theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_font_sizes/font_size = 24
+text = "Credits"
+underline = 2
+
+[node name="Back" type="LinkButton" parent="." unique_id=2098872156]
+layout_mode = 0
+offset_left = 303.0
+offset_top = 248.0
+offset_right = 362.0
+offset_bottom = 282.0
+focus_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
+theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_font_sizes/font_size = 24
+text = "Back"
+underline = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1482249748]
+libraries/ = SubResource("AnimationLibrary_7pniv")
+autoplay = &"background_loop"

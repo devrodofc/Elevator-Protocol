@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="NPCDialogue" format=3 uid="uid://bsnwfhgg8a3ta"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_no0mm"]
+
+[resource]
+script = ExtResource("1_no0mm")
+texto = "Me manda pro andar 1, esqueci minha garrafa d'água na sala de descanso."
+metadata/_custom_type_script = "uid://30jqbkcb4q5"

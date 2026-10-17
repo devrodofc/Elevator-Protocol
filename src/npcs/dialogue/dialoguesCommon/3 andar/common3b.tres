@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="NPCDialogue" format=3 uid="uid://c5xldf8nx3yb4"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_8pjwe"]
+
+[resource]
+script = ExtResource("1_8pjwe")
+texto = "Me manda pro 3º andar... O suporte mandou eu 'reiniciar o modem', eu puxei o cabo geral da parede e acho que derrubei a internet de três bairros."
+andar_desejado = 3
+metadata/_custom_type_script = "uid://30jqbkcb4q5"

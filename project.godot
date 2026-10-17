@@ -11,6 +11,24 @@ config_version=5
 [application]
 
 config/name="GamejamPlus-2026"
-run/main_scene="uid://ck6pn78lk8av7"
+run/main_scene="uid://b6hgpbqqj2j76"
 config/features=PackedStringArray("4.7")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Dialogue="*res://autoload/dialogue/dialogue.tscn"
+
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/mode=3
+window/size/window_width_override=1920
+window/size/window_height_override=1080
+window/stretch/mode="viewport"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+2d/snap/snap_2d_transforms_to_pixel=true

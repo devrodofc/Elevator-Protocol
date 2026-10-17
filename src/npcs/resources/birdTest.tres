@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_5i0pw"]
 [ext_resource type="PackedScene" uid="uid://ck5iujkbuh1g0" path="res://src/npcs/scenes/characters/PassaroTeste.tscn" id="1_7hyus"]
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="2_c01o2"]
 
 [resource]
 script = ExtResource("1_5i0pw")
 id = "002"
-visitor_name = "Bird"
-animation_scene = ExtResource("1_7hyus")
+cena = ExtResource("1_7hyus")
 metadata/_custom_type_script = "uid://c8k1xw7vuahns"

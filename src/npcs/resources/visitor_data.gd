@@ -1,36 +1,38 @@
 class_name VisitorData
 extends Resource
 
-@export var id: String = "001"
-@export var visitor_name: String = "Visitante"
-@export_multiline var dialogue_prefix: String = "Olá, gostaria de subir para o andar"
+const NOMES_PADRAO_PATH := "res://src/npcs/resources/male_names.tres"
 
-## Se verdadeiro, concatena o requested_floor ao final da fala. Se falso, usa apenas dialogue_prefix.
-@export var mentions_floor: bool = true
-@export var requested_floor: int = 1
-
-@export var correct_floor: int = 1   # Ex: 1, 2, 3 ou -1 para Negar Acesso
-@export var animation_scene: PackedScene
-@export var is_anomaly: bool = false
-
-## Lista de categorias/atributos: "funcionario", "visitante", "entregador", "diretoria", etc.
-@export var tags: Array[String] = []
+@export var id: String = ""
+@export var nome: String = ""
+## Sorteia um nome diferente a cada visita (para NPCs comuns). Desligado = usa "nome".
+@export var nome_aleatorio: bool = false
+## Lista de nomes para o sorteio (opcional). Vazio = male_names.tres.
+@export var lista_nomes: NameList
+@export var cena: PackedScene # Instância com arte/animação em Pixel Art
+@export var tags: Array[String] = [] # "delivery", "vip", "intruder", "send_to_basement", etc.
+@export var dialogos: Array[NPCDialogue] = []
 
 
-## Retorna a fala completa montada
-func get_full_dialogue() -> String:
-	var clean_text: String = dialogue_prefix.strip_edges()
+func has_tag(tag_name: String) -> bool:
+	return tags.has(tag_name)
+
+
+func pick_visit(forced_dialogue: NPCDialogue = null) -> Dictionary:
+	var d: NPCDialogue = forced_dialogue
+	if d == null and not dialogos.is_empty():
+		d = dialogos.pick_random()
 	
-	if mentions_floor:
-		return "%s %d." % [clean_text, requested_floor]
-	
-	return clean_text
+	return {
+		"visitor": self,
+		"dialogue": d,
+		"nome": _sortear_nome()
+	}
 
 
-## Verifica se o visitante possui uma tag específica (ignora maiúsculas/minúsculas)
-func has_tag(target_tag: String) -> bool:
-	var clean_target: String = target_tag.strip_edges().to_lower()
-	for t in tags:
-		if t.strip_edges().to_lower() == clean_target:
-			return true
-	return false
+## Nome desta visita: sorteado se nome_aleatorio estiver ligado, senão o "nome" fixo.
+func _sortear_nome() -> String:
+	if not nome_aleatorio:
+		return nome
+	var lista: NameList = lista_nomes if lista_nomes else load(NOMES_PADRAO_PATH)
+	return lista.pick()

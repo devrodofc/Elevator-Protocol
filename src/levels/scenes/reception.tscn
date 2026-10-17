@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://ck6pn78lk8av7"]
+
+[ext_resource type="Script" uid="uid://bummgya0ukifq" path="res://src/levels/scripts/reception_manager.gd" id="1_2llwu"]
+[ext_resource type="Resource" uid="uid://crs2g0lcexipn" path="res://src/levels/schedules/day1.tres" id="2_d2spp"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
+
+[node name="Reception" type="Node2D" unique_id=1772593470]
+script = ExtResource("1_2llwu")
+schedule_config = ExtResource("2_d2spp")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1097790414]
+offset_left = -19.0
+offset_top = -21.0
+offset_right = 1627.0
+offset_bottom = 910.0
+color = Color(0.12156863, 0.12941177, 0.14901961, 0.6666667)
+
+[node name="VisitorSpawnPoint" type="Marker2D" parent="." unique_id=764996381]
+position = Vector2(-158, -148)
+
+[node name="VisitorDeskPoint1" type="Marker2D" parent="." unique_id=1308736993]
+position = Vector2(314, 234)
+
+[node name="VisitorDeskPoint2" type="Marker2D" parent="." unique_id=494710076]
+position = Vector2(564, 98)
+
+[node name="VisitorDeskPoint3" type="Marker2D" parent="." unique_id=1740972590]
+position = Vector2(397, 96)
+
+[node name="VisitorDeskPoint4" type="Marker2D" parent="." unique_id=83516864]
+position = Vector2(211, 98)
+
+[node name="VisitorDeskPoint5" type="Marker2D" parent="." unique_id=1073765186]
+position = Vector2(54, 106)
+
+[node name="VisitorExitPoint" type="Marker2D" parent="." unique_id=484986941]
+position = Vector2(755, 287)
+
+[node name="UI_CanvasLayer" type="CanvasLayer" parent="." unique_id=333661408]
+
+[node name="DialogueUI" type="Control" parent="UI_CanvasLayer" unique_id=260762140]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ElevatorPanel" parent="UI_CanvasLayer" unique_id=1702898045 instance=ExtResource("6_elevator")]
+
+[node name="ManualPanel" type="Control" parent="UI_CanvasLayer" unique_id=341641184]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ShiftSummary" type="Control" parent="UI_CanvasLayer" unique_id=162248258]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+
+[node name="FeedbackAudio" type="AudioStreamPlayer2D" parent="." unique_id=2050434788]
