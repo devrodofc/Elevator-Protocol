@@ -1,5 +1,8 @@
 extends Control
 
+const GAME_SCENE := "res://src/levels/reception.tscn"
+const OPTIONS_SCENE := "res://src/ui/menus/scenes/options.tscn"
+
 @onready var play_button: LinkButton = $Play
 @onready var options_button: LinkButton = $Options
 @onready var quit_button: LinkButton = $Quit
@@ -12,9 +15,11 @@ func _ready() -> void:
 
 
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file(
-        "res://src/levels/reception.tscn"
-	)
+	get_tree().change_scene_to_file(GAME_SCENE)
+
+
+func _on_options_pressed() -> void:
+	get_tree().change_scene_to_file(OPTIONS_SCENE)
 
 
 func _on_options_pressed() -> void:
