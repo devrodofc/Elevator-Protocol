@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="3_44rsv"]
 [ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/common_npc_male1.tres" id="4_jq48f"]
 [ext_resource type="Resource" uid="uid://c6u578611k2mr" path="res://src/npcs/resources/birdTest.tres" id="5_jq48f"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
 
 [node name="Reception" type="Node2D" unique_id=1772593470]
 script = ExtResource("1_2llwu")
@@ -45,9 +46,7 @@ position = Vector2(1762, 511)
 layout_mode = 3
 anchors_preset = 0
 
-[node name="ElevatorPanel" type="Control" parent="UI_CanvasLayer" unique_id=1702898045]
-layout_mode = 3
-anchors_preset = 0
+[node name="ElevatorPanel" parent="UI_CanvasLayer" unique_id=1702898045 instance=ExtResource("6_elevator")]
 
 [node name="ManualPanel" type="Control" parent="UI_CanvasLayer" unique_id=341641184]
 layout_mode = 3

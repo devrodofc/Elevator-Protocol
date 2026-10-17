@@ -22,7 +22,7 @@ extends Node2D
 @onready var exit_point: Marker2D = $VisitorExitPoint
 
 # Referências de UI
-@onready var dialogue_ui: Control = $UI_CanvasLayer/DialogueUI
+@onready var dialogue_ui: Node = Dialogue # autoload global (autoload/dialogue)
 @onready var elevator_panel: Control = $UI_CanvasLayer/ElevatorPanel
 @onready var shift_summary: Control = $UI_CanvasLayer/ShiftSummary
 
@@ -77,7 +77,7 @@ func _fill_queue() -> void:
 		var new_visitor: Visitor = visitor_scene.instantiate() as Visitor
 		add_child(new_visitor)
 		new_visitor.global_position = spawn_point.global_position
-		new_visitor.setup(data)
+		new_visitor.setup(data.create_visit()) # nome, andar e frase sorteados por visita
 		
 		line_visitors.append(new_visitor)
 		
