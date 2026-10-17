@@ -24,7 +24,7 @@ animations = [{
 [node name="PassaroTeste" type="Node2D" unique_id=604808346]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1120699086]
-position = Vector2(-5, -31)
-scale = Vector2(0.3027344, 0.3027344)
+position = Vector2(-5, -16)
+scale = Vector2(0.1328125, 0.1328125)
 sprite_frames = SubResource("SpriteFrames_15u54")
 frame_progress = 0.28725573

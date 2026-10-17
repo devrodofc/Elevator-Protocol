@@ -24,7 +24,8 @@ animations = [{
 [node name="JoseNpc" type="Node2D" unique_id=677711227]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=68891245]
-position = Vector2(-1, -100)
+position = Vector2(1, -31)
+scale = Vector2(0.2890625, 0.2890625)
 sprite_frames = SubResource("SpriteFrames_15u54")
 animation = &"walk"
 frame_progress = 0.32414562
