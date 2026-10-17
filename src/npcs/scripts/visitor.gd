@@ -4,7 +4,7 @@ extends Node2D
 signal arrived
 signal departed
 
-## Referência ao nó visual atualmente instanciado
+## Instância visual carregada da cena da Clara (PackedScene)
 var current_visual_instance: Node = null
 
 @export var current_data: VisitorData:
@@ -19,9 +19,11 @@ var current_visual_instance: Node = null
 @export_group("Step Animation Settings")
 @export var step_bob_height: float = 6.0
 ## Distância em pixels percorrida para completar 1 passo (bobbing completo)
-@export var step_distance: float = 50.0
+@export var step_distance: float = 45.0
 
 var is_moving: bool = false
+var _active_move_tween: Tween = null
+var _active_bob_tween: Tween = null
 
 
 func _ready() -> void:
@@ -33,6 +35,7 @@ func setup(data: VisitorData) -> void:
 	current_data = data
 
 
+## Remove a arte anterior e instancia a nova cena visual do VisitorData
 func _apply_data(data: VisitorData) -> void:
 	if not is_node_ready():
 		return
@@ -41,20 +44,14 @@ func _apply_data(data: VisitorData) -> void:
 		current_visual_instance.queue_free()
 		current_visual_instance = null
 		
-	if data and data.animation_scene:
-		current_visual_instance = data.animation_scene.instantiate()
+	if data and data.cena:
+		current_visual_instance = data.cena.instantiate()
 		add_child(current_visual_instance)
-
-
-func get_dialogue_text() -> String:
-	if current_data:
-		return current_data.get_full_dialogue()
-	return ""
 
 
 func get_visitor_name() -> String:
 	if current_data:
-		return current_data.visitor_name
+		return current_data.nome
 	return ""
 
 
@@ -70,11 +67,15 @@ func get_tags() -> Array[String]:
 	return []
 
 
-## Move o visitante com velocidade constante até uma posição da fila
+## Move o visitante com velocidade constante e animação de passos
 func move_to_slot(target_pos: Vector2, on_finished: Callable = Callable()) -> void:
+	_kill_tweens()
+	
 	var distance: float = global_position.distance_to(target_pos)
 	if distance <= 1.0 or move_speed <= 0.0:
 		global_position = target_pos
+		is_moving = false
+		arrived.emit()
 		if on_finished.is_valid():
 			on_finished.call()
 		return
@@ -82,25 +83,27 @@ func move_to_slot(target_pos: Vector2, on_finished: Callable = Callable()) -> vo
 	var duration: float = distance / move_speed
 	is_moving = true
 	
-	# Usamos TRANS_LINEAR para manter a velocidade 100% constante
-	var move_tween: Tween = create_tween().set_parallel(true)
-	move_tween.tween_property(self, "global_position:x", target_pos.x, duration)\
+	_active_move_tween = create_tween().set_parallel(true)
+	_active_move_tween.tween_property(self, "global_position:x", target_pos.x, duration)\
 		.set_trans(Tween.TRANS_LINEAR)
-	move_tween.tween_property(self, "global_position:y", target_pos.y, duration)\
+	_active_move_tween.tween_property(self, "global_position:y", target_pos.y, duration)\
 		.set_trans(Tween.TRANS_LINEAR)
 	
 	_play_step_animation(distance, duration)
 	
-	move_tween.chain().tween_callback(func():
+	_active_move_tween.chain().tween_callback(func():
 		is_moving = false
 		_reset_bob()
+		arrived.emit()
 		if on_finished.is_valid():
 			on_finished.call()
 	)
 
 
-## Despede o visitante da recepção com velocidade constante
+## Despede o visitante da recepção até o ponto de saída
 func leave_to(exit_position: Vector2) -> void:
+	_kill_tweens()
+	
 	var distance: float = global_position.distance_to(exit_position)
 	if distance <= 1.0 or move_speed <= 0.0:
 		departed.emit()
@@ -110,15 +113,15 @@ func leave_to(exit_position: Vector2) -> void:
 	var duration: float = distance / move_speed
 	is_moving = true
 	
-	var move_tween: Tween = create_tween().set_parallel(true)
-	move_tween.tween_property(self, "global_position:x", exit_position.x, duration)\
+	_active_move_tween = create_tween().set_parallel(true)
+	_active_move_tween.tween_property(self, "global_position:x", exit_position.x, duration)\
 		.set_trans(Tween.TRANS_LINEAR)
-	move_tween.tween_property(self, "global_position:y", exit_position.y, duration)\
+	_active_move_tween.tween_property(self, "global_position:y", exit_position.y, duration)\
 		.set_trans(Tween.TRANS_LINEAR)
 	
 	_play_step_animation(distance, duration)
 	
-	move_tween.chain().tween_callback(func():
+	_active_move_tween.chain().tween_callback(func():
 		is_moving = false
 		_reset_bob()
 		departed.emit()
@@ -126,7 +129,6 @@ func leave_to(exit_position: Vector2) -> void:
 	)
 
 
-## Anima os passos com base na distância real percorrida
 func _play_step_animation(distance: float, duration: float) -> void:
 	if not is_instance_valid(current_visual_instance) or not (current_visual_instance is Node2D):
 		return
@@ -135,14 +137,21 @@ func _play_step_animation(distance: float, duration: float) -> void:
 	var cycles: int = maxi(1, int(round(distance / step_distance)))
 	var step_time: float = duration / (cycles * 2)
 	
-	var bob_tween: Tween = create_tween()
+	_active_bob_tween = create_tween()
 	for i in range(cycles):
-		bob_tween.tween_property(visual_node, "position:y", -step_bob_height, step_time)\
+		_active_bob_tween.tween_property(visual_node, "position:y", -step_bob_height, step_time)\
 			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		bob_tween.tween_property(visual_node, "position:y", 0.0, step_time)\
+		_active_bob_tween.tween_property(visual_node, "position:y", 0.0, step_time)\
 			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 
 func _reset_bob() -> void:
 	if is_instance_valid(current_visual_instance) and current_visual_instance is Node2D:
 		(current_visual_instance as Node2D).position.y = 0.0
+
+
+func _kill_tweens() -> void:
+	if _active_move_tween and _active_move_tween.is_valid():
+		_active_move_tween.kill()
+	if _active_bob_tween and _active_bob_tween.is_valid():
+		_active_bob_tween.kill()

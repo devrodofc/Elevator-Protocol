@@ -1,157 +1,223 @@
 class_name ReceptionManager
 extends Node2D
 
-@export_group("Dependencies")
-@export var visitor_scene: PackedScene
-@export var shift_visitors: Array[VisitorData] = []
+@export_group("Configuração do Turno")
+@export var schedule_config: DayScheduleConfig
 
-@export_group("Queue Settings")
-## Tempo de espera para spawnar o próximo da fila se o balcão (Ponto 1) estiver ocupado
-@export var queue_delay_when_desk_busy: float = 1.5
-## Intervalo mínimo padrão entre a entrada de cada pessoa na fila
-@export var default_spawn_interval: float = 0.4
-@export_group("Scene References")
-@onready var spawn_point: Marker2D = $VisitorSpawnPoint
-@onready var desk_points: Array[Marker2D] = [
+@export_group("Instanciação do NPC")
+@export var visitor_base_scene: PackedScene = preload("res://src/npcs/scenes/visitor.tscn")
+
+# Nós do Cenário mapeados diretamente da árvore
+@onready var spawn_point: Node2D = $VisitorSpawnPoint
+@onready var desk_points: Array[Node2D] = [
 	$VisitorDeskPoint1,
 	$VisitorDeskPoint2,
 	$VisitorDeskPoint3,
 	$VisitorDeskPoint4,
 	$VisitorDeskPoint5
 ]
-@onready var exit_point: Marker2D = $VisitorExitPoint
+@onready var exit_point: Node2D = $VisitorExitPoint
 
-# Referências de UI
-@onready var dialogue_ui: Node = Dialogue # autoload global (autoload/dialogue)
-@onready var elevator_panel: Control = $UI_CanvasLayer/ElevatorPanel
-@onready var shift_summary: Control = $UI_CanvasLayer/ShiftSummary
+# Nós de Interface e Áudio mapeados da árvore
+@onready var elevator_panel: ElevatorPanel = $UI_CanvasLayer/ElevatorPanel as ElevatorPanel
+@onready var feedback_audio: AudioStreamPlayer2D = $FeedbackAudio
 
-# Estado da Fila
-var line_visitors: Array[Visitor] = []
-var next_visitor_data_index: int = 0
-var is_shift_active: bool = false
-var is_filling_queue: bool = false
-var correct_decisions: int = 0
-var mistakes: int = 0
+@export_group("Supervisão Clara (Opcional)")
+@export var clara_game_over_panel: Control
+@export var clara_dialogue_label: Label
+
+var active_queue: Array[Dictionary] = [] # {"visitor": VisitorData, "dialogue": NPCDialogue, "node": Visitor}
+var current_visita: Dictionary = {}
+var is_processing_decision: bool = false
 
 
 func _ready() -> void:
-	if elevator_panel and elevator_panel.has_signal("decision_made"):
-		elevator_panel.connect("decision_made", _on_decision_made)
-	
-	start_shift()
+	if clara_game_over_panel:
+		clara_game_over_panel.visible = false
+		
+	if elevator_panel:
+		elevator_panel.floor_selected.connect(_on_floor_selected)
+		elevator_panel.set_panel_locked(true)
+		
+	_build_day_queue()
+	_fill_desk_slots()
 
 
-## Inicia o expediente e inicia o preenchimento da fila
-func start_shift() -> void:
-	is_shift_active = true
-	correct_decisions = 0
-	mistakes = 0
-	next_visitor_data_index = 0
-	
-	_fill_queue()
-
-
-## Completa vagas vazias na fila respeitando o atraso se o posto 1 estiver ocupado
-func _fill_queue() -> void:
-	if is_filling_queue:
+func _build_day_queue() -> void:
+	active_queue.clear()
+	if schedule_config == null:
 		return
 		
-	is_filling_queue = true
-	
-	while line_visitors.size() < desk_points.size() and next_visitor_data_index < shift_visitors.size():
-		# Se o primeiro lugar já estiver ocupado, aguarda o tempo configurado
-		if not line_visitors.is_empty():
-			await get_tree().create_timer(queue_delay_when_desk_busy).timeout
+	# 1. Fase 1: Primeiros normais do pool inicial
+	if not schedule_config.pool_primeira_fase.is_empty():
+		for i in range(schedule_config.qtd_primeira_fase):
+			var v_rand: VisitorData = schedule_config.pool_primeira_fase.pick_random()
+			var entry: Dictionary = v_rand.pick_visit()
+			entry["node"] = null
+			active_queue.append(entry)
 			
-			# Revalida se o turno ainda está ativo e se ainda há vaga disponível após o delay
-			if not is_shift_active or line_visitors.size() >= desk_points.size() or next_visitor_data_index >= shift_visitors.size():
+	# 2. Fase 2: O NPC Fixo obrigatório
+	if schedule_config.npc_fixo != null:
+		var entry_fixo: Dictionary = schedule_config.npc_fixo.pick_visit(schedule_config.dialogo_fixo)
+		entry_fixo["node"] = null
+		active_queue.append(entry_fixo)
+		
+	# 3. Fase 3: Últimos normais do pool final
+	if not schedule_config.pool_segunda_fase.is_empty():
+		for i in range(schedule_config.qtd_segunda_fase):
+			var v_rand: VisitorData = schedule_config.pool_segunda_fase.pick_random()
+			var entry: Dictionary = v_rand.pick_visit()
+			entry["node"] = null
+			active_queue.append(entry)
+
+
+func _fill_desk_slots() -> void:
+	var total_slots: int = mini(active_queue.size(), desk_points.size())
+	
+	for i in range(total_slots):
+		if active_queue[i]["node"] == null:
+			var v_data: VisitorData = active_queue[i]["visitor"]
+			var visitor_instance: Visitor = visitor_base_scene.instantiate() as Visitor
+			add_child(visitor_instance)
+			
+			visitor_instance.global_position = spawn_point.global_position
+			visitor_instance.setup(v_data)
+			active_queue[i]["node"] = visitor_instance
+			
+			var target_pos: Vector2 = desk_points[i].global_position
+			if i == 0:
+				visitor_instance.move_to_slot(target_pos, _on_first_visitor_arrived_at_desk)
+			else:
+				visitor_instance.move_to_slot(target_pos)
+
+
+func _on_first_visitor_arrived_at_desk() -> void:
+	if active_queue.is_empty():
+		_conclude_day()
+		return
+		
+	current_visita = active_queue[0]
+	var v_data: VisitorData = current_visita["visitor"]
+	var d_data: NPCDialogue = current_visita["dialogue"]
+	
+	var speaker_name: String = v_data.nome if v_data else ""
+	var speech_text: String = d_data.texto if d_data else ""
+	
+	_show_dialogue_via_autoload(speaker_name, speech_text)
+		
+	if elevator_panel:
+		elevator_panel.set_panel_locked(false)
+
+
+func _on_floor_selected(floor_code: int) -> void:
+	if is_processing_decision or current_visita.is_empty():
+		return
+		
+	is_processing_decision = true
+	
+	if elevator_panel:
+		elevator_panel.set_panel_locked(true)
+	_clear_dialogue_via_autoload()
+		
+	var v_data: VisitorData = current_visita["visitor"]
+	var d_data: NPCDialogue = current_visita["dialogue"]
+	var current_day: int = schedule_config.dia_numero if schedule_config else 1
+	
+	var success: bool = RuleValidator.validar_decisao(v_data, d_data, floor_code, current_day)
+	
+	if success:
+		_advance_queue()
+	else:
+		_trigger_clara_game_over()
+
+
+func _advance_queue() -> void:
+	var finished: Dictionary = active_queue.pop_front()
+	current_visita = {}
+	
+	if finished and finished["node"]:
+		(finished["node"] as Visitor).leave_to(exit_point.global_position)
+		
+	for i in range(active_queue.size()):
+		if i < desk_points.size() and active_queue[i]["node"] != null:
+			var target_pos: Vector2 = desk_points[i].global_position
+			var vis_node: Visitor = active_queue[i]["node"] as Visitor
+			
+			if i == 0:
+				vis_node.move_to_slot(target_pos, _on_first_visitor_arrived_at_desk)
+			else:
+				vis_node.move_to_slot(target_pos)
+				
+	_fill_desk_slots()
+	is_processing_decision = false
+	
+	if active_queue.is_empty():
+		_conclude_day()
+
+
+func _trigger_clara_game_over() -> void:
+	if elevator_panel:
+		elevator_panel.set_panel_locked(true)
+		
+	if feedback_audio and feedback_audio.playing:
+		feedback_audio.stop()
+		
+	if clara_game_over_panel:
+		clara_game_over_panel.visible = true
+	if clara_dialogue_label:
+		clara_dialogue_label.text = "Você tinha um trabalho tão simples... mas falhou. Vamos tentar de novo, certo?"
+	else:
+		_show_dialogue_via_autoload("Marta", "Você tinha um trabalho tão simples... mas falhou. Vamos tentar de novo, certo?")
+		
+	await get_tree().create_timer(5.0).timeout
+	get_tree().reload_current_scene()
+
+
+func _conclude_day() -> void:
+	_show_dialogue_via_autoload("Sistema", "Expediente encerrado. Você concluiu o dia!")
+	if elevator_panel:
+		elevator_panel.set_panel_locked(true)
+	print("Dia concluído com sucesso!")
+
+
+## Comunicação com o Autoload Dialogue
+func _show_dialogue_via_autoload(speaker_name: String, speech_text: String) -> void:
+	var dialogue_singleton = get_node_or_null("/root/Dialogue")
+	if dialogue_singleton == null:
+		return
+	
+	if "visible" in dialogue_singleton:
+		dialogue_singleton.visible = true
+		
+	if dialogue_singleton.has_method("display_dialogue"):
+		dialogue_singleton.call("display_dialogue", speaker_name, speech_text)
+	elif dialogue_singleton.has_method("start_dialogue"):
+		dialogue_singleton.call("start_dialogue", speech_text)
+	elif dialogue_singleton.has_method("show_dialogue"):
+		dialogue_singleton.call("show_dialogue", speaker_name, speech_text)
+	elif dialogue_singleton.has_method("set_dialogue"):
+		dialogue_singleton.call("set_dialogue", speech_text)
+	else:
+		for child in dialogue_singleton.find_children("*", "Label", true, false):
+			if child is Label:
+				child.text = speech_text
+				child.visible = true
 				break
-		
-		var data: VisitorData = shift_visitors[next_visitor_data_index]
-		next_visitor_data_index += 1
-		
-		var slot_index: int = line_visitors.size()
-		var target_pos: Vector2 = desk_points[slot_index].global_position
-		
-		var new_visitor: Visitor = visitor_scene.instantiate() as Visitor
-		add_child(new_visitor)
-		new_visitor.global_position = spawn_point.global_position
-		new_visitor.setup(data.create_visit()) # nome, andar e frase sorteados por visita
-		
-		line_visitors.append(new_visitor)
-		
-		if slot_index == 0:
-			new_visitor.move_to_slot(target_pos, _on_first_visitor_ready)
-		else:
-			new_visitor.move_to_slot(target_pos)
-		
-		# Intervalo padrão entre spawns consecutivos
-		await get_tree().create_timer(default_spawn_interval).timeout
-	
-	is_filling_queue = false
+		for child in dialogue_singleton.find_children("*", "RichTextLabel", true, false):
+			if child is RichTextLabel:
+				child.text = speech_text
+				child.visible = true
+				break
 
 
-## Chamado quando o visitante da frente chega ao balcão (DeskPoint1)
-func _on_first_visitor_ready() -> void:
-	if line_visitors.is_empty():
+func _clear_dialogue_via_autoload() -> void:
+	var dialogue_singleton = get_node_or_null("/root/Dialogue")
+	if dialogue_singleton == null:
 		return
 		
-	var active_visitor: Visitor = line_visitors[0]
-	
-	if dialogue_ui and dialogue_ui.has_method("display_dialogue"):
-		dialogue_ui.display_dialogue(active_visitor.get_visitor_name(), active_visitor.get_dialogue_text())
-		
-	if elevator_panel and elevator_panel.has_method("unlock_controls"):
-		elevator_panel.unlock_controls()
-
-
-## Recebe a decisão tomada no elevador
-func _on_decision_made(chosen_floor: int) -> void:
-	if line_visitors.is_empty():
-		return
-		
-	if elevator_panel and elevator_panel.has_method("lock_controls"):
-		elevator_panel.lock_controls()
-		
-	if dialogue_ui and dialogue_ui.has_method("clear_dialogue"):
-		dialogue_ui.clear_dialogue()
-		
-	var active_visitor: Visitor = line_visitors.pop_front()
-	
-	if active_visitor.current_data:
-		if chosen_floor == active_visitor.current_data.correct_floor:
-			correct_decisions += 1
-		else:
-			mistakes += 1
-			
-	active_visitor.leave_to(exit_point.global_position)
-	
-	_advance_line()
-
-
-## Faz a fila avançar e reativa o preenchimento de vagas restantes
-func _advance_line() -> void:
-	for i in range(line_visitors.size()):
-		var visitor: Visitor = line_visitors[i]
-		var target_pos: Vector2 = desk_points[i].global_position
-		
-		if i == 0:
-			visitor.move_to_slot(target_pos, _on_first_visitor_ready)
-		else:
-			visitor.move_to_slot(target_pos)
-			
-	# Reabastece as vagas liberadas
-	_fill_queue()
-	
-	if line_visitors.is_empty() and next_visitor_data_index >= shift_visitors.size():
-		_finish_shift()
-
-
-## Encerramento do turno
-func _finish_shift() -> void:
-	is_shift_active = false
-	if shift_summary:
-		shift_summary.visible = true
-		if shift_summary.has_method("setup_summary"):
-			shift_summary.setup_summary(correct_decisions, mistakes)
+	if dialogue_singleton.has_method("clear_dialogue"):
+		dialogue_singleton.call("clear_dialogue")
+	elif dialogue_singleton.has_method("hide_dialogue"):
+		dialogue_singleton.call("hide_dialogue")
+	elif "visible" in dialogue_singleton:
+		dialogue_singleton.visible = false

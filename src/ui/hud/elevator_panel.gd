@@ -1,43 +1,45 @@
+class_name ElevatorPanel
 extends Control
-## Painel do elevador: o jogador escolhe um andar ou nega o acesso.
-## A recepção escuta decision_made e chama unlock_controls() quando o visitante chega ao balcão.
-## Atalhos de teclado: 1, 2, 3 = andares; N = negar.
 
-signal decision_made(chosen_floor: int)
+signal floor_selected(floor_number: int)
 
-@onready var _buttons: Array[Button] = [%Floor1Button, %Floor2Button, %Floor3Button, %DenyButton]
+const DENY_CODE: int = 999
+
+@onready var floor_1_button: Button = %Floor1Button
+@onready var floor_2_button: Button = %Floor2Button
+@onready var floor_3_button: Button = %Floor3Button
+@onready var deny_button: Button = %DenyButton
+
+var locked: bool = true
 
 
 func _ready() -> void:
-	%Floor1Button.pressed.connect(_choose.bind(1))
-	%Floor2Button.pressed.connect(_choose.bind(2))
-	%Floor3Button.pressed.connect(_choose.bind(3))
-	%DenyButton.pressed.connect(_choose.bind(VisitorData.DENY))
-	lock_controls()
+	if floor_1_button:
+		floor_1_button.pressed.connect(func(): _on_button_clicked(1))
+	if floor_2_button:
+		floor_2_button.pressed.connect(func(): _on_button_clicked(2))
+	if floor_3_button:
+		floor_3_button.pressed.connect(func(): _on_button_clicked(3))
+	if deny_button:
+		deny_button.pressed.connect(func(): _on_button_clicked(DENY_CODE))
+	
+	set_panel_locked(locked)
 
 
-func unlock_controls() -> void:
-	for button in _buttons:
-		button.disabled = false
+func set_panel_locked(is_locked: bool) -> void:
+	locked = is_locked
+	if floor_1_button:
+		floor_1_button.disabled = locked
+	if floor_2_button:
+		floor_2_button.disabled = locked
+	if floor_3_button:
+		floor_3_button.disabled = locked
+	if deny_button:
+		deny_button.disabled = locked
 
 
-func lock_controls() -> void:
-	for button in _buttons:
-		button.disabled = true
-
-
-func _choose(chosen_floor: int) -> void:
-	lock_controls() # evita clique duplo antes da recepção processar
-	decision_made.emit(chosen_floor)
-
-
-func _unhandled_key_input(event: InputEvent) -> void:
-	if not event.pressed or event.echo or %DenyButton.disabled:
+func _on_button_clicked(floor_code: int) -> void:
+	if locked:
 		return
-	match event.keycode:
-		KEY_1: _choose(1)
-		KEY_2: _choose(2)
-		KEY_3: _choose(3)
-		KEY_N: _choose(VisitorData.DENY)
-		_: return
-	get_viewport().set_input_as_handled()
+	set_panel_locked(true)
+	floor_selected.emit(floor_code)
