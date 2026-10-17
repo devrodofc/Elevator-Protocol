@@ -10,7 +10,6 @@ extends Node2D
 @export var queue_delay_when_desk_busy: float = 1.5
 ## Intervalo mínimo padrão entre a entrada de cada pessoa na fila
 @export var default_spawn_interval: float = 0.4
-
 @export_group("Scene References")
 @onready var spawn_point: Marker2D = $VisitorSpawnPoint
 @onready var desk_points: Array[Marker2D] = [
