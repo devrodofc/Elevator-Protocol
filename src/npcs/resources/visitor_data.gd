@@ -1,8 +1,14 @@
 class_name VisitorData
 extends Resource
 
+const NOMES_PADRAO_PATH := "res://src/npcs/resources/male_names.tres"
+
 @export var id: String = ""
 @export var nome: String = ""
+## Sorteia um nome diferente a cada visita (para NPCs comuns). Desligado = usa "nome".
+@export var nome_aleatorio: bool = false
+## Lista de nomes para o sorteio (opcional). Vazio = male_names.tres.
+@export var lista_nomes: NameList
 @export var cena: PackedScene # Instância com arte/animação em Pixel Art
 @export var tags: Array[String] = [] # "delivery", "vip", "intruder", "send_to_basement", etc.
 @export var dialogos: Array[NPCDialogue] = []
@@ -19,5 +25,14 @@ func pick_visit(forced_dialogue: NPCDialogue = null) -> Dictionary:
 	
 	return {
 		"visitor": self,
-		"dialogue": d
+		"dialogue": d,
+		"nome": _sortear_nome()
 	}
+
+
+## Nome desta visita: sorteado se nome_aleatorio estiver ligado, senão o "nome" fixo.
+func _sortear_nome() -> String:
+	if not nome_aleatorio:
+		return nome
+	var lista: NameList = lista_nomes if lista_nomes else load(NOMES_PADRAO_PATH)
+	return lista.pick()
