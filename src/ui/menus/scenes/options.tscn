@@ -172,7 +172,7 @@ theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_fonts/font = ExtResource("3_1um8p")
 theme_override_font_sizes/font_size = 24
-text = "Credits"
+text = "Créditos"
 underline = 2
 
 [node name="Back" type="TextureButton" parent="." unique_id=400312025]
