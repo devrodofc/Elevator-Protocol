@@ -26,7 +26,7 @@ func _ready() -> void:
 	badge_details.toggled.connect(_on_badge_toggled)
 
 
-func set_current_visitor(visitor: Visitor, visit_name: String = "") -> void:
+func set_current_visitor(visitor: Visitor, visit_name: String = "", cracha: Dictionary = {}) -> void:
 	if visitor == null:
 		if is_instance_valid(_current_visitor) and badge.visible:
 			_collect_badge(_current_visitor)
@@ -36,7 +36,7 @@ func set_current_visitor(visitor: Visitor, visit_name: String = "") -> void:
 		return
 	_cancel_badge_tweens()
 	_current_visitor = visitor
-	badge_details.set_visitor(visitor, visit_name)
+	badge_details.set_visitor(visitor, visit_name, cracha)
 	badge.position = _visitor_badge_position(visitor)
 	badge.scale = _badge_scale * 0.3
 	badge.show()

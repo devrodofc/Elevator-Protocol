@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://btagpc2oh1ho6"]
 
 [ext_resource type="Script" uid="uid://de8j7peduudhd" path="res://src/ui/menus/scenes/pause.gd" id="1_r8232"]
-[ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://src/levels/assets/fonts/PixeloidSans-Bold.ttf" id="2_60hwv"]
+[ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://fonts/PixeloidSans-Bold.ttf" id="2_60hwv"]
 [ext_resource type="PackedScene" uid="uid://bfmon6s3y20l" path="res://src/ui/menus/scenes/options_pause.tscn" id="2_options"]
-[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://src/levels/assets/fonts/PixeloidSans.ttf" id="3_uiw7h"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="3_uiw7h"]
 
 [node name="Pause" type="CanvasLayer" unique_id=1030095812]
 process_mode = 3

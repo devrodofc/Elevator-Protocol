@@ -1,8 +1,7 @@
 [gd_scene format=3 uid="uid://0s2adho6lhr3"]
 
 [ext_resource type="Script" uid="uid://dycu3xihjorki" path="res://src/ui/menus/scripts/options.gd" id="1_jqr15"]
-[ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/tela inicial do game 1 frame.jpg" id="2_1um8p"]
-[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://src/levels/assets/fonts/resources/dynapuff_regular.tres" id="3_1um8p"]
+[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://fonts/resources/dynapuff_regular.tres" id="3_1um8p"]
 [ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/tela inicial do game 1 frame.jpg" id="3_quti6"]
 
 [sub_resource type="Animation" id="Animation_lrlgq"]
@@ -17,7 +16,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_1um8p")]
+"values": [ExtResource("3_quti6")]
 }
 
 [sub_resource type="Animation" id="Animation_22vns"]
@@ -33,7 +32,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("2_1um8p"), ExtResource("3_quti6")]
+"values": [ExtResource("3_quti6"), ExtResource("3_quti6")]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7pniv"]
@@ -59,7 +58,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_1um8p")
+texture = ExtResource("3_quti6")
 expand_mode = 1
 stretch_mode = 6
 metadata/_edit_lock_ = true

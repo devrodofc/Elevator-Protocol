@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cnqqfxy5yhm6s"
-path="res://.godot/imported/PixeloidMono.ttf-52175fe65edf89d5b0d3c150eb4b5e95.fontdata"
+uid="uid://basenhmkhdrdj"
+path="res://.godot/imported/Jersey10-Regular.ttf-2bf0d37d15e5634f8f45422a282f4af2.fontdata"
 
 [deps]
 
-source_file="res://src/levels/assets/fonts/PixeloidMono.ttf"
-dest_files=["res://.godot/imported/PixeloidMono.ttf-52175fe65edf89d5b0d3c150eb4b5e95.fontdata"]
+source_file="res://fonts/Jersey10-Regular.ttf"
+dest_files=["res://.godot/imported/Jersey10-Regular.ttf-2bf0d37d15e5634f8f45422a282f4af2.fontdata"]
 
 [params]
 

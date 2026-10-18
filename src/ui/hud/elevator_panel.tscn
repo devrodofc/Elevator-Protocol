@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://3ehfranwnf7p"]
 
-[ext_resource type="Script" path="res://src/ui/hud/elevator_panel.gd" id="1_panel"]
-[ext_resource type="Script" path="res://src/ui/hud/elevator_button.gd" id="2_button"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/Elevador/painel elevador.png" id="3_panel"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/Elevador/botão elevador.png" id="4_normal"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/Elevador/botão elevador pressionado sem contorno.png" id="5_pressed"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/Elevador/botão de negar pressionado sem contorno.png" id="6_deny_pressed"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/Elevador/confirmar pressionado.png" id="7_confirm_pressed"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/Elevador/painel elevador botões.png" id="8_reference"]
-[ext_resource type="FontVariation" path="res://src/levels/assets/fonts/resources/dynapuff_bold.tres" id="9_font"]
+[ext_resource type="Script" uid="uid://6gn0hyc28ndp" path="res://src/ui/hud/elevator_panel.gd" id="1_panel"]
+[ext_resource type="Script" uid="uid://b3uduovofky1y" path="res://src/ui/hud/elevator_button.gd" id="2_button"]
+[ext_resource type="Texture2D" uid="uid://c7j3wj536b1fl" path="res://src/levels/assets/Elevador/painel elevador.png" id="3_panel"]
+[ext_resource type="Texture2D" uid="uid://cg78eid27qumv" path="res://src/levels/assets/Elevador/botão elevador.png" id="4_normal"]
+[ext_resource type="Texture2D" uid="uid://ce8lbt86jksjn" path="res://src/levels/assets/Elevador/botão elevador pressionado sem contorno.png" id="5_pressed"]
+[ext_resource type="Texture2D" uid="uid://db4lpgpif2xd5" path="res://src/levels/assets/Elevador/botão de negar pressionado sem contorno.png" id="6_deny_pressed"]
+[ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://fonts/PixeloidSans-Bold.ttf" id="6_wrxtx"]
+[ext_resource type="Texture2D" uid="uid://sxp0s574oosq" path="res://src/levels/assets/Elevador/confirmar pressionado.png" id="7_confirm_pressed"]
+[ext_resource type="Texture2D" uid="uid://cpp3pto0pah3d" path="res://src/levels/assets/Elevador/painel elevador botões.png" id="8_reference"]
 
 [sub_resource type="AtlasTexture" id="Atlas_deny_normal"]
 atlas = ExtResource("8_reference")
@@ -18,7 +18,7 @@ region = Rect2(228, 374, 100, 96)
 atlas = ExtResource("8_reference")
 region = Rect2(56, 491, 272, 89)
 
-[node name="ElevatorPanel" type="Control"]
+[node name="ElevatorPanel" type="Control" unique_id=717598547]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 384.0
@@ -27,22 +27,22 @@ scale = Vector2(0.25, 0.25)
 mouse_filter = 2
 script = ExtResource("1_panel")
 
-[node name="Panel" type="TextureRect" parent="."]
+[node name="Panel" type="TextureRect" parent="." unique_id=1803230544]
 layout_mode = 0
 offset_right = 384.0
 offset_bottom = 624.0
 mouse_filter = 2
 texture = ExtResource("3_panel")
 
-[node name="Buttons" type="Control" parent="."]
+[node name="Buttons" type="Control" parent="." unique_id=2095681345]
 unique_name_in_owner = true
-layout_mode = 0
+anchors_preset = 0
 offset_right = 384.0
 offset_bottom = 624.0
 mouse_filter = 2
 
-[node name="Floor5" type="Control" parent="Buttons"]
-layout_mode = 0
+[node name="Floor5" type="Control" parent="Buttons" unique_id=211365808]
+anchors_preset = 0
 offset_left = 56.0
 offset_top = 36.0
 offset_right = 156.0
@@ -53,27 +53,27 @@ texto = "5"
 normal_texture = ExtResource("4_normal")
 selected_texture = ExtResource("5_pressed")
 
-[node name="Normal" type="TextureRect" parent="Buttons/Floor5"]
+[node name="Normal" type="TextureRect" parent="Buttons/Floor5" unique_id=1056481739]
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Selected" type="TextureRect" parent="Buttons/Floor5"]
+[node name="Selected" type="TextureRect" parent="Buttons/Floor5" unique_id=1357054810]
 visible = false
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Buttons/Floor5"]
+[node name="Label" type="Label" parent="Buttons/Floor5" unique_id=2145789760]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 88.0
 theme_override_colors/font_color = Color(0.16, 0.16, 0.16, 1)
-theme_override_fonts/font = ExtResource("9_font")
+theme_override_fonts/font = ExtResource("6_wrxtx")
 theme_override_font_sizes/font_size = 48
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Floor6" type="Control" parent="Buttons"]
-layout_mode = 0
+[node name="Floor6" type="Control" parent="Buttons" unique_id=674275772]
+anchors_preset = 0
 offset_left = 228.0
 offset_top = 36.0
 offset_right = 328.0
@@ -84,27 +84,27 @@ texto = "6"
 normal_texture = ExtResource("4_normal")
 selected_texture = ExtResource("5_pressed")
 
-[node name="Normal" type="TextureRect" parent="Buttons/Floor6"]
+[node name="Normal" type="TextureRect" parent="Buttons/Floor6" unique_id=1281996865]
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Selected" type="TextureRect" parent="Buttons/Floor6"]
+[node name="Selected" type="TextureRect" parent="Buttons/Floor6" unique_id=1113800133]
 visible = false
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Buttons/Floor6"]
+[node name="Label" type="Label" parent="Buttons/Floor6" unique_id=1162658411]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 88.0
 theme_override_colors/font_color = Color(0.16, 0.16, 0.16, 1)
-theme_override_fonts/font = ExtResource("9_font")
+theme_override_fonts/font = ExtResource("6_wrxtx")
 theme_override_font_sizes/font_size = 48
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Floor3" type="Control" parent="Buttons"]
-layout_mode = 0
+[node name="Floor3" type="Control" parent="Buttons" unique_id=1469480263]
+anchors_preset = 0
 offset_left = 56.0
 offset_top = 150.0
 offset_right = 156.0
@@ -115,27 +115,27 @@ texto = "3"
 normal_texture = ExtResource("4_normal")
 selected_texture = ExtResource("5_pressed")
 
-[node name="Normal" type="TextureRect" parent="Buttons/Floor3"]
+[node name="Normal" type="TextureRect" parent="Buttons/Floor3" unique_id=962270938]
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Selected" type="TextureRect" parent="Buttons/Floor3"]
+[node name="Selected" type="TextureRect" parent="Buttons/Floor3" unique_id=734339880]
 visible = false
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Buttons/Floor3"]
+[node name="Label" type="Label" parent="Buttons/Floor3" unique_id=581551353]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 88.0
 theme_override_colors/font_color = Color(0.16, 0.16, 0.16, 1)
-theme_override_fonts/font = ExtResource("9_font")
+theme_override_fonts/font = ExtResource("6_wrxtx")
 theme_override_font_sizes/font_size = 48
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Floor4" type="Control" parent="Buttons"]
-layout_mode = 0
+[node name="Floor4" type="Control" parent="Buttons" unique_id=812695741]
+anchors_preset = 0
 offset_left = 228.0
 offset_top = 150.0
 offset_right = 328.0
@@ -146,58 +146,57 @@ texto = "4"
 normal_texture = ExtResource("4_normal")
 selected_texture = ExtResource("5_pressed")
 
-[node name="Normal" type="TextureRect" parent="Buttons/Floor4"]
+[node name="Normal" type="TextureRect" parent="Buttons/Floor4" unique_id=1915819201]
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Selected" type="TextureRect" parent="Buttons/Floor4"]
+[node name="Selected" type="TextureRect" parent="Buttons/Floor4" unique_id=273807437]
 visible = false
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Buttons/Floor4"]
+[node name="Label" type="Label" parent="Buttons/Floor4" unique_id=1637248041]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 88.0
 theme_override_colors/font_color = Color(0.16, 0.16, 0.16, 1)
-theme_override_fonts/font = ExtResource("9_font")
+theme_override_fonts/font = ExtResource("6_wrxtx")
 theme_override_font_sizes/font_size = 48
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Floor1" type="Control" parent="Buttons"]
-layout_mode = 0
+[node name="Floor1" type="Control" parent="Buttons" unique_id=1230420616]
+anchors_preset = 0
 offset_left = 56.0
 offset_top = 262.0
 offset_right = 156.0
 offset_bottom = 358.0
 script = ExtResource("2_button")
-code = 1
 texto = "1"
 normal_texture = ExtResource("4_normal")
 selected_texture = ExtResource("5_pressed")
 
-[node name="Normal" type="TextureRect" parent="Buttons/Floor1"]
+[node name="Normal" type="TextureRect" parent="Buttons/Floor1" unique_id=630599063]
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Selected" type="TextureRect" parent="Buttons/Floor1"]
+[node name="Selected" type="TextureRect" parent="Buttons/Floor1" unique_id=2047560859]
 visible = false
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Buttons/Floor1"]
+[node name="Label" type="Label" parent="Buttons/Floor1" unique_id=1698340923]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 88.0
 theme_override_colors/font_color = Color(0.16, 0.16, 0.16, 1)
-theme_override_fonts/font = ExtResource("9_font")
+theme_override_fonts/font = ExtResource("6_wrxtx")
 theme_override_font_sizes/font_size = 48
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Floor2" type="Control" parent="Buttons"]
-layout_mode = 0
+[node name="Floor2" type="Control" parent="Buttons" unique_id=753662104]
+anchors_preset = 0
 offset_left = 228.0
 offset_top = 262.0
 offset_right = 328.0
@@ -208,27 +207,27 @@ texto = "2"
 normal_texture = ExtResource("4_normal")
 selected_texture = ExtResource("5_pressed")
 
-[node name="Normal" type="TextureRect" parent="Buttons/Floor2"]
+[node name="Normal" type="TextureRect" parent="Buttons/Floor2" unique_id=1893632954]
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Selected" type="TextureRect" parent="Buttons/Floor2"]
+[node name="Selected" type="TextureRect" parent="Buttons/Floor2" unique_id=33020578]
 visible = false
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Buttons/Floor2"]
+[node name="Label" type="Label" parent="Buttons/Floor2" unique_id=1984627700]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 88.0
 theme_override_colors/font_color = Color(0.16, 0.16, 0.16, 1)
-theme_override_fonts/font = ExtResource("9_font")
+theme_override_fonts/font = ExtResource("6_wrxtx")
 theme_override_font_sizes/font_size = 48
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Subsolo" type="Control" parent="Buttons"]
-layout_mode = 0
+[node name="Subsolo" type="Control" parent="Buttons" unique_id=927136439]
+anchors_preset = 0
 offset_left = 56.0
 offset_top = 374.0
 offset_right = 156.0
@@ -239,84 +238,82 @@ texto = "S"
 normal_texture = ExtResource("4_normal")
 selected_texture = ExtResource("5_pressed")
 
-[node name="Normal" type="TextureRect" parent="Buttons/Subsolo"]
+[node name="Normal" type="TextureRect" parent="Buttons/Subsolo" unique_id=759566685]
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Selected" type="TextureRect" parent="Buttons/Subsolo"]
+[node name="Selected" type="TextureRect" parent="Buttons/Subsolo" unique_id=1850524214]
 visible = false
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Buttons/Subsolo"]
+[node name="Label" type="Label" parent="Buttons/Subsolo" unique_id=2003734613]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 88.0
 theme_override_colors/font_color = Color(0.16, 0.16, 0.16, 1)
-theme_override_fonts/font = ExtResource("9_font")
+theme_override_fonts/font = ExtResource("6_wrxtx")
 theme_override_font_sizes/font_size = 48
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Deny" type="Control" parent="Buttons"]
-layout_mode = 0
+[node name="Deny" type="Control" parent="Buttons" unique_id=1712389552]
+anchors_preset = 0
 offset_left = 228.0
 offset_top = 374.0
 offset_right = 328.0
 offset_bottom = 470.0
 script = ExtResource("2_button")
 code = 999
-texto = ""
 normal_texture = SubResource("Atlas_deny_normal")
 selected_texture = ExtResource("6_deny_pressed")
 
-[node name="Normal" type="TextureRect" parent="Buttons/Deny"]
+[node name="Normal" type="TextureRect" parent="Buttons/Deny" unique_id=951086030]
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Selected" type="TextureRect" parent="Buttons/Deny"]
+[node name="Selected" type="TextureRect" parent="Buttons/Deny" unique_id=1397022985]
 visible = false
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Buttons/Deny"]
+[node name="Label" type="Label" parent="Buttons/Deny" unique_id=1600610901]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 88.0
 theme_override_colors/font_color = Color(0.16, 0.16, 0.16, 1)
-theme_override_fonts/font = ExtResource("9_font")
+theme_override_fonts/font = ExtResource("6_wrxtx")
 theme_override_font_sizes/font_size = 48
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ConfirmButton" type="Control" parent="Buttons"]
+[node name="ConfirmButton" type="Control" parent="Buttons" unique_id=1995814327]
 unique_name_in_owner = true
-layout_mode = 0
+anchors_preset = 0
 offset_left = 56.0
 offset_top = 491.0
 offset_right = 328.0
 offset_bottom = 580.0
 script = ExtResource("2_button")
 code = 0
-texto = ""
 normal_texture = SubResource("Atlas_confirm_normal")
 selected_texture = ExtResource("7_confirm_pressed")
 
-[node name="Normal" type="TextureRect" parent="Buttons/ConfirmButton"]
+[node name="Normal" type="TextureRect" parent="Buttons/ConfirmButton" unique_id=285387180]
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Selected" type="TextureRect" parent="Buttons/ConfirmButton"]
+[node name="Selected" type="TextureRect" parent="Buttons/ConfirmButton" unique_id=280272963]
 visible = false
 layout_mode = 0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Buttons/ConfirmButton"]
+[node name="Label" type="Label" parent="Buttons/ConfirmButton" unique_id=333290209]
 layout_mode = 0
 offset_right = 272.0
 offset_bottom = 88.0
 theme_override_colors/font_color = Color(0.16, 0.16, 0.16, 1)
-theme_override_fonts/font = ExtResource("9_font")
+theme_override_fonts/font = ExtResource("6_wrxtx")
 theme_override_font_sizes/font_size = 48
 horizontal_alignment = 1
 vertical_alignment = 1
