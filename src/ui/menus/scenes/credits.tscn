@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bjqvjv6o462d1" path="res://src/ui/menus/scripts/credits.gd" id="1_o6xkx"]
 [ext_resource type="Texture2D" uid="uid://dx268n3lhjdjl" path="res://src/ui/menus/assets/background_menu1.png" id="2_gtovi"]
+[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://src/levels/assets/fonts/resources/dynapuff_regular.tres" id="3_gtovi"]
 [ext_resource type="Texture2D" uid="uid://14bkwadxycu1" path="res://src/ui/menus/assets/background_menu2.png" id="3_qwbe7"]
 
 [sub_resource type="Animation" id="Animation_lrlgq"]
@@ -74,28 +75,31 @@ color = Color(0, 0, 0, 0.15686275)
 
 [node name="CreditsTitle" type="Label" parent="." unique_id=1936966435]
 layout_mode = 0
-offset_left = 220.0
-offset_top = 55.0
-offset_right = 430.0
-offset_bottom = 100.0
+offset_left = 219.0
+offset_top = 62.0
+offset_right = 429.0
+offset_bottom = 107.0
+theme_override_fonts/font = ExtResource("3_gtovi")
 theme_override_font_sizes/font_size = 32
 text = "Opções"
 horizontal_alignment = 1
 
 [node name="Studio" type="Label" parent="." unique_id=720760481]
 layout_mode = 0
-offset_left = 227.0
-offset_top = 99.0
-offset_right = 412.0
-offset_bottom = 122.0
+offset_left = 228.0
+offset_top = 104.0
+offset_right = 419.0
+offset_bottom = 127.0
+theme_override_fonts/font = ExtResource("3_gtovi")
 text = "Coffee & Games Studios"
 
 [node name="Team" type="Label" parent="." unique_id=573932509]
 layout_mode = 0
-offset_left = 224.0
-offset_top = 125.0
-offset_right = 416.0
-offset_bottom = 252.0
+offset_left = 225.0
+offset_top = 132.0
+offset_right = 423.0
+offset_bottom = 244.0
+theme_override_fonts/font = ExtResource("3_gtovi")
 text = "Rodrigo - Game Designer
 Daniel - Programador
 Gustavo - Programador
@@ -114,6 +118,7 @@ theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_fonts/font = ExtResource("3_gtovi")
 theme_override_font_sizes/font_size = 24
 text = "Back"
 underline = 2

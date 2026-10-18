@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://cqu76s68bvugf"]
+[gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://bisjqw4jlnmn2"]
 
 [ext_resource type="PackedScene" uid="uid://dkr07sdxnwmoo" path="res://src/npcs/scenes/characters/joseNPC.tscn" id="1_0ndgi"]
 [ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_n2dn3"]

@@ -6,6 +6,10 @@ signal departed
 
 ## Instância visual carregada da cena da Clara (PackedScene)
 var current_visual_instance: Node = null
+## Textura sorteada para esta visita (usada no Sprite2D padrão quando não há "cena")
+var current_sprite: Texture2D = null
+
+@onready var default_sprite: Sprite2D = get_node_or_null("Sprite2D")
 
 @export var current_data: VisitorData:
 	set(value):
@@ -16,9 +20,15 @@ var current_visual_instance: Node = null
 ## Velocidade constante de deslocamento em pixels por segundo
 @export var move_speed: float = 250.0
 
+@export_group("Depth & Scale Settings")
+## Escala quando o visitante está esperando na fila (menor, ao fundo)
+@export var queue_scale: Vector2 = Vector2(0.75, 0.75)
+## Escala completa no balcão de atendimento (frente)
+@export var desk_scale: Vector2 = Vector2(1.0, 1.0)
+
 @export_group("Step Animation Settings")
 @export var step_bob_height: float = 6.0
-## Distância em pixels percorrida para completar 1 passo (bobbing completo)
+## Distância em pixels percorrida para completar 1 passo
 @export var step_distance: float = 45.0
 
 var is_moving: bool = false
@@ -27,15 +37,16 @@ var _active_bob_tween: Tween = null
 
 
 func _ready() -> void:
+	scale = queue_scale
 	if current_data:
 		_apply_data(current_data)
 
 
-func setup(data: VisitorData) -> void:
+func setup(data: VisitorData, sprite: Texture2D = null) -> void:
+	current_sprite = sprite
 	current_data = data
 
 
-## Remove a arte anterior e instancia a nova cena visual do VisitorData
 func _apply_data(data: VisitorData) -> void:
 	if not is_node_ready():
 		return
@@ -47,6 +58,16 @@ func _apply_data(data: VisitorData) -> void:
 	if data and data.cena:
 		current_visual_instance = data.cena.instantiate()
 		add_child(current_visual_instance)
+		if default_sprite:
+			default_sprite.visible = false
+	elif default_sprite:
+		var texture: Texture2D = current_sprite
+		if texture == null and data and not data.sprites.is_empty():
+			texture = data.sprites.pick_random()
+		default_sprite.texture = texture
+		default_sprite.visible = true
+		if data and texture == null:
+			push_warning("Visitor '%s' sem arte: defina 'cena' ou 'sprites' no VisitorData." % data.id)
 
 
 func get_visitor_name() -> String:
@@ -67,13 +88,48 @@ func get_tags() -> Array[String]:
 	return []
 
 
-## Move o visitante com velocidade constante e animação de passos
-func move_to_slot(target_pos: Vector2, on_finished: Callable = Callable()) -> void:
+func get_badge_photo() -> Texture2D:
+	if current_data and current_data.retrato:
+		return current_data.retrato
+	var visual: Node = current_visual_instance if is_instance_valid(current_visual_instance) else default_sprite
+	return _find_badge_texture(visual)
+
+
+func _find_badge_texture(visual: Node) -> Texture2D:
+	if visual == null:
+		return null
+	if visual is CanvasItem and not visual.visible:
+		return null
+	if visual is AnimatedSprite2D and visual.sprite_frames:
+		var frames: SpriteFrames = visual.sprite_frames
+		if frames.has_animation(visual.animation) and frames.get_frame_count(visual.animation) > visual.frame:
+			return frames.get_frame_texture(visual.animation, visual.frame)
+	if visual is Sprite2D and visual.texture:
+		if not visual.region_enabled and visual.hframes == 1 and visual.vframes == 1:
+			return visual.texture
+		var frame_size: Vector2 = visual.region_rect.size if visual.region_enabled else visual.texture.get_size()
+		frame_size /= Vector2(visual.hframes, visual.vframes)
+		var origin: Vector2 = visual.region_rect.position if visual.region_enabled else Vector2.ZERO
+		var atlas := AtlasTexture.new()
+		atlas.atlas = visual.texture
+		atlas.region = Rect2(origin + Vector2(visual.frame_coords) * frame_size, frame_size)
+		return atlas
+	for child in visual.get_children():
+		var texture: Texture2D = _find_badge_texture(child)
+		if texture:
+			return texture
+	return null
+
+
+func move_to_slot(target_pos: Vector2, on_finished: Callable = Callable(), is_desk_slot: bool = false) -> void:
 	_kill_tweens()
 	
+	var target_scale: Vector2 = desk_scale if is_desk_slot else queue_scale
 	var distance: float = global_position.distance_to(target_pos)
+	
 	if distance <= 1.0 or move_speed <= 0.0:
 		global_position = target_pos
+		scale = target_scale
 		is_moving = false
 		arrived.emit()
 		if on_finished.is_valid():
@@ -89,6 +145,9 @@ func move_to_slot(target_pos: Vector2, on_finished: Callable = Callable()) -> vo
 	_active_move_tween.tween_property(self, "global_position:y", target_pos.y, duration)\
 		.set_trans(Tween.TRANS_LINEAR)
 	
+	_active_move_tween.tween_property(self, "scale", target_scale, duration)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	
 	_play_step_animation(distance, duration)
 	
 	_active_move_tween.chain().tween_callback(func():
@@ -100,7 +159,6 @@ func move_to_slot(target_pos: Vector2, on_finished: Callable = Callable()) -> vo
 	)
 
 
-## Despede o visitante da recepção até o ponto de saída
 func leave_to(exit_position: Vector2) -> void:
 	_kill_tweens()
 	
@@ -129,11 +187,27 @@ func leave_to(exit_position: Vector2) -> void:
 	)
 
 
+## Retorna a instância carregada ou o Sprite2D padrão para animar
+func _get_visual_target() -> Node2D:
+	if is_instance_valid(current_visual_instance) and current_visual_instance is Node2D:
+		return current_visual_instance as Node2D
+	
+	if default_sprite and is_instance_valid(default_sprite):
+		return default_sprite
+		
+	# Fallback: busca qualquer Sprite2D ou AnimatedSprite2D filho
+	for child in get_children():
+		if child is Sprite2D or child is AnimatedSprite2D:
+			return child as Node2D
+			
+	return null
+
+
 func _play_step_animation(distance: float, duration: float) -> void:
-	if not is_instance_valid(current_visual_instance) or not (current_visual_instance is Node2D):
+	var visual_node: Node2D = _get_visual_target()
+	if visual_node == null:
 		return
 		
-	var visual_node: Node2D = current_visual_instance as Node2D
 	var cycles: int = maxi(1, int(round(distance / step_distance)))
 	var step_time: float = duration / (cycles * 2)
 	
@@ -146,8 +220,9 @@ func _play_step_animation(distance: float, duration: float) -> void:
 
 
 func _reset_bob() -> void:
-	if is_instance_valid(current_visual_instance) and current_visual_instance is Node2D:
-		(current_visual_instance as Node2D).position.y = 0.0
+	var visual_node: Node2D = _get_visual_target()
+	if visual_node:
+		visual_node.position.y = 0.0
 
 
 func _kill_tweens() -> void:

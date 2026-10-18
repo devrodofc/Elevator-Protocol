@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://ylajsyngiss5"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_ku75k"]
+[ext_resource type="Script" uid="uid://dqqkx48suhb5s" path="res://src/npcs/resources/name_list.gd" id="2_dperg"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="3_fik82"]
+[ext_resource type="Texture2D" uid="uid://ictwd4yy5kpx" path="res://src/npcs/assets/mulher1/npc mulher 1.png" id="4_iqb70"]
+[ext_resource type="Texture2D" uid="uid://cs26gm0bsysvi" path="res://src/npcs/assets/mulher2/npc mulher 2.png" id="5_vclc3"]
+
+[sub_resource type="Resource" id="Resource_4b4sj"]
+script = ExtResource("1_ku75k")
+texto = "Bom dia! Por favor, libere o 1º Andar para mim."
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_uogxw"]
+script = ExtResource("1_ku75k")
+texto = "Com licença, vim para o horário de almoço no refeitório."
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_afyfh"]
+script = ExtResource("1_ku75k")
+texto = "Tomei seis expressos duplos, comecei a tremer e mandei a demissão sem querer por e-mail. Preciso de subir ao RH para cancelar isso antes que vejam!"
+andar_desejado = 2
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_vovbs"]
+script = ExtResource("1_ku75k")
+texto = "Olá... vim para uma entrevista de emprego no Recursos Humanos."
+andar_desejado = 2
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_u5flw"]
+script = ExtResource("1_ku75k")
+texto = "Segundo andar... acho que vão me demitir..."
+andar_desejado = 2
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_hx2ub"]
+script = ExtResource("1_ku75k")
+texto = "Bom dia! Por favor, libere o 3º Andar."
+andar_desejado = 3
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_gnben"]
+script = ExtResource("1_ku75k")
+texto = "Olá, preciso subir para o terceiro andar para atualizar os servidores"
+andar_desejado = 3
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_lw65k"]
+script = ExtResource("1_ku75k")
+texto = "Me falaram que o código só compila se a equipe de TI estiver a operar à base de cafeína pura. Mande-me para a Tecnologia antes que comecem a tremer!"
+andar_desejado = 3
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_jsnu2"]
+script = ExtResource("2_dperg")
+names = PackedStringArray("Júlia", "Cleide", "Panqueca", "Mariana", "Cristina", "Raquel", "Socorro", "Paula", "Lara", "Joana", "Marianne", "Moranga", "Beatriz", "Juliette", "Márcia")
+metadata/_custom_type_script = "uid://dqqkx48suhb5s"
+
+[resource]
+script = ExtResource("3_fik82")
+id = "002"
+nome = "FemaleNPC"
+nome_aleatorio = true
+lista_nomes = SubResource("Resource_jsnu2")
+sprites = Array[Texture2D]([ExtResource("4_iqb70"), ExtResource("5_vclc3")])
+tags = Array[String](["Common"])
+dialogos = Array[ExtResource("1_ku75k")]([SubResource("Resource_4b4sj"), SubResource("Resource_uogxw"), SubResource("Resource_afyfh"), SubResource("Resource_vovbs"), SubResource("Resource_u5flw"), SubResource("Resource_hx2ub"), SubResource("Resource_gnben"), SubResource("Resource_lw65k")])
+idade_aleatoria = true
+idade_max = 36
+sexo = "Feminino"
+opcoes_sexo = PackedStringArray("Masculino", "Feminino")
+ocupacao_aleatoria = true
+opcoes_ocupacao = PackedStringArray("Analista", "Contador")
+metadata/_custom_type_script = "uid://c8k1xw7vuahns"

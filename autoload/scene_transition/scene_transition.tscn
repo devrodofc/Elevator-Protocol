@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://autoload/scene_transition/scene_transition.gd" id="1_transition"]
+[ext_resource type="FontFile" uid="uid://bfqv1huuduey3" path="res://src/levels/assets/fonts/Chewy-Regular.ttf" id="2_title"]
+
+[node name="SceneTransition" type="CanvasLayer"]
+layer = 50
+script = ExtResource("1_transition")
+
+[node name="Fade" type="ColorRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.07, 0.06, 0.06, 0)
+
+[node name="Title" type="Label" parent="Fade"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.93, 0.9, 0.84, 1)
+theme_override_fonts/font = ExtResource("2_title")
+theme_override_font_sizes/font_size = 32
+text = "Dia 1"
+horizontal_alignment = 1
+vertical_alignment = 1

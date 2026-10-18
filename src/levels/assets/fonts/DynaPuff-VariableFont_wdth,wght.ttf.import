@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://yf7uwgqktn5r"
-path="res://.godot/imported/KiwiSoda.ttf-b0fc01a494cc34fd048d9428c3ee39e1.fontdata"
+uid="uid://bc3sbfcfbrh64"
+path="res://.godot/imported/DynaPuff-VariableFont_wdth,wght.ttf-0aaf4222d86b60a6ca1bc288eb1942f4.fontdata"
 
 [deps]
 
-source_file="res://src/levels/assets/fonts/KiwiSoda.ttf"
-dest_files=["res://.godot/imported/KiwiSoda.ttf-b0fc01a494cc34fd048d9428c3ee39e1.fontdata"]
+source_file="res://src/levels/assets/fonts/DynaPuff-VariableFont_wdth,wght.ttf"
+dest_files=["res://.godot/imported/DynaPuff-VariableFont_wdth,wght.ttf-0aaf4222d86b60a6ca1bc288eb1942f4.fontdata"]
 
 [params]
 
