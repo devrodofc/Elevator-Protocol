@@ -70,6 +70,9 @@ func _ready() -> void:
 	if dia_em_andamento:
 		schedule_config = dia_em_andamento
 	_build_schedule_data()
+	# Dias 1 e 2: música do gameplay; a partir do dia 3: música "errada"
+	var dia: int = schedule_config.dia_numero if schedule_config else 1
+	Audio.play_music(Audio.MUSICA_ERRADA if dia >= 3 else Audio.MUSICA_GAMEPLAY)
 	_start_day_intro()
 
 
@@ -177,6 +180,7 @@ func _on_floor_selected(floor_code: int) -> void:
 
 ## Sucesso: o visitante vai embora e, após o delay, surge o próximo
 func _process_success(floor_code: int = RuleValidator.DENY_ACTION) -> void:
+	Audio.play_sfx(Audio.SUCESSO)
 	reception_hud.set_current_visitor(null)
 	if is_instance_valid(current_visitor_node):
 		# A chegada dele no elevador não pode atualizar o crachá do próximo visitante
@@ -211,6 +215,7 @@ func _process_success(floor_code: int = RuleValidator.DENY_ACTION) -> void:
 
 ## Função de falha com transição de tela vermelha lenta e aparição da Marta
 func fail() -> void:
+	Audio.play_sfx(Audio.ERRO)
 	reception_hud.set_current_visitor(null)
 	if elevator_panel:
 		elevator_panel.set_panel_locked(true)
@@ -268,8 +273,9 @@ func _conclude_day() -> void:
 		
 	var escuro: ColorRect = null
 	var suspense: float = schedule_config.suspense_antes_do_fim if schedule_config else 0.0
+	var som_escuro: AudioStream = schedule_config.som_no_escuro if schedule_config else null
 	if suspense > 0.0:
-		escuro = await _apagar_luzes(suspense)
+		escuro = await _apagar_luzes(suspense, som_escuro)
 		if not is_inside_tree():
 			return
 
@@ -279,7 +285,19 @@ func _conclude_day() -> void:
 		await _marta_arrive(true, sprite_fim) # sai do elevador e vem até a mesa
 	if not is_inside_tree():
 		return
-	if escuro:
+	if escuro and som_escuro:
+		# Ela para e encara em silêncio; a luz volta pouco e vermelha, pulsando enquanto ela fala
+		var luz := create_tween()
+		luz.tween_property(escuro, "color", Color(0.3, 0.0, 0.0, 0.42), 1.6)			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		luz.tween_callback(func():
+			var pulso := create_tween().set_loops()
+			pulso.tween_property(escuro, "color:a", 0.3, 1.1).set_trans(Tween.TRANS_SINE)
+			pulso.tween_property(escuro, "color:a", 0.42, 1.1).set_trans(Tween.TRANS_SINE)
+		)
+		await get_tree().create_timer(1.8).timeout
+		if not is_inside_tree():
+			return
+	elif escuro:
 		# A luz volta só um pouco enquanto ela fala
 		create_tween().tween_property(escuro, "color:a", 0.25, 1.2)
 	var msg_fim: String = schedule_config.mensagem_fim if schedule_config else "Expediente encerrado. Você concluiu o dia!"
@@ -303,14 +321,16 @@ func _conclude_day() -> void:
 		get_tree().change_scene_to_file(scene_file_path)
 
 
-## Suspense do fim do dia: espera o último visitante sumir no elevador, as luzes piscam e a sala
-## fica escura e em silêncio por "segundos". Devolve o escurecimento (continua na tela).
-func _apagar_luzes(segundos: float) -> ColorRect:
+## Suspense do fim do dia: espera o último visitante sumir no elevador, a música some, as luzes
+## piscam e a sala fica escura e em silêncio por "segundos". Com "som", ele toca no escuro (vindo do
+## subsolo) com o cenário tremendo. Devolve o escurecimento (continua na tela).
+func _apagar_luzes(segundos: float, som: AudioStream = null) -> ColorRect:
 	while elevator and elevator.has_method("is_busy") and elevator.is_busy():
 		await get_tree().process_frame
 		if not is_inside_tree():
 			return null
-	await get_tree().create_timer(0.6).timeout
+	Audio.fade_out_music(1.2)
+	await get_tree().create_timer(1.4 if som else 0.6).timeout
 	if not is_inside_tree():
 		return null
 
@@ -328,12 +348,38 @@ func _apagar_luzes(segundos: float) -> ColorRect:
 	for alvo in [0.55, 0.1, 0.7, 0.2, 0.75, 0.35]:
 		pisca.tween_property(escuro, "color:a", alvo, 0.07)
 		pisca.tween_interval(randf_range(0.05, 0.2))
-	pisca.tween_property(escuro, "color:a", 0.7, 0.6)
+	pisca.tween_property(escuro, "color:a", 0.9 if som else 0.7, 0.6)
 	await pisca.finished
 	if not is_inside_tree():
 		return null
+
+	if som:
+		await get_tree().create_timer(1.0).timeout
+		if not is_inside_tree():
+			return null
+		var duracao: float = maxf(som.get_length(), 0.5)
+		Audio.play_sfx(som)
+		_tremer(duracao, 3.0)
+		# Um vermelho fraco no escuro enquanto o som vem lá de baixo
+		var brilho := create_tween()
+		brilho.tween_property(escuro, "color", Color(0.18, 0.0, 0.0, 0.92), duracao * 0.3)
+		brilho.tween_property(escuro, "color", Color(0.0, 0.0, 0.02, 0.9), duracao * 0.7)
+		await get_tree().create_timer(duracao).timeout
+		if not is_inside_tree():
+			return null
 	await get_tree().create_timer(segundos).timeout
 	return escuro
+
+
+## Treme o cenário (a HUD fica parada) por "segundos", com a força diminuindo até parar.
+func _tremer(segundos: float, forca: float) -> void:
+	var origem: Vector2 = position
+	var passos: int = maxi(1, int(segundos / 0.05))
+	var tween := create_tween()
+	for i in passos:
+		var f: float = forca * (1.0 - float(i) / passos)
+		tween.tween_property(self, "position", origem + Vector2(randf_range(-f, f), randf_range(-f, f)), 0.05)
+	tween.tween_property(self, "position", origem, 0.05)
 
 
 func _update_badge_visitor() -> void:
@@ -540,7 +586,7 @@ func _marta_arrive(from_elevator: bool, sprite: Texture2D = null) -> void:
 	var target_pos: Vector2 = marta_point.global_position if marta_point else desk_point.global_position
 	if from_elevator and elevator and elevator.has_method("release"):
 		marta_instance = _spawn_marta(elevator.door_position(), sprite)
-		await elevator.release(marta_instance, target_pos)
+		await elevator.release(marta_instance, target_pos, true)
 	else:
 		marta_instance = _spawn_marta(_marta_spawn_pos(), sprite)
 		await _await_callback(func(done: Callable): _move_actor(marta_instance, target_pos, done))

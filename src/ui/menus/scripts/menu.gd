@@ -11,9 +11,11 @@ func _ready() -> void:
 	play_button.pressed.connect(_on_play_pressed)
 	options_button.pressed.connect(_on_options_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
+	Audio.stop_music() # voltando do jogo (pause → menu principal)
 	MusicMenu.play_if_stopped()
 
 func _on_play_pressed() -> void:
+	MusicMenu.stop_music()
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 func _on_options_pressed() -> void:

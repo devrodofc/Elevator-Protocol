@@ -68,7 +68,7 @@ Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu pri
 | Stretch | `canvas_items` | Texto é desenhado na resolução da janela (fica liso) |
 | Filtro de textura | Nearest (`default_texture_filter=0`) | Pixel art nítido |
 | Snap 2D | `snap_2d_transforms_to_pixel=true` | |
-| Autoloads | `Dialogue`, `SceneTransition`, `MusicMenu` | Ver seção 6. `MusicMenu` é registrado pelo **caminho** (`res://sounds/music/menu/music_menu.tscn`): pelo uid dava "Unrecognized UID" |
+| Autoloads | `Dialogue`, `SceneTransition`, `MusicMenu`, `Audio` | Ver seção 6. `MusicMenu` é registrado pelo **caminho** (`res://sounds/music/menu/music_menu.tscn`): pelo uid dava "Unrecognized UID" |
 | Áudio | `default_bus_layout.tres` | Buses `Master`, `Music`, `SFX` (os sliders das opções usam esses nomes) |
 | Input | `hack_level1`, `hack_level2` | Declarados, **não usados** em nenhum script |
 
@@ -86,10 +86,11 @@ caminho que não existe: elas carregam pelo `uid`. Se o uid se perder, corrija o
 autoload/
   dialogue/            Caixa de fala global (balão de fala, com páginas)
   scene_transition/    Fade + título entre cenas
+  audio/               audio.gd (autoload Audio: música do gameplay + efeitos sonoros, ver 6.9)
 sounds/music/
   menu/                music_menu.tscn/.gd (autoload MusicMenu: toca musica_menu.wav no bus Music)
-  wav/                 musica_menu.wav + mp3 ainda sem uso (gameplay, errada, elevador, digitando,
-                       passando_pagina, 3 "WhatsApp Audio ...")
+  wav/                 musica_menu.wav + mp3 do jogo (musica_gameplay, musica_errada, BotãoPressionado,
+                       chegou_elevador, digitando, erro, sucess, passando_pagina)
 default_bus_layout.tres  buses Music e SFX
 src/
   levels/
@@ -251,7 +252,7 @@ Ordem de aplicação:
 Códigos: andares 1–6, subsolo **-1**, negar **999** (`RuleValidator.DENY_ACTION`, `ElevatorPanel.DENY_CODE`).
 
 ### 6.3 Agenda do dia (`day_schedule.gd` + `day_interaction.gd`)
-- `DayScheduleConfig`: `dia_numero`, `proximo_dia`, `sprite_marta_fim`, `suspense_antes_do_fim`,
+- `DayScheduleConfig`: `dia_numero`, `proximo_dia`, `sprite_marta_fim`, `suspense_antes_do_fim`, `som_no_escuro`,
   mensagens da Marta (início, fim, falha), `intervalo_regras` (padrão 2; 0 desliga), `regras_por_dia`,
   `regras_marta` (banco sorteado), `regras_obrigatorias` (ditas todo dia), `pool_padrao`, `interacoes`,
   `andares_do_dia`, `falas_comuns`, `usar_falas_do_visitante` (desligado = só `falas_comuns`).
@@ -294,8 +295,11 @@ falas próprias em `src/npcs/dialogue/dialoguesDia2/<N> andar/` (3 por andar, `u
   a outra regra é sorteada do banco de 7: 3→negar, 1→subsolo, 4→2º, 5→6º + 3 narrativas.
 - O entregador pede "entrega para a dona Marta" (`andar_desejado = -1`): o certo é o subsolo.
 - `sprite_marta_fim` = `Marta sangrenta.png`: só na fala de fim ela aparece ensanguentada ("é katchup!").
-  Durante o dia usa o sprite padrão. `suspense_antes_do_fim = 3.0`: depois que o entregador entra no elevador,
-  as luzes piscam, a sala fica escura e em silêncio, e só então a Marta sai do elevador (`_apagar_luzes`).
+  Durante o dia usa o sprite padrão. `suspense_antes_do_fim = 3.0` + `som_no_escuro = MartaSubsoloKetchup.mp3`:
+  depois que o entregador entra no elevador a música some, as luzes piscam e a sala fica quase preta (0,9);
+  1 s depois toca o `MartaSubsoloKetchup` com o cenário tremendo e um vermelho fraco no escuro; mais 3 s de
+  silêncio, o elevador chega grave e a Marta sai, para e encara 1,8 s sob luz vermelha que pulsa enquanto ela
+  fala (`_apagar_luzes`, `_tremer`, `_conclude_day`). A música só volta no dia seguinte.
 
 **Dia 3** (`day3.tres`): mesmo formato, falas em `src/npcs/dialogue/dialoguesDia3/<N> andar/`. Visitante fixo
 no fim: **Seu Tião**, o faxineiro (`src/npcs/resources/Day3/tiao.tres`, sprite `tiao/tiao_jardineiro.png`,
@@ -336,6 +340,25 @@ clareia; emite `finished`. Bloqueia cliques durante a troca.
   (com 15, "1º andar" ocupa 86 px numa coluna de 76 e encosta na outra coluna); dados em
   `company_directory.tres` (7 entradas: 1º–6º e Subsolo por último). Logo só aparece se preenchido.
 - `rules_board.gd`: `open()`, `close()`, `toggle()`, `add_rule(texto)`, `clear_rules()`.
+
+### 6.9 Áudio (`Audio` + `MusicMenu`)
+`MusicMenu` (autoload) toca `musica_menu.wav` no menu; para ao apertar **Jogar** (`menu.gd`) e volta quando o
+menu abre de novo (o menu também para a música do gameplay). `Audio` (`autoload/audio/audio.gd`, registrado pelo
+caminho) tem um player de música (bus Music), um de loop e 6 vozes de efeito (bus SFX):
+
+| Som | Quando | Onde |
+|---|---|---|
+| `musica_gameplay` | Recepção, dias 1 e 2 (em loop) | `reception_manager._ready` |
+| `musica_errada` | Recepção, a partir do dia 3 (em loop) | `reception_manager._ready` |
+| `BotãoPressionado` | Qualquer botão do painel do elevador (inclui X e Confirmar) | `elevator_button._gui_input` |
+| `chegou_elevador` | Porta do elevador abre estando fechada: -6 dB (50%); quando a Marta sai, volume normal e pitch 0,7 | `elevator._tocar_chegada` (`release(..., som_da_marta)`) |
+| `digitando` | Narração da intro (tutorial), enquanto o texto aparece | `tutorial._show_narration` |
+| `passando_pagina` | Setas do livro de andares | `company_book.next_page/previous_page` |
+| `sucess` / `erro` | Acerto / erro do andar | `_process_success` / `fail` |
+| `MartaSubsoloKetchup` | Fim do dia 2, no escuro (`som_no_escuro` do `day2.tres`) | `_apagar_luzes` |
+
+Os MP3 foram importados sem loop: `audio.gd` liga `loop` em código nas músicas e no `digitando`.
+`play_music` não reinicia a mesma música (ao falhar e recarregar a cena ela continua).
 
 ---
 
@@ -451,10 +474,8 @@ clareia; emite `finished`. Bloqueia cliques durante a troca.
   se a mecânica mudar, atualizar `tutorial_intro.tres`.
 - Não há tela de resumo/fim depois do último dia.
 - A prancheta de regras aberta cobre o crachá.
-- **Música do menu continua tocando no jogo**: `MusicMenu` tem `autoplay` e ninguém chama `stop_music()`;
-  ela segue no tutorial e na recepção. Os sons de gameplay (`musica_gameplay.mp3`, `musica_errada.mp3`,
-  `chegou_elevador.mp3`, `digitando.mp3`, `passando_pagina.mp3`) estão em `sounds/music/wav/` mas ainda
-  não são usados por nenhuma cena.
+- Volumes do `Audio` (`MUSIC_VOLUME_DB` -20, `SFX_VOLUME_DB` -6, `LOOP_VOLUME_DB` -10) foram chutados
+  sem ouvir; ajustar no jogo.
 - Nos dias 2 e 3, as regras só narrativas do banco não saem: a obrigatória já é narrativa e a outra
   vaga é sempre de uma regra com efeito.
 
