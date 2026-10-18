@@ -40,12 +40,9 @@ animations = [{
 script = ExtResource("1_elevator")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1863498634]
-position = Vector2(378, 11)
 sprite_frames = SubResource("SpriteFrames_elevator")
 animation = &"fechar"
 centered = false
 
 [node name="DoorPoint" type="Marker2D" parent="." unique_id=1253606912]
 position = Vector2(102, 182)
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=714334894]
