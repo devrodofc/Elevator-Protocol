@@ -9,3 +9,5 @@ queue_scale = Vector2(0.2, 0.2)
 desk_scale = Vector2(3, 3)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2064176380]
+scale = Vector2(0.2890625, 0.2890625)
+offset = Vector2(3.5, -107)

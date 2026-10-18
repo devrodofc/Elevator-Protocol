@@ -1,11 +1,10 @@
 [gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://c6u578611k2mr"]
 
 [ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_5i0pw"]
-[ext_resource type="PackedScene" uid="uid://ck5iujkbuh1g0" path="res://src/npcs/scenes/characters/PassaroTeste.tscn" id="1_7hyus"]
 [ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="2_c01o2"]
 
 [resource]
 script = ExtResource("1_5i0pw")
-id = "002"
-cena = ExtResource("1_7hyus")
+id = "001ESPECIAL"
+nome = "Entregador "
 metadata/_custom_type_script = "uid://c8k1xw7vuahns"

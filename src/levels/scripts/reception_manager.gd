@@ -58,25 +58,8 @@ func _ready() -> void:
 ## Monta a lista completa de atendimentos do dia
 func _build_schedule_data() -> void:
 	queue_data.clear()
-	if schedule_config == null:
-		return
-		
-	# 1. Fase 1: Primeiros normais sorteados
-	if not schedule_config.pool_primeira_fase.is_empty():
-		for i in range(schedule_config.qtd_primeira_fase):
-			var v_rand: VisitorData = schedule_config.pool_primeira_fase.pick_random()
-			queue_data.append(v_rand.pick_visit())
-			
-	# 2. Fase 2: O NPC Fixo obrigatório
-	if schedule_config.npc_fixo != null:
-		var entry_fixo: Dictionary = schedule_config.npc_fixo.pick_visit(schedule_config.dialogo_fixo)
-		queue_data.append(entry_fixo)
-		
-	# 3. Fase 3: Últimos normais sorteados
-	if not schedule_config.pool_segunda_fase.is_empty():
-		for i in range(schedule_config.qtd_segunda_fase):
-			var v_rand: VisitorData = schedule_config.pool_segunda_fase.pick_random()
-			queue_data.append(v_rand.pick_visit())
+	if schedule_config:
+		queue_data = schedule_config.build_queue()
 
 
 ## Rotina de Introdução da Marta
@@ -122,7 +105,7 @@ func _call_next_visitor() -> void:
 		current_visitor_node.move_speed = visitor_move_speed
 	_add_actor(current_visitor_node)
 	current_visitor_node.global_position = spawn_point.global_position
-	current_visitor_node.setup(v_data)
+	current_visitor_node.setup(v_data, current_entry.get("sprite"))
 	
 	current_visitor_node.move_to_slot(desk_point.global_position, _on_visitor_arrived_at_desk, true)
 

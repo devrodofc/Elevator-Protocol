@@ -4,7 +4,13 @@
 [ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_ha2se"]
 [ext_resource type="Resource" uid="uid://c6u578611k2mr" path="res://src/npcs/resources/birdTest.tres" id="2_00xs8"]
 [ext_resource type="Script" uid="uid://dw560omsfs2go" path="res://src/levels/scripts/day_schedule.gd" id="2_1agin"]
-[ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/common_npc_male1.tres" id="4_3djo4"]
+[ext_resource type="Script" uid="uid://brn4guv252f6e" path="res://src/levels/scripts/day_interaction.gd" id="3_inter"]
+[ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/Day1/common_npc_male1.tres" id="4_3djo4"]
+[ext_resource type="Resource" uid="uid://ylajsyngiss5" path="res://src/npcs/resources/Day1/common_npc_female1.tres" id="5_3djo4"]
+
+[sub_resource type="Resource" id="Interaction_aleatorios"]
+script = ExtResource("3_inter")
+repeticoes = 4
 
 [sub_resource type="Resource" id="Resource_6es8l"]
 script = ExtResource("1_7wgci")
@@ -12,12 +18,21 @@ texto = "Opa, entrega para o andar... 3... beleza? Me joga lá!"
 andar_desejado = 3
 metadata/_custom_type_script = "uid://30jqbkcb4q5"
 
+[sub_resource type="Resource" id="Interaction_entregador"]
+script = ExtResource("3_inter")
+modo = 1
+visitante = ExtResource("2_00xs8")
+dialogo = SubResource("Resource_6es8l")
+
+[sub_resource type="Resource" id="Resource_df8m6"]
+script = ExtResource("3_inter")
+repeticoes = 2
+pool = Array[ExtResource("1_ha2se")]([ExtResource("5_3djo4"), ExtResource("4_3djo4")])
+metadata/_custom_type_script = "uid://brn4guv252f6e"
+
 [resource]
 script = ExtResource("2_1agin")
 mensagem_fim = "Excelente trabalho por hoje! ... Mas... você deixou aquele entregador ir para o terceiro andar, certo?... Tudo bem... você não sabia!"
-qtd_primeira_fase = 4
-pool_primeira_fase = Array[ExtResource("1_ha2se")]([ExtResource("4_3djo4")])
-npc_fixo = ExtResource("2_00xs8")
-dialogo_fixo = SubResource("Resource_6es8l")
-qtd_segunda_fase = 0
+pool_padrao = Array[ExtResource("1_ha2se")]([ExtResource("4_3djo4"), ExtResource("5_3djo4")])
+interacoes = Array[ExtResource("3_inter")]([SubResource("Interaction_aleatorios"), SubResource("Interaction_entregador"), SubResource("Resource_df8m6")])
 metadata/_custom_type_script = "uid://dw560omsfs2go"
