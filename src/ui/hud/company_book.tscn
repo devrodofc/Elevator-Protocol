@@ -1,0 +1,156 @@
+[gd_scene format=3 uid="uid://b37cn5b28tskj"]
+
+[ext_resource type="Script" uid="uid://bcfg843txo5ii" path="res://src/ui/hud/company_book.gd" id="1_book"]
+[ext_resource type="Texture2D" uid="uid://bfnejlqfqsq7q" path="res://src/levels/assets/company_book/livro_sem_txt.png" id="2_book"]
+[ext_resource type="FontFile" uid="uid://bc3sbfcfbrh64" path="res://src/levels/assets/fonts/DynaPuff-VariableFont_wdth,wght.ttf" id="4_c08jm"]
+[ext_resource type="Texture2D" uid="uid://onq6n5uiguu0" path="res://src/levels/assets/company_book/logo_livro.png" id="5_logo"]
+[ext_resource type="FontFile" uid="uid://bfqv1huuduey3" path="res://src/levels/assets/fonts/Chewy-Regular.ttf" id="6_c08jm"]
+[ext_resource type="Resource" uid="uid://bv1xf0actsq15" path="res://src/levels/resources/company_directory.tres" id="6_dir"]
+
+[sub_resource type="AtlasTexture" id="Atlas_arrow"]
+atlas = ExtResource("2_book")
+region = Rect2(700, 258, 36, 64)
+
+[node name="CompanyBook" type="Control" unique_id=504899324]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 193.0
+offset_bottom = 142.0
+mouse_filter = 2
+script = ExtResource("1_book")
+directory = ExtResource("6_dir")
+
+[node name="Book" type="TextureRect" parent="." unique_id=504532817]
+layout_mode = 0
+offset_right = 193.0
+offset_bottom = 142.0
+mouse_filter = 2
+texture = ExtResource("2_book")
+expand_mode = 1
+
+[node name="LeftColumn" type="VBoxContainer" parent="." unique_id=1270833962]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 15.0
+offset_right = 94.0
+offset_bottom = 134.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Floor" type="Label" parent="LeftColumn" unique_id=2077350121]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.5, 0.5, 1)
+theme_override_fonts/font = ExtResource("6_c08jm")
+theme_override_font_sizes/font_size = 15
+text = "1º andar"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="LeftColumn" unique_id=1895575084]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.13, 0.12, 0.11, 1)
+theme_override_constants/line_spacing = -3
+theme_override_fonts/font = ExtResource("4_c08jm")
+theme_override_font_sizes/font_size = 10
+text = "Nome da Empresa"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Logo" type="TextureRect" parent="LeftColumn" unique_id=291450133]
+custom_minimum_size = Vector2(37, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("5_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Description" type="Label" parent="LeftColumn" unique_id=1563895184]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.13, 0.12, 0.11, 1)
+theme_override_constants/line_spacing = -1
+theme_override_fonts/font = ExtResource("4_c08jm")
+theme_override_font_sizes/font_size = 8
+text = "Breve descrição para que o jogador saiba que é a empresa"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RightColumn" type="VBoxContainer" parent="." unique_id=1201861333]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 96.0
+offset_top = 15.0
+offset_right = 172.0
+offset_bottom = 134.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Floor" type="Label" parent="RightColumn" unique_id=568459113]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.5, 0.5, 1)
+theme_override_fonts/font = ExtResource("6_c08jm")
+theme_override_font_sizes/font_size = 15
+text = "1º andar"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="RightColumn" unique_id=649927273]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.13, 0.12, 0.11, 1)
+theme_override_constants/line_spacing = -3
+theme_override_fonts/font = ExtResource("4_c08jm")
+theme_override_font_sizes/font_size = 10
+text = "Nome da Empresa"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Logo" type="TextureRect" parent="RightColumn" unique_id=428506016]
+custom_minimum_size = Vector2(37, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("5_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Description" type="Label" parent="RightColumn" unique_id=779455104]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.13, 0.12, 0.11, 1)
+theme_override_constants/line_spacing = -1
+theme_override_fonts/font = ExtResource("4_c08jm")
+theme_override_font_sizes/font_size = 8
+text = "Breve descrição para que o jogador saiba que é a empresa"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="NextButton" type="Button" parent="." unique_id=2032954424]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 172.0
+offset_top = 60.0
+offset_right = 188.0
+offset_bottom = 86.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="PrevArrow" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 64.0
+offset_right = 16.0
+offset_bottom = 80.0
+mouse_filter = 2
+texture = SubResource("Atlas_arrow")
+expand_mode = 1
+flip_h = true
+
+[node name="PrevButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 60.0
+offset_right = 20.0
+offset_bottom = 86.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true

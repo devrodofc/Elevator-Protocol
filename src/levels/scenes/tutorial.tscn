@@ -1,0 +1,154 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/levels/scripts/tutorial.gd" id="1_tutorial"]
+[ext_resource type="Resource" path="res://src/levels/tutorial/tutorial_intro.tres" id="2_roteiro"]
+[ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="3_marta"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/reception_hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/elevator_panel.tscn" id="5_elevator"]
+[ext_resource type="FontFile" uid="uid://bc3sbfcfbrh64" path="res://src/levels/assets/fonts/DynaPuff-VariableFont_wdth,wght.ttf" id="6_text"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_highlight"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.94, 0.33, 0.25, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_skip"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0.13, 0.12, 0.11, 0.75)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_skip_hover"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0.4, 0.25, 0.15, 0.9)
+
+[node name="Tutorial" type="Node2D"]
+script = ExtResource("1_tutorial")
+roteiro = ExtResource("2_roteiro")
+marta_scene = ExtResource("3_marta")
+
+[node name="Wall" type="ColorRect" parent="."]
+offset_right = 640.0
+offset_bottom = 201.0
+mouse_filter = 2
+color = Color(0.96862745, 0.96862745, 0.96862745, 1)
+
+[node name="WindowClip" type="ColorRect" parent="."]
+clip_children = 2
+offset_right = 282.0
+offset_bottom = 201.0
+mouse_filter = 2
+color = Color(0.96862745, 0.96862745, 0.96862745, 1)
+
+[node name="Actors" type="Node2D" parent="WindowClip"]
+unique_name_in_owner = true
+
+[node name="MartaSpawnPoint" type="Marker2D" parent="WindowClip/Actors"]
+unique_name_in_owner = true
+position = Vector2(-150, 140)
+
+[node name="MartaPoint" type="Marker2D" parent="WindowClip/Actors"]
+unique_name_in_owner = true
+position = Vector2(141, 140)
+
+[node name="UI_CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ReceptionHUD" parent="UI_CanvasLayer" instance=ExtResource("4_hud")]
+unique_name_in_owner = true
+
+[node name="ElevatorPanel" parent="UI_CanvasLayer" instance=ExtResource("5_elevator")]
+unique_name_in_owner = true
+offset_left = 495.0
+offset_top = 203.0
+offset_right = 879.0
+offset_bottom = 827.0
+
+[node name="Highlight" type="Panel" parent="UI_CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBox_highlight")
+
+[node name="NarrationLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="Narration" type="ColorRect" parent="NarrationLayer"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07, 0.06, 0.06, 1)
+
+[node name="NarrationLabel" type="Label" parent="NarrationLayer/Narration"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.93, 0.9, 0.84, 1)
+theme_override_constants/line_spacing = 2
+theme_override_fonts/font = ExtResource("6_text")
+theme_override_font_sizes/font_size = 10
+text = "Narração"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="NarrationHint" type="Label" parent="NarrationLayer/Narration"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -40.0
+offset_right = 100.0
+offset_bottom = -28.0
+theme_override_colors/font_color = Color(0.6, 0.55, 0.5, 1)
+theme_override_fonts/font = ExtResource("6_text")
+theme_override_font_sizes/font_size = 10
+text = "[Espaço] continuar"
+horizontal_alignment = 1
+
+[node name="SkipLayer" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="SkipButton" type="Button" parent="SkipLayer"]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -134.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 18.0
+grow_horizontal = 0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93, 0.9, 0.84, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_text")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBox_skip")
+theme_override_styles/hover = SubResource("StyleBox_skip_hover")
+theme_override_styles/pressed = SubResource("StyleBox_skip_hover")
+text = "Pular tutorial [Esc]"

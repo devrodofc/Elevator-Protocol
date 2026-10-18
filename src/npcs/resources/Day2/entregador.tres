@@ -1,0 +1,68 @@
+[gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://dh7ijaqmrfnfs"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_am10j"]
+[ext_resource type="Script" uid="uid://dqqkx48suhb5s" path="res://src/npcs/resources/name_list.gd" id="2_hlhfw"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="2_krguw"]
+[ext_resource type="Texture2D" uid="uid://brwssu6vo4wn4" path="res://src/npcs/assets/lucas/lucas_entregrador.png" id="4_hsl1q"]
+
+[sub_resource type="Resource" id="Resource_c7uaj"]
+script = ExtResource("1_am10j")
+texto = "Oi. Uma entrega para o Andar 2..."
+andar_desejado = 2
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_xsh1o"]
+script = ExtResource("1_am10j")
+texto = "Opa! Falaram que eu tinha que deixar a entrega no andar 1."
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_0xx2r"]
+script = ExtResource("1_am10j")
+texto = "Andar 3."
+andar_desejado = 3
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_wcnhm"]
+script = ExtResource("1_am10j")
+texto = "Uma entrega para a galera da TI..."
+andar_desejado = 3
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_d8qhb"]
+script = ExtResource("1_am10j")
+texto = "Opa. Entrega... Pediram pra deixar na área de comidas."
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_1kj74"]
+script = ExtResource("1_am10j")
+texto = "Uma entrega para o diretor Manfredo. "
+andar_desejado = 5
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_hsl1q"]
+script = ExtResource("1_am10j")
+texto = "Entrega para o senhor Lucas do RH."
+andar_desejado = 2
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_a5ukk"]
+script = ExtResource("1_am10j")
+texto = "Entrega para o Maurício, dos Recursos Humanos."
+andar_desejado = 2
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Resource_hlhfw"]
+script = ExtResource("2_hlhfw")
+names = PackedStringArray("Entregador Maurício", "Entregador Alex", "Entregador Lucas", "Entregador Mário", "Entregador Golias", "Entregador Juca", "Entregador Pontes")
+metadata/_custom_type_script = "uid://dqqkx48suhb5s"
+
+[resource]
+script = ExtResource("2_krguw")
+id = "entregador"
+nome = "Entregador"
+nome_aleatorio = true
+lista_nomes = SubResource("Resource_hlhfw")
+sprites = Array[Texture2D]([ExtResource("4_hsl1q")])
+tags = Array[String](["entregador"])
+dialogos = Array[ExtResource("1_am10j")]([SubResource("Resource_c7uaj"), SubResource("Resource_xsh1o"), SubResource("Resource_0xx2r"), SubResource("Resource_wcnhm"), SubResource("Resource_d8qhb"), SubResource("Resource_1kj74"), SubResource("Resource_hsl1q"), SubResource("Resource_a5ukk")])
+metadata/_custom_type_script = "uid://c8k1xw7vuahns"

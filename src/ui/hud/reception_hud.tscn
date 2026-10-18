@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/janela.png" id="1_janela"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/mesa.png" id="2_mesa"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/fala_vazia.png" id="3_fala"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/company_book.tscn" id="5_livro"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/rules_board.tscn" id="6_regras"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/badge/cracha.png" id="7_cracha"]
+[ext_resource type="Script" path="res://src/ui/hud/reception_hud.gd" id="8_script"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/badge_details.tscn" id="9_badge_details"]
+
+[node name="ReceptionHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_script")
+
+[node name="Window" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 282.0
+offset_right = 698.0
+offset_bottom = 185.0
+mouse_filter = 2
+texture = ExtResource("1_janela")
+expand_mode = 1
+
+[node name="Desk" type="TextureRect" parent="."]
+layout_mode = 0
+offset_top = 201.0
+offset_right = 678.0
+offset_bottom = 382.0
+mouse_filter = 2
+texture = ExtResource("2_mesa")
+expand_mode = 1
+
+[node name="SpeechBoard" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 280.0
+offset_top = 21.0
+offset_right = 473.0
+offset_bottom = 159.0
+mouse_filter = 2
+texture = ExtResource("3_fala")
+expand_mode = 1
+
+[node name="Badge" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = 115.0
+offset_top = 195.0
+offset_right = 158.0
+offset_bottom = 287.0
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+texture = ExtResource("7_cracha")
+expand_mode = 1
+
+[node name="CompanyBook" parent="." instance=ExtResource("5_livro")]
+offset_left = 246.0
+offset_top = 216.0
+offset_right = 439.0
+offset_bottom = 358.0
+
+[node name="RulesBoard" parent="." instance=ExtResource("6_regras")]
+offset_left = 78.0
+offset_top = 314.0
+offset_right = 194.0
+offset_bottom = 465.0
+
+[node name="BadgeOverlay" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="BadgeDetails" parent="BadgeOverlay" instance=ExtResource("9_badge_details")]
+visible = false

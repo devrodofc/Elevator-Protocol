@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://wgyeho3yroc0"
-path="res://.godot/imported/Pixelta.ttf-65993ec2545190f8866419cfc12c02a6.fontdata"
+uid="uid://buyl0e04pwhgv"
+path="res://.godot/imported/DynaPuff-Bold.ttf-921fe08dda54314eec0bf661f312c458.fontdata"
 
 [deps]
 
-source_file="res://src/levels/assets/fonts/Pixelta.ttf"
-dest_files=["res://.godot/imported/Pixelta.ttf-65993ec2545190f8866419cfc12c02a6.fontdata"]
+source_file="res://src/levels/assets/fonts/DynaPuff-Bold.ttf"
+dest_files=["res://.godot/imported/DynaPuff-Bold.ttf-921fe08dda54314eec0bf661f312c458.fontdata"]
 
 [params]
 
