@@ -9,6 +9,7 @@
 [ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/Day1/common_npc_male1.tres" id="4_3djo4"]
 [ext_resource type="Resource" uid="uid://ylajsyngiss5" path="res://src/npcs/resources/Day1/common_npc_female1.tres" id="5_3djo4"]
 [ext_resource type="Script" uid="uid://dvpyfvnwc78bh" path="res://src/levels/scripts/marta_rule.gd" id="9_rule"]
+[ext_resource type="Resource" path="res://src/levels/schedules/day2.tres" id="10_dia2"]
 [ext_resource type="Resource" uid="uid://b5qa6blw8wptq" path="res://src/npcs/dialogue/dialoguesCommon/4 andar/common4a.tres" id="d4a"]
 [ext_resource type="Resource" uid="uid://cruf2n81kiwg0" path="res://src/npcs/dialogue/dialoguesCommon/4 andar/common4b.tres" id="d4b"]
 [ext_resource type="Resource" uid="uid://g184fibsps7x" path="res://src/npcs/dialogue/dialoguesCommon/5 andar/common5a.tres" id="d5a"]
@@ -103,9 +104,11 @@ texto_prancheta = "Sorria. As câmeras estão vendo."
 
 [resource]
 script = ExtResource("2_1agin")
+proximo_dia = ExtResource("10_dia2")
 mensagem_fim = "Excelente trabalho por hoje! ... Mas... você deixou aquele entregador ir para o terceiro andar, certo?... Tudo bem... você não sabia!"
 regras_marta = Array[ExtResource("9_rule")]([SubResource("Regra_subsolo"), SubResource("Regra_rogerio"), SubResource("Regra_quarto"), SubResource("Regra_presidencia"), SubResource("Regra_rh"), SubResource("Regra_batidas"), SubResource("Regra_cameras")])
 pool_padrao = Array[ExtResource("1_ha2se")]([ExtResource("4_3djo4"), ExtResource("5_3djo4")])
 interacoes = Array[ExtResource("3_inter")]([SubResource("Interaction_aleatorios"), SubResource("Resource_df8m6"), SubResource("Interaction_entregador")])
 andares_do_dia = PackedInt32Array(1, 2, 4, 5, 6)
+falas_comuns = Array[ExtResource("1_7wgci")]([ExtResource("fc_common1a"), ExtResource("fc_common1b"), ExtResource("fc_common1c"), ExtResource("fc_common1d"), ExtResource("fc_common2a"), ExtResource("fc_common2b"), ExtResource("fc_common2c"), ExtResource("fc_common2d"), ExtResource("fc_common3a"), ExtResource("fc_common3b"), ExtResource("fc_common3c"), ExtResource("fc_common3d"), ExtResource("d4a"), ExtResource("d4b"), ExtResource("fc_common4c"), ExtResource("fc_common4d"), ExtResource("d5a"), ExtResource("d5b"), ExtResource("fc_common5c"), ExtResource("fc_common6a"), ExtResource("fc_common6b"), ExtResource("fc_common6c"), ExtResource("fc_common5d"), ExtResource("fc_common6d")])
 metadata/_custom_type_script = "uid://dw560omsfs2go"

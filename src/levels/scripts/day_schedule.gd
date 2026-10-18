@@ -2,10 +2,14 @@ class_name DayScheduleConfig
 extends Resource
 
 @export var dia_numero: int = 1
+## Dia que começa quando este termina (depois da fala de fim da Marta). Vazio = último dia.
+@export var proximo_dia: DayScheduleConfig
 
 @export_group("Mensagens da Supervisora (Marta)")
 @export_multiline var mensagem_inicio: String = "Bom dia! Que alegria ter você aqui na nossa equipe! O trabalho é super tranquilo: tudo o que você precisa fazer é ouvir para onde o visitante quer ir e apertar o botão correto no painel."
 @export_multiline var mensagem_fim: String = "Excelente trabalho por hoje! Você pegou o jeito muito rápido. Descanse um pouco e até amanhã!"
+## Sprite da Marta só na fala de fim do dia (ex.: dia 2, ensanguentada). Vazio = o da cena Marta.tscn.
+@export var sprite_marta_fim: Texture2D
 @export_multiline var mensagem_falha: String = "Você tinha um trabalho tão simples... mas falhou. Vamos tentar de novo, certo?"
 
 @export_group("Regras da Marta")
@@ -16,6 +20,8 @@ extends Resource
 @export_range(0, 10) var regras_por_dia: int = 2
 ## Banco de regras do dia. Sem valor padrão "= []": com ele o editor descarta a lista salva.
 @export var regras_marta: Array[MartaRule]
+## Regras ditas todo dia, além do sorteio (contam em regras_por_dia). Ex.: dia 2, entrega para a Marta.
+@export var regras_obrigatorias: Array[MartaRule]
 
 @export_group("Visitantes")
 ## Sorteio usado pelas interações aleatórias que não têm pool próprio
@@ -29,6 +35,9 @@ extends Resource
 ## Falas que qualquer visitante aleatório pode usar, além das dele. O andar de cada fala
 ## (andar_desejado) decide em qual sorteio ela entra. Sem "= []" pelo mesmo motivo acima.
 @export var falas_comuns: Array[NPCDialogue]
+## Desligado: os aleatórios só usam falas_comuns (ex.: dia 2 com falas próprias, sem repetir
+## as falas que ficam no recurso de cada visitante).
+@export var usar_falas_do_visitante: bool = true
 
 
 ## Monta a fila completa do dia: {"visitor", "dialogue", "nome", "sprite", "fixo"} por visitante.
@@ -78,6 +87,10 @@ func _sortear_regras(fila: Array[Dictionary]) -> Array[MartaRule]:
 	if quantidade <= 0:
 		return escolhidas
 
+	for regra in regras_obrigatorias:
+		if regra and escolhidas.size() < quantidade:
+			escolhidas.append(regra)
+
 	var com_efeito: Array[MartaRule] = []
 	var restantes: Array[MartaRule] = []
 	var andares_fixos: Dictionary = {}
@@ -89,7 +102,10 @@ func _sortear_regras(fila: Array[Dictionary]) -> Array[MartaRule]:
 			restantes.append(regra)
 			if regra.tem_efeito():
 				com_efeito.append(regra)
-	if not com_efeito.is_empty():
+	var ja_tem_efeito: bool = false
+	for regra in escolhidas:
+		ja_tem_efeito = ja_tem_efeito or regra.tem_efeito()
+	if not com_efeito.is_empty() and not ja_tem_efeito and escolhidas.size() < quantidade:
 		var garantida: MartaRule = com_efeito.pick_random()
 		escolhidas.append(garantida)
 		restantes.erase(garantida)
@@ -216,10 +232,14 @@ func _aplicar_falas(fila: Array[Dictionary], livres: Array[int], plano: Array[in
 			usados[fala.texto] = true
 
 
-## Fala para o andar pedido: primeiro as preferidas, depois as do visitante + falas_comuns.
+## Fala para o andar pedido: primeiro as preferidas, depois as do visitante (se usar_falas_do_visitante)
+## + falas_comuns.
 ## Evita textos já usados; se todas daquele andar já saíram, repete uma delas.
 func _sortear_fala(visitante: VisitorData, andar: int, usados: Dictionary, preferidas: Array[NPCDialogue]) -> NPCDialogue:
-	var grupos: Array = [preferidas, visitante.dialogos + falas_comuns]
+	var do_dia: Array[NPCDialogue] = falas_comuns.duplicate()
+	if usar_falas_do_visitante:
+		do_dia = visitante.dialogos + falas_comuns
+	var grupos: Array = [preferidas, do_dia]
 	for grupo in grupos:
 		var livres: Array[NPCDialogue] = []
 		var do_andar: Array[NPCDialogue] = []
