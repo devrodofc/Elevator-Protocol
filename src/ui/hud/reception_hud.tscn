@@ -3,9 +3,8 @@
 [ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/janela.png" id="1_janela"]
 [ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/mesa.png" id="2_mesa"]
 [ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/fala_vazia.png" id="3_fala"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/buttons/botão_completo.png" id="4_painel"]
 [ext_resource type="PackedScene" path="res://src/ui/hud/company_book.tscn" id="5_livro"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/rules/regras_vazaio.png" id="6_regras"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/rules_board.tscn" id="6_regras"]
 [ext_resource type="Texture2D" path="res://src/levels/assets/badge/cracha.png" id="7_cracha"]
 
 [node name="ReceptionHUD" type="Control"]
@@ -55,28 +54,14 @@ mouse_filter = 2
 texture = ExtResource("7_cracha")
 expand_mode = 1
 
-[node name="DecisionPanel" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = 57.0
-offset_top = 289.0
-offset_right = 219.0
-offset_bottom = 358.0
-mouse_filter = 2
-texture = ExtResource("4_painel")
-expand_mode = 1
-
 [node name="CompanyBook" parent="." instance=ExtResource("5_livro")]
 offset_left = 246.0
 offset_top = 216.0
 offset_right = 439.0
 offset_bottom = 358.0
 
-[node name="RulesBoard" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = 485.0
-offset_top = 207.0
-offset_right = 601.0
-offset_bottom = 358.0
-mouse_filter = 2
-texture = ExtResource("6_regras")
-expand_mode = 1
+[node name="RulesBoard" parent="." instance=ExtResource("6_regras")]
+offset_left = 78.0
+offset_top = 314.0
+offset_right = 194.0
+offset_bottom = 465.0

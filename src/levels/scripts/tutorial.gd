@@ -15,6 +15,7 @@ var _narration_active: bool = false
 var _advance_requested: bool = false
 var _narration_tween: Tween
 var _highlight_tween: Tween
+var _highlight_node: Control = null
 var _marta: Node2D = null
 
 @onready var _narration: ColorRect = %Narration
@@ -103,19 +104,38 @@ func _enter_reception() -> void:
 func _set_highlight(destaque: int) -> void:
 	if _highlight_tween:
 		_highlight_tween.kill()
-	var target: Control = _highlight_target(destaque)
-	if target == null:
+	# A prancheta de regras sobe enquanto a Marta fala dela e desce depois
+	var rules: Control = %ReceptionHUD.get_node_or_null("RulesBoard")
+	if rules and rules.has_method("open"):
+		if destaque == TutorialStep.Destaque.REGRAS:
+			rules.open()
+		else:
+			rules.close()
+	_highlight_node = _highlight_target(destaque)
+	if _highlight_node == null:
 		_highlight.visible = false
 		return
-	# Lê a posição real do elemento: se a HUD mudar de lugar, o destaque acompanha
-	var rect: Rect2 = target.get_global_rect()
-	_highlight.position = rect.position - Vector2(2, 2)
-	_highlight.size = rect.size + Vector2(4, 4)
+	_update_highlight_rect()
 	_highlight.visible = true
 	_highlight.modulate.a = 1.0
 	_highlight_tween = create_tween().set_loops()
 	_highlight_tween.tween_property(_highlight, "modulate:a", 0.25, 0.5)
 	_highlight_tween.tween_property(_highlight, "modulate:a", 1.0, 0.5)
+
+
+func _process(_delta: float) -> void:
+	# Acompanha o elemento destacado (ex.: a prancheta deslizando para cima)
+	if _highlight.visible and is_instance_valid(_highlight_node):
+		_update_highlight_rect()
+
+
+## Lê a posição real do elemento. get_global_rect() ignora escala (o painel do elevador usa 0,25),
+## então aplica a transformação completa.
+func _update_highlight_rect() -> void:
+	var xform: Transform2D = _highlight_node.get_global_transform()
+	var rect := Rect2(xform.origin, _highlight_node.size * xform.get_scale())
+	_highlight.position = rect.position - Vector2(2, 2)
+	_highlight.size = rect.size + Vector2(4, 4)
 
 
 ## Elemento da tela que cada destaque contorna.

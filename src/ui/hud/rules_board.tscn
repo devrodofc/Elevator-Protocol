@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/ui/hud/rules_board.gd" id="1_rules"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/rules/regras_vazaio.png" id="2_board"]
+
+[node name="RulesBoard" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 116.0
+offset_bottom = 151.0
+script = ExtResource("1_rules")
+
+[node name="Board" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 116.0
+offset_bottom = 151.0
+mouse_filter = 2
+texture = ExtResource("2_board")
+expand_mode = 1

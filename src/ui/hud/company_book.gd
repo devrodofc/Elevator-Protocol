@@ -1,6 +1,6 @@
 extends Control
 ## Livro de empresas da recepção: mostra 2 andares por página.
-## A seta ">" passa para a próxima página; depois da última, volta para a primeira.
+## A seta ">" passa para a próxima página e a "<" volta uma; nas pontas, dá a volta no livro.
 
 
 @export var directory: CompanyDirectory
@@ -12,6 +12,7 @@ var _page: int = 0
 
 func _ready() -> void:
 	%NextButton.pressed.connect(next_page)
+	%PrevButton.pressed.connect(previous_page)
 	_show_page()
 
 
@@ -23,6 +24,11 @@ func page_count() -> int:
 
 func next_page() -> void:
 	_page = (_page + 1) % page_count()
+	_show_page()
+
+
+func previous_page() -> void:
+	_page = (_page - 1 + page_count()) % page_count()
 	_show_page()
 
 
