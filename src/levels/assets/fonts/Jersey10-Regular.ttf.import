@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bfqv1huuduey3"
-path="res://.godot/imported/Chewy-Regular.ttf-47c2363044cbf4b7b58212f168c686c9.fontdata"
+uid="uid://basenhmkhdrdj"
+path="res://.godot/imported/Jersey10-Regular.ttf-41fa6bdc976a9b9c99e48487bedc17c5.fontdata"
 
 [deps]
 
-source_file="res://src/levels/assets/fonts/Chewy-Regular.ttf"
-dest_files=["res://.godot/imported/Chewy-Regular.ttf-47c2363044cbf4b7b58212f168c686c9.fontdata"]
+source_file="res://src/levels/assets/fonts/Jersey10-Regular.ttf"
+dest_files=["res://.godot/imported/Jersey10-Regular.ttf-41fa6bdc976a9b9c99e48487bedc17c5.fontdata"]
 
 [params]
 

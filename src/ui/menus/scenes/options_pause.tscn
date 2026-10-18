@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://edt4vecpvqvc"]
+[gd_scene format=3 uid="uid://bfmon6s3y20l"]
 
 [ext_resource type="Script" uid="uid://bm5rjsblsmu7u" path="res://src/ui/menus/scenes/options_pause.gd" id="1_ngfjj"]
-[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://src/levels/assets/fonts/resources/dynapuff_regular.tres" id="3_lbwgp"]
+[ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://src/levels/assets/fonts/PixeloidSans-Bold.ttf" id="2_wj4tm"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://src/levels/assets/fonts/PixeloidSans.ttf" id="3_7n0b6"]
 
 [node name="OptionsPause" type="Control" unique_id=1171505832]
 layout_mode = 3
@@ -27,6 +28,7 @@ offset_left = 170.0
 offset_top = 55.0
 offset_right = 470.0
 offset_bottom = 105.0
+theme_override_fonts/font = ExtResource("2_wj4tm")
 theme_override_font_sizes/font_size = 28
 text = "PAUSADO"
 horizontal_alignment = 1
@@ -44,7 +46,7 @@ theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_fonts/font = ExtResource("3_lbwgp")
+theme_override_fonts/font = ExtResource("3_7n0b6")
 theme_override_font_sizes/font_size = 24
 text = "Fullscreen"
 underline = 2
@@ -55,7 +57,7 @@ offset_left = 202.0
 offset_top = 149.0
 offset_right = 310.0
 offset_bottom = 172.0
-theme_override_fonts/font = ExtResource("3_lbwgp")
+theme_override_fonts/font = ExtResource("3_7n0b6")
 text = "Volume Geral"
 
 [node name="MasterVolume" type="HSlider" parent="." unique_id=928112800]
@@ -71,7 +73,7 @@ offset_left = 200.0
 offset_top = 175.0
 offset_right = 318.0
 offset_bottom = 198.0
-theme_override_fonts/font = ExtResource("3_lbwgp")
+theme_override_fonts/font = ExtResource("3_7n0b6")
 text = "Volume Música"
 
 [node name="MusicVolume" type="HSlider" parent="." unique_id=1904012095]
@@ -87,7 +89,7 @@ offset_left = 198.0
 offset_top = 195.0
 offset_right = 326.0
 offset_bottom = 218.0
-theme_override_fonts/font = ExtResource("3_lbwgp")
+theme_override_fonts/font = ExtResource("3_7n0b6")
 text = "Efeitos sonoros"
 
 [node name="SFXVolume" type="HSlider" parent="." unique_id=1879119154]
@@ -103,5 +105,6 @@ offset_left = 266.0
 offset_top = 250.0
 offset_right = 328.0
 offset_bottom = 273.0
+theme_override_fonts/font = ExtResource("3_7n0b6")
 text = "VOLTAR"
 underline = 2

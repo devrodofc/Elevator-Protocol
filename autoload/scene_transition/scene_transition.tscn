@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://autoload/scene_transition/scene_transition.gd" id="1_transition"]
-[ext_resource type="FontFile" uid="uid://bfqv1huuduey3" path="res://src/levels/assets/fonts/Chewy-Regular.ttf" id="2_title"]
+[ext_resource type="Script" uid="uid://bajlxlgobujfk" path="res://autoload/scene_transition/scene_transition.gd" id="1_transition"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://src/levels/assets/fonts/PixeloidSans.ttf" id="2_title"]
 
 [node name="SceneTransition" type="CanvasLayer"]
 layer = 50

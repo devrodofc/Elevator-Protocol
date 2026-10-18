@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://buyl0e04pwhgv"
-path="res://.godot/imported/DynaPuff-Bold.ttf-921fe08dda54314eec0bf661f312c458.fontdata"
+uid="uid://diu3d6k46wgvo"
+path="res://.godot/imported/PixeloidSans-Bold.ttf-83da0fcb072293fd21488846d8c779a0.fontdata"
 
 [deps]
 
-source_file="res://src/levels/assets/fonts/DynaPuff-Bold.ttf"
-dest_files=["res://.godot/imported/DynaPuff-Bold.ttf-921fe08dda54314eec0bf661f312c458.fontdata"]
+source_file="res://src/levels/assets/fonts/PixeloidSans-Bold.ttf"
+dest_files=["res://.godot/imported/PixeloidSans-Bold.ttf-83da0fcb072293fd21488846d8c779a0.fontdata"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn6vm7c2jao0a"
-path="res://.godot/imported/botão pause 1.png-df3fcbb5cf9bc0c8e2ad2716a7e8542c.ctex"
+uid="uid://pi23wgq2qdx2"
+path="res://.godot/imported/botão semaudio.png-3a68ec22834afb6fa3a2c79ab57b3493.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/assets/botão pause 1.png"
-dest_files=["res://.godot/imported/botão pause 1.png-df3fcbb5cf9bc0c8e2ad2716a7e8542c.ctex"]
+source_file="res://src/ui/assets/buttons/botão semaudio.png"
+dest_files=["res://.godot/imported/botão semaudio.png-3a68ec22834afb6fa3a2c79ab57b3493.ctex"]
 
 [params]
 
