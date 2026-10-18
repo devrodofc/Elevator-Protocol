@@ -26,6 +26,8 @@ var _marta: Node2D = null
 
 
 func _ready() -> void:
+	# Jogo novo: a recepção começa do dia 1
+	ReceptionManager.dia_em_andamento = null
 	%SkipButton.pressed.connect(_go_to_reception)
 	_elevator_panel.set_panel_locked(true)
 	_highlight.visible = false

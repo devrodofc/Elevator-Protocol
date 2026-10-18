@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="NPCDialogue" format=3]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_fala"]
+
+[resource]
+script = ExtResource("1_fala")
+texto = "Quinto andar. Preciso de uma pasta de 2009 do arquivo morto. Ninguém sabe o que tem nela, mas o chefe quer."
+andar_desejado = 5
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
