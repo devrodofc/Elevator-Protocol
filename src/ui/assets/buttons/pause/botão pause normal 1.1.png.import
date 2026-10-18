@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0mp8o0wqthyq"
-path="res://.godot/imported/tela inicial do game 1 frame.jpg-a5b2b1f57003101bc5b1d5df998737c5.ctex"
+uid="uid://viteco6lnfwj"
+path="res://.godot/imported/botão pause normal 1.1.png-2eacee12942b18fb30de6cc57cea3025.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/menus/assets/tela inicial do game 1 frame.jpg"
-dest_files=["res://.godot/imported/tela inicial do game 1 frame.jpg-a5b2b1f57003101bc5b1d5df998737c5.ctex"]
+source_file="res://src/ui/assets/buttons/pause/botão pause normal 1.1.png"
+dest_files=["res://.godot/imported/botão pause normal 1.1.png-2eacee12942b18fb30de6cc57cea3025.ctex"]
 
 [params]
 

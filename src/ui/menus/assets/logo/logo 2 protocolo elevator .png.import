@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3aqthjkwwge1"
-path="res://.godot/imported/tela inicial do game 2 frame..jpg-3e35b970adba8c150a7dd2f6b5a736f8.ctex"
+uid="uid://cqfrb41wxj3j3"
+path="res://.godot/imported/logo 2 protocolo elevator .png-bf0b4387c29eb1250de6bd3314d91179.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/menus/assets/tela inicial do game 2 frame..jpg"
-dest_files=["res://.godot/imported/tela inicial do game 2 frame..jpg-3e35b970adba8c150a7dd2f6b5a736f8.ctex"]
+source_file="res://src/ui/menus/assets/logo/logo 2 protocolo elevator .png"
+dest_files=["res://.godot/imported/logo 2 protocolo elevator .png-bf0b4387c29eb1250de6bd3314d91179.ctex"]
 
 [params]
 

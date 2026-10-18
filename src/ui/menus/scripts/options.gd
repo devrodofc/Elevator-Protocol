@@ -2,12 +2,13 @@ extends Control
 
 const MENU_SCENE := "res://src/ui/menus/scenes/menu.tscn"
 const CREDITS_SCENE := "res://src/ui/menus/scenes/credits.tscn"
+const DisplayMode = preload("res://src/ui/menus/scripts/display_mode.gd")
 
 # Botões
 
 @onready var fullscreen_button: LinkButton = $Fullscreen
 @onready var credits_button: LinkButton = $Credits
-@onready var back_button: LinkButton = $Back
+@onready var back_button: TextureButton = $Back
 
 # Sliders
 
@@ -47,37 +48,20 @@ func _ready() -> void:
 
 
 # ==========================================
-# FULLSCREEN
+# MODO DE EXIBIÇÃO
 # ==========================================
 
 func _on_fullscreen_pressed() -> void:
-	var mode := DisplayServer.window_get_mode()
+	await DisplayMode.cycle(get_tree())
+	_update_fullscreen_text()
 
-	if mode == DisplayServer.WINDOW_MODE_FULLSCREEN or \
-	mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
 
-		DisplayServer.window_set_mode(
-			DisplayServer.WINDOW_MODE_WINDOWED
-		)
-
-	else:
-		DisplayServer.window_set_mode(
-			DisplayServer.WINDOW_MODE_FULLSCREEN
-		)
-
+func _process(_delta: float) -> void:
 	_update_fullscreen_text()
 
 
 func _update_fullscreen_text() -> void:
-	var mode := DisplayServer.window_get_mode()
-
-	if mode == DisplayServer.WINDOW_MODE_FULLSCREEN or \
-	mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
-
-		fullscreen_button.text = "TELA CHEIA: LIGADA"
-
-	else:
-		fullscreen_button.text = "TELA CHEIA: DESLIGADA"
+	fullscreen_button.text = DisplayMode.current_text()
 
 
 # ==========================================

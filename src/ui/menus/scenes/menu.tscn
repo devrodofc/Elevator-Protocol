@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b6hgpbqqj2j76"]
 
 [ext_resource type="Script" uid="uid://d4iivy11yyffy" path="res://src/ui/menus/scripts/menu.gd" id="1_wcxd3"]
-[ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/tela inicial do game 1 frame.jpg" id="2_2t3vq"]
+[ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/background/tela inicial do game 1 frame.jpg" id="2_2t3vq"]
 [ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://fonts/PixeloidSans-Bold.ttf" id="3_xhwb1"]
 [ext_resource type="Texture2D" uid="uid://dntswdhj64eo5" path="res://src/ui/menus/assets/buttons/play/botão play normal.png" id="4_7pniv"]
 [ext_resource type="Texture2D" uid="uid://c5nip1qfix1p5" path="res://src/ui/menus/assets/buttons/play/botão play pressionado.png" id="5_6jtff"]
@@ -12,6 +12,85 @@
 [ext_resource type="Texture2D" uid="uid://cj5vrlcewba00" path="res://src/ui/menus/assets/buttons/off/botão desligar.png" id="10_jw4ia"]
 [ext_resource type="Texture2D" uid="uid://c2erl7ciuhqmo" path="res://src/ui/menus/assets/buttons/off/botão desligar pressionado.png" id="11_g3cxf"]
 [ext_resource type="Texture2D" uid="uid://c7nvg4d8qi36v" path="res://src/ui/menus/assets/buttons/off/botão desligar hover.png" id="12_cfvon"]
+[ext_resource type="Texture2D" uid="uid://bays5qjb8x6gu" path="res://src/ui/menus/assets/logo/logo com borda protocolo elevator .png" id="13_1ot40"]
+[ext_resource type="Texture2D" uid="uid://drewrirq2pg5u" path="res://src/ui/menus/assets/logo/logo com borda 1 protocolo elevator .png" id="13_jw4ia"]
+[ext_resource type="Texture2D" uid="uid://bh61au3d0p3ne" path="res://src/ui/menus/assets/background/tela inicial do game 3 frame..jpg" id="14_jw4ia"]
+[ext_resource type="Texture2D" uid="uid://c3aqthjkwwge1" path="res://src/ui/menus/assets/background/tela inicial do game 2 frame..jpg" id="15_g3cxf"]
+
+[sub_resource type="Animation" id="Animation_cfvon"]
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_2t3vq"), ExtResource("15_g3cxf"), ExtResource("14_jw4ia")]
+}
+
+[sub_resource type="Animation" id="Animation_yyfxb"]
+resource_name = "background"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_2t3vq"), ExtResource("15_g3cxf"), ExtResource("14_jw4ia")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7qefj"]
+_data = {
+&"RESET": SubResource("Animation_cfvon"),
+&"background": SubResource("Animation_yyfxb")
+}
+
+[sub_resource type="Animation" id="Animation_g3cxf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Logo:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("13_jw4ia")]
+}
+
+[sub_resource type="Animation" id="Animation_7qefj"]
+resource_name = "logo"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Logo:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("13_jw4ia"), ExtResource("13_1ot40")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_chpb7"]
+_data = {
+&"RESET": SubResource("Animation_g3cxf"),
+&"logo": SubResource("Animation_7qefj")
+}
 
 [node name="Menu" type="Control" unique_id=1171505832]
 layout_mode = 3
@@ -50,10 +129,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -86.0
-offset_top = -42.0
-offset_right = -86.0
-offset_bottom = -42.0
+offset_left = -99.0
+offset_top = -56.0
+offset_right = -77.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.15686275)
@@ -64,6 +143,7 @@ offset_left = 53.0
 offset_top = 40.0
 offset_right = 415.0
 offset_bottom = 85.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_xhwb1")
 theme_override_font_sizes/font_size = 32
 text = "Elevator Protocol"
@@ -71,11 +151,11 @@ text = "Elevator Protocol"
 [node name="Play" type="TextureButton" parent="." unique_id=925288588]
 texture_filter = 1
 layout_mode = 0
-offset_left = 340.0
-offset_top = 216.0
-offset_right = 468.0
-offset_bottom = 344.0
-scale = Vector2(0.3, 0.3)
+offset_left = 336.0
+offset_top = 208.0
+offset_right = 464.0
+offset_bottom = 336.0
+scale = Vector2(0.35, 0.35)
 texture_normal = ExtResource("4_7pniv")
 texture_pressed = ExtResource("5_6jtff")
 texture_hover = ExtResource("6_j15jl")
@@ -83,22 +163,39 @@ stretch_mode = 5
 
 [node name="Options" type="TextureButton" parent="." unique_id=1639284561]
 layout_mode = 0
-offset_left = 391.0
-offset_top = 216.00002
-offset_right = 519.0
-offset_bottom = 344.0
-scale = Vector2(0.3, 0.3)
+offset_left = 387.0
+offset_top = 208.00002
+offset_right = 515.0
+offset_bottom = 336.0
+scale = Vector2(0.35, 0.35)
 texture_normal = ExtResource("7_8mwgn")
 texture_pressed = ExtResource("8_2t3vq")
 texture_hover = ExtResource("9_1ot40")
 
 [node name="Quit" type="TextureButton" parent="." unique_id=1574169354]
 layout_mode = 0
-offset_left = 439.0
-offset_top = 216.0
-offset_right = 571.0
-offset_bottom = 344.0
-scale = Vector2(0.3, 0.3)
+offset_left = 435.0
+offset_top = 208.0
+offset_right = 567.0
+offset_bottom = 336.0
+scale = Vector2(0.35, 0.35)
 texture_normal = ExtResource("10_jw4ia")
 texture_pressed = ExtResource("11_g3cxf")
 texture_hover = ExtResource("12_cfvon")
+
+[node name="Logo" type="TextureRect" parent="." unique_id=1936127102]
+layout_mode = 0
+offset_left = 176.0
+offset_top = 81.00001
+offset_right = 362.0
+offset_bottom = 295.0
+scale = Vector2(0.5591398, 0.5591398)
+texture = ExtResource("13_jw4ia")
+
+[node name="AnimationBackground" type="AnimationPlayer" parent="." unique_id=1831585183]
+libraries/ = SubResource("AnimationLibrary_7qefj")
+autoplay = &"background"
+
+[node name="AnimationLogo" type="AnimationPlayer" parent="." unique_id=1203020594]
+libraries/ = SubResource("AnimationLibrary_chpb7")
+autoplay = &"logo"

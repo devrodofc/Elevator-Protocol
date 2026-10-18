@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0e56p5otyuwa"
-path="res://.godot/imported/botão pressionado desligar.png-4b11197b312e2e4b04825b5554940993.ctex"
+uid="uid://bays5qjb8x6gu"
+path="res://.godot/imported/logo com borda protocolo elevator .png-1448372ee30155d5db5e5ea6043135ee.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/assets/buttons/botão pressionado desligar.png"
-dest_files=["res://.godot/imported/botão pressionado desligar.png-4b11197b312e2e4b04825b5554940993.ctex"]
+source_file="res://src/ui/menus/assets/logo/logo com borda protocolo elevator .png"
+dest_files=["res://.godot/imported/logo com borda protocolo elevator .png-1448372ee30155d5db5e5ea6043135ee.ctex"]
 
 [params]
 

@@ -2,7 +2,7 @@ extends Control
 
 const OPTIONS_SCENE := "res://src/ui/menus/scenes/options.tscn"
 
-@onready var back_button: LinkButton = $Back
+@onready var back_button: TextureButton = $Back
 
 
 func _ready() -> void:

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bylg1uhsfyoko"
-path="res://.godot/imported/botão pause pressionado.png-371f7f1367f8686887d54c304e07d78b.ctex"
+uid="uid://drewrirq2pg5u"
+path="res://.godot/imported/logo com borda 1 protocolo elevator .png-da8c426c80f64798ee1e13db51f7e2c1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/assets/buttons/botão pause pressionado.png"
-dest_files=["res://.godot/imported/botão pause pressionado.png-371f7f1367f8686887d54c304e07d78b.ctex"]
+source_file="res://src/ui/menus/assets/logo/logo com borda 1 protocolo elevator .png"
+dest_files=["res://.godot/imported/logo com borda 1 protocolo elevator .png-da8c426c80f64798ee1e13db51f7e2c1.ctex"]
 
 [params]
 

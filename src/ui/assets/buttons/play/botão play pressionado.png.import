@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://pi23wgq2qdx2"
-path="res://.godot/imported/botão semaudio.png-3a68ec22834afb6fa3a2c79ab57b3493.ctex"
+uid="uid://dywp6t1c6eljt"
+path="res://.godot/imported/botão play pressionado.png-5af9879a0422f256bdf2158e4e262e74.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/assets/buttons/botão semaudio.png"
-dest_files=["res://.godot/imported/botão semaudio.png-3a68ec22834afb6fa3a2c79ab57b3493.ctex"]
+source_file="res://src/ui/assets/buttons/play/botão play pressionado.png"
+dest_files=["res://.godot/imported/botão play pressionado.png-5af9879a0422f256bdf2158e4e262e74.ctex"]
 
 [params]
 

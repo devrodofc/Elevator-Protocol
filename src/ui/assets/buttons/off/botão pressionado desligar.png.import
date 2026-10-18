@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dywp6t1c6eljt"
-path="res://.godot/imported/botão play pressionado.png-d3fe4636dea61579d414c17baf28174c.ctex"
+uid="uid://d0e56p5otyuwa"
+path="res://.godot/imported/botão pressionado desligar.png-8521c869c74c397607f603e27805a03b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/assets/buttons/botão play pressionado.png"
-dest_files=["res://.godot/imported/botão play pressionado.png-d3fe4636dea61579d414c17baf28174c.ctex"]
+source_file="res://src/ui/assets/buttons/off/botão pressionado desligar.png"
+dest_files=["res://.godot/imported/botão pressionado desligar.png-8521c869c74c397607f603e27805a03b.ctex"]
 
 [params]
 
