@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bjqvjv6o462d1" path="res://src/ui/menus/scripts/credits.gd" id="1_o6xkx"]
 [ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/tela inicial do game 1 frame.jpg" id="2_gtovi"]
-[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://src/levels/assets/fonts/resources/dynapuff_regular.tres" id="3_gtovi"]
+[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://fonts/resources/dynapuff_regular.tres" id="3_gtovi"]
 [ext_resource type="Texture2D" uid="uid://c3aqthjkwwge1" path="res://src/ui/menus/assets/tela inicial do game 2 frame..jpg" id="3_qwbe7"]
 
 [sub_resource type="Animation" id="Animation_lrlgq"]

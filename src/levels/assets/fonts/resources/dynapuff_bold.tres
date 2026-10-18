@@ -1,6 +1,0 @@
-[gd_resource type="FontVariation" format=3 uid="uid://lnk0k0wuguun"]
-
-[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://src/levels/assets/fonts/PixeloidSans.ttf" id="1_h5are"]
-
-[resource]
-base_font = ExtResource("1_h5are")

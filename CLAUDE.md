@@ -184,7 +184,9 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
   trocando os pixels amarelos pela cor da face.
 
 ### 5.4 `src/levels/scenes/tutorial.tscn` — tutorial
-- Mesmo cenário da recepção (parede, janela, HUD, elevador travado).
+- Mesmo cenário da recepção (`PisoParede`, cadeiras, elevador, HUD; painel travado). O `WindowClip` tem de ser
+  igual ao da recepção (`clip_children = 1`, largura 465): com `clip_children = 2` ele desenha um retângulo
+  branco por cima do fundo e das cadeiras.
 - `NarrationLayer` (layer 5): tela escura com texto (narração da história do protagonista).
 - `SkipLayer` (layer 20): botão "Pular tutorial [Esc]".
 - Roteiro: `src/levels/tutorial/tutorial_intro.tres` (12 passos: 4 narrações + 8 falas da Marta).
@@ -262,10 +264,13 @@ Códigos: andares 1–6, subsolo **-1**, negar **999** (`RuleValidator.DENY_ACTI
   - os visitantes **aleatórios** cobrem todos os `andares_do_dia` (padrão 1–6), cada um ao menos uma
     vez, em **ordem sorteada**; a fala de cada um é sorteada entre as falas daquele andar (do próprio
     visitante + `falas_comuns`), **sem repetir texto no dia**. Visitantes FIXOS mantêm a fala deles;
-  - sorteia `regras_por_dia` regras do banco `regras_marta` (pelo menos uma com efeito), em ordem
-    aleatória; regras que mudariam o destino de um visitante FIXO ficam de fora naquele dia;
-  - **garante 1 caso de regra**: uma regra com efeito é colocada numa aparição da Marta com visitante
-    aleatório depois, e o andar dela é posto nesse visitante (marcado com `"caso_regra": true`).
+  - escolhe `regras_por_dia` regras em **ordem fixa**: a 1ª aparição da Marta (depois do 2º visitante)
+    dita uma **regra de andar** (com efeito); as seguintes só **regras de lore** (sem efeito, não limitam
+    andar). `regras_obrigatorias` entram no grupo delas (as de lore vêm antes das sorteadas: nos dias 2 e 3
+    a 2ª regra é sempre o aviso da entrega/do Tião). Regras de andar que mudariam o destino de um
+    visitante FIXO ficam de fora naquele dia;
+  - **garante 1 caso de regra**: um visitante aleatório depois da regra de andar pede o andar dela
+    (marcado com `"caso_regra": true`); a ordem das regras não muda.
     O caso **nunca é o visitante logo depois da regra** (vem pelo menos um depois), e o visitante
     logo depois de qualquer regra com efeito não pede o andar dela (`_evitar_caso_no_proximo`).
 - Entrada da fila: `{visitor, dialogue, nome, sprite, cracha, fixo, caso_regra?}`.
@@ -476,8 +481,8 @@ Os MP3 foram importados sem loop: `audio.gd` liga `loop` em código nas músicas
 - A prancheta de regras aberta cobre o crachá.
 - Volumes do `Audio` (`MUSIC_VOLUME_DB` -20, `SFX_VOLUME_DB` -6, `LOOP_VOLUME_DB` -10) foram chutados
   sem ouvir; ajustar no jogo.
-- Nos dias 2 e 3, as regras só narrativas do banco não saem: a obrigatória já é narrativa e a outra
-  vaga é sempre de uma regra com efeito.
+- Nos dias 2 e 3, as regras de lore do banco não saem: a 2ª vaga (lore) é sempre a obrigatória
+  (entrega / Tião). Decisão do Gustavo: manter assim.
 
 ---
 

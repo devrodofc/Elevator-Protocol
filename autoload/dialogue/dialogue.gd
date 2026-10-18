@@ -21,6 +21,7 @@ signal finished
 var _tween: Tween
 var _skippable: bool = false
 var _advance_requested: bool = false
+var _dialogue_version: int = 0
 ## Páginas da fala atual (cada uma cabe no balão) e a que está na tela
 var _pages: PackedStringArray = []
 var _page: int = 0
@@ -35,6 +36,7 @@ func _ready() -> void:
 
 
 func display_dialogue(speaker: String, text: String, skippable: bool = false) -> void:
+	_dialogue_version += 1
 	_kill_tween()
 	_skippable = skippable
 	_advance_requested = false
@@ -64,10 +66,19 @@ func _show_page(index: int) -> void:
 
 
 func clear_dialogue() -> void:
+	_dialogue_version += 1
 	_kill_tween()
 	_skippable = false
 	_advance_requested = true # encerra qualquer wait_for_advance() em andamento
 	visible = false
+	_pages.clear()
+	_page = 0
+	_name_label.text = ""
+	_name_label.visible = false
+	_text_label.text = ""
+	_text_label.visible_ratio = 1.0
+	_skip_hint.text = ""
+	_skip_hint.visible = false
 
 
 func is_open() -> bool:
@@ -77,10 +88,13 @@ func is_open() -> bool:
 ## Espera até max_seconds ou até o jogador apertar Espaço com a fala já completa.
 ## max_seconds <= 0: sem limite de tempo, espera só o jogador.
 func wait_for_advance(max_seconds: float = 0.0) -> void:
+	var version := _dialogue_version
 	_advance_requested = false
 	var elapsed := 0.0
 	while (max_seconds <= 0.0 or elapsed < max_seconds) and not _advance_requested:
 		await get_tree().process_frame
+		if version != _dialogue_version:
+			return
 		elapsed += get_process_delta_time()
 	_advance_requested = false
 
@@ -107,6 +121,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_text_complete() -> void:
+	if not visible:
+		return
 	_text_label.visible_ratio = 1.0
 	var has_next_page: bool = _page < _pages.size() - 1
 	_skip_hint.visible = _skippable or has_next_page

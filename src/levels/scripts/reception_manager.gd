@@ -252,7 +252,8 @@ func fail() -> void:
 		
 	# 4. Marta sai do elevador e assume a posição
 	if marta_scene != null:
-		await _marta_arrive(true) # sai do elevador e vem até a mesa
+		var sprite_raiva: Texture2D = preload("res://src/npcs/assets/marta/marta_raiva.png") if schedule_config == null or schedule_config.dia_numero == 1 else null
+		await _marta_arrive(true, null, sprite_raiva) # troca o sprite somente ao chegar
 	if not is_inside_tree():
 		return
 	var msg_falha: String = schedule_config.mensagem_falha if schedule_config else "Você falhou. Vamos tentar de novo."
@@ -262,6 +263,7 @@ func fail() -> void:
 	await _wait_dialogue(6.0) # Espaço encerra antes
 	if not is_inside_tree():
 		return
+	_clear_dialogue_via_autoload()
 	get_tree().reload_current_scene()
 
 
@@ -387,7 +389,7 @@ func _update_badge_visitor() -> void:
 		reception_hud.set_current_visitor(null)
 		return
 	var data: VisitorData = current_entry["visitor"]
-	reception_hud.set_current_visitor(current_visitor_node, current_entry.get("nome", data.nome))
+	reception_hud.set_current_visitor(current_visitor_node, current_entry.get("nome", data.nome), current_entry.get("cracha", {}))
 
 
 func _on_badge_toggled(is_open: bool) -> void:
@@ -502,7 +504,7 @@ func _wait_dialogue(seconds: float) -> void:
 
 ## Cria a Marta dentro da janela. Ela usa o script do visitante, que muda de escala sozinho
 ## entre fila e balcão; aqui a escala fica fixa em marta_focus_scale do começo ao fim.
-func _spawn_marta(at_position: Vector2, sprite: Texture2D = null) -> Node2D:
+func _spawn_marta(at_position: Vector2, sprite: Texture2D = null, arrival_sprite: Texture2D = null) -> Node2D:
 	var marta: Node2D = marta_scene.instantiate() as Node2D
 	if "queue_scale" in marta:
 		marta.queue_scale = marta_focus_scale
@@ -511,6 +513,8 @@ func _spawn_marta(at_position: Vector2, sprite: Texture2D = null) -> Node2D:
 	var sprite_node := marta.get_node_or_null("Sprite2D") as Sprite2D
 	if sprite and sprite_node:
 		sprite_node.texture = sprite
+	if arrival_sprite and sprite_node:
+		marta.arrived.connect(func(): sprite_node.texture = arrival_sprite, CONNECT_ONE_SHOT)
 	_add_actor(marta)
 	marta.global_position = at_position
 	marta.scale = marta_focus_scale
@@ -582,13 +586,13 @@ func _await_callback(starter: Callable) -> void:
 
 
 ## A Marta chega até a mesa: pela esquerda (from_elevator = false) ou saindo do elevador.
-func _marta_arrive(from_elevator: bool, sprite: Texture2D = null) -> void:
+func _marta_arrive(from_elevator: bool, sprite: Texture2D = null, arrival_sprite: Texture2D = null) -> void:
 	var target_pos: Vector2 = marta_point.global_position if marta_point else desk_point.global_position
 	if from_elevator and elevator and elevator.has_method("release"):
-		marta_instance = _spawn_marta(elevator.door_position(), sprite)
+		marta_instance = _spawn_marta(elevator.door_position(), sprite, arrival_sprite)
 		await elevator.release(marta_instance, target_pos, true)
 	else:
-		marta_instance = _spawn_marta(_marta_spawn_pos(), sprite)
+		marta_instance = _spawn_marta(_marta_spawn_pos(), sprite, arrival_sprite)
 		await _await_callback(func(done: Callable): _move_actor(marta_instance, target_pos, done))
 
 
