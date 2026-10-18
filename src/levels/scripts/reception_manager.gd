@@ -37,16 +37,20 @@ extends Node2D
 @export_group("Interface & Áudio")
 @onready var ui_canvas_layer: CanvasLayer = $UI_CanvasLayer
 @onready var elevator_panel: ElevatorPanel = $UI_CanvasLayer/ElevatorPanel as ElevatorPanel
+@onready var reception_hud: Control = $UI_CanvasLayer/ReceptionHUD
 @onready var feedback_audio: AudioStreamPlayer2D = $FeedbackAudio
 
 var queue_data: Array[Dictionary] = [] # Lista de dados: {"visitor": VisitorData, "dialogue": NPCDialogue}
 var current_entry: Dictionary = {}
 var current_visitor_node: Visitor = null
 var is_processing_decision: bool = false
+var _badge_locked_panel: bool = false
 var marta_instance: Node2D = null
 
 
 func _ready() -> void:
+	reception_hud.badge_details.toggled.connect(_on_badge_toggled)
+	reception_hud.set_current_visitor(null)
 	if elevator_panel:
 		elevator_panel.floor_selected.connect(_on_floor_selected)
 		elevator_panel.set_panel_locked(true)
@@ -106,6 +110,8 @@ func _call_next_visitor() -> void:
 	_add_actor(current_visitor_node)
 	current_visitor_node.global_position = spawn_point.global_position
 	current_visitor_node.setup(v_data, current_entry.get("sprite"))
+	# O sinal já existente marca o início do atendimento no balcão.
+	current_visitor_node.arrived.connect(_update_badge_visitor)
 	
 	current_visitor_node.move_to_slot(desk_point.global_position, _on_visitor_arrived_at_desk, true)
 
@@ -129,7 +135,7 @@ func _on_visitor_arrived_at_desk() -> void:
 
 ## Trata o clique do jogador nos botões do elevador
 func _on_floor_selected(floor_code: int) -> void:
-	if is_processing_decision or current_entry.is_empty():
+	if is_processing_decision or current_entry.is_empty() or reception_hud.badge_details.visible:
 		return
 		
 	is_processing_decision = true
@@ -152,6 +158,7 @@ func _on_floor_selected(floor_code: int) -> void:
 
 ## Sucesso: o visitante vai embora e, após o delay, surge o próximo
 func _process_success() -> void:
+	reception_hud.set_current_visitor(null)
 	if is_instance_valid(current_visitor_node):
 		current_visitor_node.leave_to(exit_point.global_position)
 		current_visitor_node = null
@@ -167,6 +174,7 @@ func _process_success() -> void:
 
 ## Função de falha com transição de tela vermelha lenta e aparição da Marta
 func fail() -> void:
+	reception_hud.set_current_visitor(null)
 	if elevator_panel:
 		elevator_panel.set_panel_locked(true)
 		
@@ -217,6 +225,7 @@ func fail() -> void:
 
 ## Encerramento do dia
 func _conclude_day() -> void:
+	reception_hud.set_current_visitor(null)
 	if elevator_panel:
 		elevator_panel.set_panel_locked(true)
 		
@@ -234,6 +243,29 @@ func _conclude_day() -> void:
 		_show_dialogue_via_autoload("Marta", msg_fim, true)
 		
 	print("Dia concluído com sucesso!")
+
+
+func _update_badge_visitor() -> void:
+	if not is_instance_valid(current_visitor_node) or current_entry.is_empty():
+		reception_hud.set_current_visitor(null)
+		return
+	var data: VisitorData = current_entry["visitor"]
+	reception_hud.set_current_visitor(current_visitor_node, current_entry.get("nome", data.nome))
+
+
+func _on_badge_toggled(is_open: bool) -> void:
+	if is_open:
+		# Inclui os 0,15 s da animação de confirmação já iniciada no painel.
+		if is_processing_decision or not elevator_panel or elevator_panel.locked:
+			reception_hud.badge_details.close()
+			return
+		_badge_locked_panel = true
+		elevator_panel.set_panel_locked(true)
+	elif _badge_locked_panel:
+		_badge_locked_panel = false
+		if elevator_panel and not is_processing_decision and not current_entry.is_empty() \
+				and is_instance_valid(current_visitor_node) and not current_visitor_node.is_moving:
+			elevator_panel.set_panel_locked(false)
 
 
 ## Movimentação de atores auxiliares (Marta) com interpolação de escala

@@ -88,6 +88,39 @@ func get_tags() -> Array[String]:
 	return []
 
 
+func get_badge_photo() -> Texture2D:
+	if current_data and current_data.retrato:
+		return current_data.retrato
+	var visual: Node = current_visual_instance if is_instance_valid(current_visual_instance) else default_sprite
+	return _find_badge_texture(visual)
+
+
+func _find_badge_texture(visual: Node) -> Texture2D:
+	if visual == null:
+		return null
+	if visual is CanvasItem and not visual.visible:
+		return null
+	if visual is AnimatedSprite2D and visual.sprite_frames:
+		var frames: SpriteFrames = visual.sprite_frames
+		if frames.has_animation(visual.animation) and frames.get_frame_count(visual.animation) > visual.frame:
+			return frames.get_frame_texture(visual.animation, visual.frame)
+	if visual is Sprite2D and visual.texture:
+		if not visual.region_enabled and visual.hframes == 1 and visual.vframes == 1:
+			return visual.texture
+		var frame_size: Vector2 = visual.region_rect.size if visual.region_enabled else visual.texture.get_size()
+		frame_size /= Vector2(visual.hframes, visual.vframes)
+		var origin: Vector2 = visual.region_rect.position if visual.region_enabled else Vector2.ZERO
+		var atlas := AtlasTexture.new()
+		atlas.atlas = visual.texture
+		atlas.region = Rect2(origin + Vector2(visual.frame_coords) * frame_size, frame_size)
+		return atlas
+	for child in visual.get_children():
+		var texture: Texture2D = _find_badge_texture(child)
+		if texture:
+			return texture
+	return null
+
+
 func move_to_slot(target_pos: Vector2, on_finished: Callable = Callable(), is_desk_slot: bool = false) -> void:
 	_kill_tweens()
 	
