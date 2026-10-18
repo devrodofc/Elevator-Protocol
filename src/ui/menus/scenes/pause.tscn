@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://btagpc2oh1ho6"]
+
+[ext_resource type="Script" uid="uid://de8j7peduudhd" path="res://src/ui/menus/scenes/pause.gd" id="1_r8232"]
+
+[node name="Pause" type="CanvasLayer" unique_id=1030095812]
+process_mode = 3
+layer = 10
+script = ExtResource("1_r8232")
+
+[node name="Overlay" type="Control" parent="." unique_id=582790712]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="Overlay" unique_id=888754225]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.78431374)
+
+[node name="Title" type="Label" parent="Overlay" unique_id=175373196]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 65.0
+offset_right = 470.0
+offset_bottom = 115.0
+theme_override_font_sizes/font_size = 28
+text = "PAUSADO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Continue" type="LinkButton" parent="Overlay" unique_id=504400095]
+layout_mode = 0
+offset_left = 273.0
+offset_top = 145.0
+offset_right = 368.0
+offset_bottom = 168.0
+text = "CONTINUAR"
+underline = 2
+
+[node name="Options" type="LinkButton" parent="Overlay" unique_id=331188739]
+layout_mode = 0
+offset_left = 289.0
+offset_top = 190.0
+offset_right = 352.0
+offset_bottom = 213.0
+text = "OPÇÕES"
+underline = 2
+
+[node name="MainMenu" type="LinkButton" parent="Overlay" unique_id=1555506315]
+layout_mode = 0
+offset_left = 253.0
+offset_top = 235.0
+offset_right = 387.0
+offset_bottom = 258.0
+text = "MENU PRINCIPAL"
+underline = 2
