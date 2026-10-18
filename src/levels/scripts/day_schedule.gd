@@ -13,6 +13,9 @@ extends Resource
 ## Suspense antes da fala de fim: depois que o último visitante entra no elevador, as luzes piscam,
 ## a sala escurece e fica esses segundos em silêncio até a Marta sair do elevador. 0 = sem suspense.
 @export_range(0.0, 15.0, 0.5) var suspense_antes_do_fim: float = 0.0
+## Som tocado no escuro do suspense, com a tela tremendo (dia 2: MartaSubsoloKetchup).
+## Com som, a luz volta avermelhada quando a Marta fala. Vazio = só silêncio.
+@export var som_no_escuro: AudioStream
 @export_multiline var mensagem_falha: String = "Você tinha um trabalho tão simples... mas falhou. Vamos tentar de novo, certo?"
 
 @export_group("Regras da Marta")
