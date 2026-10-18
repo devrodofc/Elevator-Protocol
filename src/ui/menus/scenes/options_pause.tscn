@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://edt4vecpvqvc"]
+
+[ext_resource type="Script" uid="uid://bm5rjsblsmu7u" path="res://src/ui/menus/scenes/options_pause.gd" id="1_ngfjj"]
+[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://src/levels/assets/fonts/resources/dynapuff_regular.tres" id="3_lbwgp"]
+
+[node name="OptionsPause" type="Control" unique_id=1171505832]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ngfjj")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1509569264]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.78431374)
+
+[node name="Title" type="Label" parent="." unique_id=2004073900]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 55.0
+offset_right = 470.0
+offset_bottom = 105.0
+theme_override_font_sizes/font_size = 28
+text = "PAUSADO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Fullscreen" type="LinkButton" parent="." unique_id=80030593]
+layout_mode = 0
+offset_left = 241.0
+offset_top = 110.0
+offset_right = 369.0
+offset_bottom = 144.0
+focus_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
+theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
+theme_override_fonts/font = ExtResource("3_lbwgp")
+theme_override_font_sizes/font_size = 24
+text = "Fullscreen"
+underline = 2
+
+[node name="MasterText" type="Label" parent="." unique_id=720760481]
+layout_mode = 0
+offset_left = 202.0
+offset_top = 149.0
+offset_right = 310.0
+offset_bottom = 172.0
+theme_override_fonts/font = ExtResource("3_lbwgp")
+text = "Volume Geral"
+
+[node name="MasterVolume" type="HSlider" parent="." unique_id=928112800]
+layout_mode = 0
+offset_left = 316.0
+offset_top = 155.0
+offset_right = 460.0
+offset_bottom = 171.0
+
+[node name="MusicText" type="Label" parent="." unique_id=369835611]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 175.0
+offset_right = 318.0
+offset_bottom = 198.0
+theme_override_fonts/font = ExtResource("3_lbwgp")
+text = "Volume Música"
+
+[node name="MusicVolume" type="HSlider" parent="." unique_id=1904012095]
+layout_mode = 0
+offset_left = 329.0
+offset_top = 180.0
+offset_right = 459.0
+offset_bottom = 196.0
+
+[node name="SFXText" type="Label" parent="." unique_id=1263696176]
+layout_mode = 0
+offset_left = 198.0
+offset_top = 195.0
+offset_right = 326.0
+offset_bottom = 218.0
+theme_override_fonts/font = ExtResource("3_lbwgp")
+text = "Efeitos sonoros"
+
+[node name="SFXVolume" type="HSlider" parent="." unique_id=1879119154]
+layout_mode = 0
+offset_left = 327.0
+offset_top = 200.0
+offset_right = 460.0
+offset_bottom = 216.0
+
+[node name="Back" type="LinkButton" parent="." unique_id=1357704994]
+layout_mode = 0
+offset_left = 266.0
+offset_top = 250.0
+offset_right = 328.0
+offset_bottom = 273.0
+text = "VOLTAR"
+underline = 2

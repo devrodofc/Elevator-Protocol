@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://drkdyxoqm4uv5"]
 
 [ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/mesa.png" id="2_mesa"]
 [ext_resource type="PackedScene" path="res://src/ui/hud/company_book.tscn" id="5_livro"]

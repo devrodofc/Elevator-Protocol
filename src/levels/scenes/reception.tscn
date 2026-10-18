@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://bummgya0ukifq" path="res://src/levels/scripts/reception_manager.gd" id="1_2llwu"]
 [ext_resource type="Resource" uid="uid://crs2g0lcexipn" path="res://src/levels/schedules/day1.tres" id="2_d2spp"]
 [ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
+[ext_resource type="PackedScene" uid="uid://btagpc2oh1ho6" path="res://src/ui/menus/scenes/pause.tscn" id="6_mgc41"]
 [ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="7_katl8"]
-[ext_resource type="PackedScene" path="res://src/ui/hud/reception_hud.tscn" id="8_hud"]
+[ext_resource type="PackedScene" uid="uid://drkdyxoqm4uv5" path="res://src/ui/hud/reception_hud.tscn" id="8_hud"]
 [ext_resource type="PackedScene" path="res://src/levels/scenes/elevator.tscn" id="9_elevator_scene"]
 [ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
 
@@ -92,3 +93,6 @@ anchors_preset = 0
 
 [node name="FeedbackAudio" type="AudioStreamPlayer2D" parent="." unique_id=2050434788]
 position = Vector2(0, -3)
+bus = &"SFX"
+
+[node name="Pause" parent="." unique_id=1030095812 instance=ExtResource("6_mgc41")]
