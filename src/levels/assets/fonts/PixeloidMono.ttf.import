@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bc3sbfcfbrh64"
-path="res://.godot/imported/DynaPuff-VariableFont_wdth,wght.ttf-0aaf4222d86b60a6ca1bc288eb1942f4.fontdata"
+uid="uid://cnqqfxy5yhm6s"
+path="res://.godot/imported/PixeloidMono.ttf-52175fe65edf89d5b0d3c150eb4b5e95.fontdata"
 
 [deps]
 
-source_file="res://src/levels/assets/fonts/DynaPuff-VariableFont_wdth,wght.ttf"
-dest_files=["res://.godot/imported/DynaPuff-VariableFont_wdth,wght.ttf-0aaf4222d86b60a6ca1bc288eb1942f4.fontdata"]
+source_file="res://src/levels/assets/fonts/PixeloidMono.ttf"
+dest_files=["res://.godot/imported/PixeloidMono.ttf-52175fe65edf89d5b0d3c150eb4b5e95.fontdata"]
 
 [params]
 
