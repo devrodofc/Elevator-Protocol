@@ -46,6 +46,12 @@ var current_visitor_node: Visitor = null
 var is_processing_decision: bool = false
 var _badge_locked_panel: bool = false
 var marta_instance: Node2D = null
+## Regras da Marta já ditadas hoje (valem para a validação a partir de quando ela fala)
+var active_rules: Array[MartaRule] = []
+var _served_count: int = 0
+var _next_rule_index: int = 0
+## Regras da Marta na ordem sorteada para hoje (montada junto com a fila)
+var _rules_today: Array[MartaRule] = []
 
 
 func _ready() -> void:
@@ -62,8 +68,11 @@ func _ready() -> void:
 ## Monta a lista completa de atendimentos do dia
 func _build_schedule_data() -> void:
 	queue_data.clear()
+	_rules_today.clear()
 	if schedule_config:
-		queue_data = schedule_config.build_queue()
+		var dia: Dictionary = schedule_config.montar_dia()
+		queue_data = dia["fila"]
+		_rules_today = dia["regras"]
 
 
 ## Rotina de Introdução da Marta
@@ -148,7 +157,7 @@ func _on_floor_selected(floor_code: int) -> void:
 	var d_data: NPCDialogue = current_entry["dialogue"]
 	var current_day: int = schedule_config.dia_numero if schedule_config else 1
 	
-	var success: bool = RuleValidator.validar_decisao(v_data, d_data, floor_code, current_day)
+	var success: bool = RuleValidator.validar_decisao(v_data, d_data, floor_code, current_day, active_rules)
 	
 	if success:
 		_process_success()
@@ -165,9 +174,15 @@ func _process_success() -> void:
 		
 	current_entry = {}
 	is_processing_decision = false
+	_served_count += 1
 	
 	if delay_between_visitors > 0.0:
 		await get_tree().create_timer(delay_between_visitors).timeout
+	
+	# A cada N atendimentos a Marta aparece para ditar uma regra nova
+	var rule: MartaRule = _rule_due()
+	if rule:
+		await _marta_announce_rule(rule)
 		
 	_call_next_visitor()
 
@@ -381,3 +396,58 @@ func _marta_spawn_pos() -> Vector2:
 
 func _marta_exit_pos() -> Vector2:
 	return (marta_exit_point if marta_exit_point else exit_point).global_position
+
+
+## Próxima regra da Marta, se já for a vez dela (a cada intervalo_regras atendimentos).
+## Não aparece depois do último visitante: aí quem fala é o encerramento do dia.
+func _rule_due() -> MartaRule:
+	if schedule_config == null or marta_scene == null or queue_data.is_empty():
+		return null
+	var intervalo: int = schedule_config.intervalo_regras
+	if intervalo <= 0 or _served_count % intervalo != 0:
+		return null
+	if _next_rule_index >= _rules_today.size():
+		return null
+	var rule: MartaRule = _rules_today[_next_rule_index]
+	_next_rule_index += 1
+	return rule
+
+
+## A Marta entra, dita a regra (Espaço continua), a regra é anotada na prancheta e ela sai.
+func _marta_announce_rule(rule: MartaRule) -> void:
+	marta_instance = _spawn_marta(_marta_spawn_pos())
+	var target_pos: Vector2 = marta_point.global_position if marta_point else desk_point.global_position
+	await _await_callback(func(done: Callable): _move_actor(marta_instance, target_pos, done))
+
+	_show_dialogue_via_autoload("Marta", rule.fala, true)
+	await _wait_dialogue(0.0)
+	_clear_dialogue_via_autoload()
+
+	active_rules.append(rule)
+	var rules_board: Control = reception_hud.get_node_or_null("RulesBoard")
+	if rules_board and rules_board.has_method("add_rule"):
+		rules_board.add_rule(rule.texto_prancheta if not rule.texto_prancheta.is_empty() else rule.fala)
+		_flash_rules_board(rules_board)
+
+	await _await_callback(func(done: Callable): _leave_actor(marta_instance, _marta_exit_pos(), done))
+	marta_instance = null
+	if delay_between_visitors > 0.0:
+		await get_tree().create_timer(delay_between_visitors).timeout
+
+
+## Mostra a prancheta aberta por um instante para o jogador ver a regra anotada.
+func _flash_rules_board(rules_board: Control) -> void:
+	if rules_board.is_open:
+		return
+	rules_board.open()
+	await get_tree().create_timer(1.8).timeout
+	if is_instance_valid(rules_board):
+		rules_board.close()
+
+
+## Chama uma função que recebe um callback de "terminou" e espera ele ser chamado.
+func _await_callback(starter: Callable) -> void:
+	var finished: Array[bool] = [false]
+	starter.call(func(): finished[0] = true)
+	while not finished[0]:
+		await get_tree().process_frame
