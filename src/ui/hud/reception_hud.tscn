@@ -28,9 +28,9 @@ expand_mode = 1
 
 [node name="Desk" type="TextureRect" parent="."]
 layout_mode = 0
-offset_top = 181.0
+offset_top = 201.0
 offset_right = 678.0
-offset_bottom = 362.0
+offset_bottom = 382.0
 mouse_filter = 2
 texture = ExtResource("2_mesa")
 expand_mode = 1
@@ -48,9 +48,9 @@ expand_mode = 1
 [node name="Badge" type="TextureRect" parent="."]
 layout_mode = 0
 offset_left = 115.0
-offset_top = 175.0
+offset_top = 195.0
 offset_right = 158.0
-offset_bottom = 267.0
+offset_bottom = 287.0
 mouse_filter = 2
 texture = ExtResource("7_cracha")
 expand_mode = 1
@@ -58,25 +58,25 @@ expand_mode = 1
 [node name="DecisionPanel" type="TextureRect" parent="."]
 layout_mode = 0
 offset_left = 57.0
-offset_top = 276.0
+offset_top = 289.0
 offset_right = 219.0
-offset_bottom = 345.0
+offset_bottom = 358.0
 mouse_filter = 2
 texture = ExtResource("4_painel")
 expand_mode = 1
 
 [node name="CompanyBook" parent="." instance=ExtResource("5_livro")]
 offset_left = 246.0
-offset_top = 204.0
+offset_top = 216.0
 offset_right = 439.0
-offset_bottom = 346.0
+offset_bottom = 358.0
 
 [node name="RulesBoard" type="TextureRect" parent="."]
 layout_mode = 0
 offset_left = 485.0
-offset_top = 202.0
+offset_top = 207.0
 offset_right = 601.0
-offset_bottom = 353.0
+offset_bottom = 358.0
 mouse_filter = 2
 texture = ExtResource("6_regras")
 expand_mode = 1

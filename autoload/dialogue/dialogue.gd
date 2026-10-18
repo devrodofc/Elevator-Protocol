@@ -54,6 +54,7 @@ func display_dialogue(speaker: String, text: String, skippable: bool = false) ->
 func clear_dialogue() -> void:
 	_kill_tween()
 	_skippable = false
+	_advance_requested = true # encerra qualquer wait_for_advance() em andamento
 	visible = false
 
 

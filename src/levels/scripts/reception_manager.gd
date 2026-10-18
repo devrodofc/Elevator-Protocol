@@ -15,6 +15,8 @@ extends Node2D
 @export var visitor_base_scene: PackedScene = preload("res://src/npcs/scenes/visitor.tscn")
 ## Escala do visitante dentro da janela (3.46 = arte 256 px em tamanho real)
 @export var visitor_scale: Vector2 = Vector2.ONE
+## Velocidade do visitante ao entrar e sair da janela, em px/s (0 = usa a da cena do visitante)
+@export var visitor_move_speed: float = 0.0
 
 @export_group("Escala e Profundidade da Marta")
 @export var marta_start_scale: Vector2 = Vector2(0.75, 0.75)
@@ -23,6 +25,9 @@ extends Node2D
 @export_group("Nós do Cenário")
 @onready var spawn_point: Node2D = %VisitorSpawnPoint
 @onready var marta_point: Node2D = %MartaPoint
+## Entrada e saída da Marta na altura dela (opcionais; sem eles usa os pontos do visitante)
+@onready var marta_spawn_point: Node2D = get_node_or_null("%MartaSpawnPoint")
+@onready var marta_exit_point: Node2D = get_node_or_null("%MartaExitPoint")
 ## Usamos o DeskPoint1 como o balcão único de atendimento
 @onready var desk_point: Node2D = %VisitorDeskPoint1
 @onready var exit_point: Node2D = %VisitorExitPoint
@@ -80,10 +85,7 @@ func _start_day_intro() -> void:
 		_call_next_visitor()
 		return
 		
-	marta_instance = marta_scene.instantiate() as Node2D
-	_add_actor(marta_instance)
-	marta_instance.global_position = spawn_point.global_position
-	marta_instance.scale = marta_start_scale
+	marta_instance = _spawn_marta(_marta_spawn_pos())
 	
 	var target_pos: Vector2 = marta_point.global_position if marta_point else desk_point.global_position
 	
@@ -94,7 +96,7 @@ func _start_day_intro() -> void:
 		await _wait_dialogue(0.0) # sem tempo limite: a Marta só sai quando o jogador aperta Espaço
 		_clear_dialogue_via_autoload()
 		
-		_leave_actor(marta_instance, exit_point.global_position, func():
+		_leave_actor(marta_instance, _marta_exit_pos(), func():
 			marta_instance = null
 			if delay_between_visitors > 0.0:
 				await get_tree().create_timer(delay_between_visitors).timeout
@@ -116,6 +118,8 @@ func _call_next_visitor() -> void:
 	# Na janela o visitante entra de lado: mesma escala na fila e no balcão
 	current_visitor_node.queue_scale = visitor_scale
 	current_visitor_node.desk_scale = visitor_scale
+	if visitor_move_speed > 0.0:
+		current_visitor_node.move_speed = visitor_move_speed
 	_add_actor(current_visitor_node)
 	current_visitor_node.global_position = spawn_point.global_position
 	current_visitor_node.setup(v_data)
@@ -213,10 +217,7 @@ func fail() -> void:
 	var target_pos: Vector2 = marta_point.global_position if marta_point else desk_point.global_position
 	
 	if marta_scene != null:
-		marta_instance = marta_scene.instantiate() as Node2D
-		_add_actor(marta_instance)
-		marta_instance.global_position = spawn_point.global_position
-		marta_instance.scale = marta_start_scale
+		marta_instance = _spawn_marta(_marta_spawn_pos())
 		
 		_move_actor(marta_instance, target_pos, func():
 			var msg_falha: String = schedule_config.mensagem_falha if schedule_config else "Você falhou. Vamos tentar de novo."
@@ -239,10 +240,7 @@ func _conclude_day() -> void:
 	var target_pos: Vector2 = marta_point.global_position if marta_point else desk_point.global_position
 	
 	if marta_scene != null:
-		marta_instance = marta_scene.instantiate() as Node2D
-		_add_actor(marta_instance)
-		marta_instance.global_position = exit_point.global_position
-		marta_instance.scale = marta_start_scale
+		marta_instance = _spawn_marta(_marta_exit_pos())
 		
 		_move_actor(marta_instance, target_pos, func():
 			var msg_fim: String = schedule_config.mensagem_fim if schedule_config else "Expediente encerrado. Você concluiu o dia!"
@@ -347,3 +345,24 @@ func _wait_dialogue(seconds: float) -> void:
 	else:
 		# Sem a caixa de fala não há como apertar Espaço: usa um tempo fixo
 		await get_tree().create_timer(seconds if seconds > 0.0 else 10.0).timeout
+
+
+## Cria a Marta dentro da janela. Ela usa o script do visitante, que muda de escala sozinho
+## entre fila e balcão; aqui a escala fica fixa em marta_focus_scale do começo ao fim.
+func _spawn_marta(at_position: Vector2) -> Node2D:
+	var marta: Node2D = marta_scene.instantiate() as Node2D
+	if "queue_scale" in marta:
+		marta.queue_scale = marta_focus_scale
+		marta.desk_scale = marta_focus_scale
+	_add_actor(marta)
+	marta.global_position = at_position
+	marta.scale = marta_focus_scale
+	return marta
+
+
+func _marta_spawn_pos() -> Vector2:
+	return (marta_spawn_point if marta_spawn_point else spawn_point).global_position
+
+
+func _marta_exit_pos() -> Vector2:
+	return (marta_exit_point if marta_exit_point else exit_point).global_position
