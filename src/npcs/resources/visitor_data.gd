@@ -13,6 +13,14 @@ const NOMES_PADRAO_PATH := "res://src/npcs/resources/male_names.tres"
 @export var tags: Array[String] = [] # "delivery", "vip", "intruder", "send_to_basement", etc.
 @export var dialogos: Array[NPCDialogue] = []
 
+@export_group("Crachá")
+## Zero indica idade não informada.
+@export_range(0, 150, 1) var idade: int = 0
+@export var sexo: String = ""
+@export var ocupacao: String = ""
+## Opcional. Sem retrato, o crachá usa a textura do sprite do visitante.
+@export var retrato: Texture2D
+
 
 func has_tag(tag_name: String) -> bool:
 	return tags.has(tag_name)
