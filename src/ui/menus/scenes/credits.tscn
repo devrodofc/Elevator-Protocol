@@ -86,8 +86,8 @@ offset_right = 430.0
 offset_bottom = 119.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_gtovi")
-theme_override_font_sizes/font_size = 32
-text = "Opções"
+theme_override_font_sizes/font_size = 24
+text = "Créditos"
 horizontal_alignment = 1
 
 [node name="Studio" type="Label" parent="." unique_id=720760481]
@@ -98,7 +98,9 @@ offset_right = 427.0
 offset_bottom = 144.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_gtovi")
+theme_override_font_sizes/font_size = 14
 text = "Coffee & Games Studios"
+horizontal_alignment = 1
 
 [node name="Team" type="Label" parent="." unique_id=573932509]
 layout_mode = 0

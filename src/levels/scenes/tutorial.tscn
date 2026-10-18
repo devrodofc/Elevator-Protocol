@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="6_text"]
 [ext_resource type="PackedScene" uid="uid://cos1f6nb23ivp" path="res://src/levels/scenes/elevator.tscn" id="7_elevator_scene"]
 [ext_resource type="Texture2D" uid="uid://decmd1y1x72a6" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/piso e parede.png" id="11_piso"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_highlight"]
 draw_center = false
@@ -42,6 +43,14 @@ offset_bottom = 201.0
 mouse_filter = 2
 color = Color(0.96862745, 0.96862745, 0.96862745, 1)
 
+[node name="PisoParede" type="TextureRect" parent="."]
+texture_repeat = 2
+offset_right = 640.0
+offset_bottom = 201.0
+mouse_filter = 2
+texture = ExtResource("11_piso")
+stretch_mode = 1
+
 [node name="Chairs" type="Sprite2D" parent="." unique_id=865671077]
 position = Vector2(17, 20)
 texture = ExtResource("10_cadeiras")
@@ -52,8 +61,8 @@ position = Vector2(282, -38)
 scale = Vector2(1.4, 1.4)
 
 [node name="WindowClip" type="ColorRect" parent="." unique_id=477386548]
-clip_children = 2
-offset_right = 282.0
+clip_children = 1
+offset_right = 465.0
 offset_bottom = 201.0
 mouse_filter = 2
 color = Color(0.96862745, 0.96862745, 0.96862745, 1)

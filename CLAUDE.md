@@ -55,7 +55,8 @@ Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu pri
 - Dias encadeados: no fim do dia, depois do Espaço na fala da Marta, a recepção é recarregada com
   `proximo_dia` (transição "Dia N"). O dia atual fica em `ReceptionManager.dia_em_andamento`
   (static); o tutorial zera para o dia 1. Dia 1 → `day1.tres`, Dia 2 → `day2.tres`, Dia 3 → `day3.tres` (último por enquanto).
-- Não existe ainda tela de fim de jogo (o dia 3 termina na fala da Marta).
+- **Fim de jogo**: depois da fala de fim do dia 3 (Espaço), transição para `src/ui/menus/scenes/end_screen.tscn`
+  (campo `cena_final` do `day3.tres`): epílogo narrado, "Fim.", créditos subindo e "Voltar ao menu".
 
 ---
 
@@ -68,9 +69,9 @@ Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu pri
 | Stretch | `canvas_items` | Texto é desenhado na resolução da janela (fica liso) |
 | Filtro de textura | Nearest (`default_texture_filter=0`) | Pixel art nítido |
 | Snap 2D | `snap_2d_transforms_to_pixel=true` | |
-| Autoloads | `Dialogue`, `SceneTransition`, `MusicMenu` | Ver seção 6. `MusicMenu` é registrado pelo **caminho** (`res://sounds/music/menu/music_menu.tscn`): pelo uid dava "Unrecognized UID" |
+| Autoloads | `Dialogue`, `SceneTransition`, `MusicMenu`, `Audio`, `CheatMenu` | Ver seção 6. `MusicMenu` é registrado pelo **caminho** (`res://sounds/music/menu/music_menu.tscn`): pelo uid dava "Unrecognized UID" |
 | Áudio | `default_bus_layout.tres` | Buses `Master`, `Music`, `SFX` (os sliders das opções usam esses nomes) |
-| Input | `hack_level1`, `hack_level2` | Declarados, **não usados** em nenhum script |
+| Input | `hack_level1`, `hack_level2` | Declarados, **não usados** em nenhum script. O hack de pular dia usa **F9** direto no código (`TECLA_PULAR_DIA`) |
 
 Fontes em uso (`src/levels/assets/fonts/`, desde o PR #36): **PixeloidSans** e **PixeloidSans-Bold**
 (texto e títulos), além de PixeloidMono e Jersey10. Os recursos `fonts/resources/dynapuff_*.tres` mantêm o nome
@@ -86,10 +87,12 @@ caminho que não existe: elas carregam pelo `uid`. Se o uid se perder, corrija o
 autoload/
   dialogue/            Caixa de fala global (balão de fala, com páginas)
   scene_transition/    Fade + título entre cenas
+  cheat_menu/          cheat_menu.gd (autoload CheatMenu: tecla P, ver 6.10)
+  audio/               audio.gd (autoload Audio: música do gameplay + efeitos sonoros, ver 6.9)
 sounds/music/
   menu/                music_menu.tscn/.gd (autoload MusicMenu: toca musica_menu.wav no bus Music)
-  wav/                 musica_menu.wav + mp3 ainda sem uso (gameplay, errada, elevador, digitando,
-                       passando_pagina, 3 "WhatsApp Audio ...")
+  wav/                 musica_menu.wav + mp3 do jogo (musica_gameplay, musica_errada, BotãoPressionado,
+                       chegou_elevador, digitando, erro, sucess, passando_pagina)
 default_bus_layout.tres  buses Music e SFX
 src/
   levels/
@@ -183,7 +186,9 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
   trocando os pixels amarelos pela cor da face.
 
 ### 5.4 `src/levels/scenes/tutorial.tscn` — tutorial
-- Mesmo cenário da recepção (parede, janela, HUD, elevador travado).
+- Mesmo cenário da recepção (`PisoParede`, cadeiras, elevador, HUD; painel travado). O `WindowClip` tem de ser
+  igual ao da recepção (`clip_children = 1`, largura 465): com `clip_children = 2` ele desenha um retângulo
+  branco por cima do fundo e das cadeiras.
 - `NarrationLayer` (layer 5): tela escura com texto (narração da história do protagonista).
 - `SkipLayer` (layer 20): botão "Pular tutorial [Esc]".
 - Roteiro: `src/levels/tutorial/tutorial_intro.tres` (12 passos: 4 narrações + 8 falas da Marta).
@@ -208,7 +213,13 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
 - `src/ui/menus/scenes/menu.tscn`: fundo animado com os 3 quadros `tela inicial do game N frame.jpg`
   (`AnimationPlayer`) e botões `TextureButton` (`Play`, `Options`, `Quit`, arte em `assets/buttons/`).
   `menu.gd` chama `MusicMenu.play_if_stopped()`.
-- `options.tscn` (tela cheia, volumes Master/Music/SFX), `credits.tscn`.
+- `options.tscn` (tela cheia, volumes Master/Music/SFX), `credits.tscn` (texto centralizado dentro da tela
+  azul do computador do fundo: x 100–553, y 73–250).
+- `end_screen.tscn` + `scripts/end_screen.gd`: tela de fim de jogo. Epílogo em tela escura (const `EPILOGO`,
+  Espaço acelera/continua, como a narração do tutorial), "Fim.", créditos subindo (const `CREDITOS`,
+  `[estilo, texto]` com estilos titulo/sub/secao/nome/espaco) e "Voltar ao menu". Esc pula para o fim dos
+  créditos; Esc de novo volta ao menu. Abaixa a música do jogo e toca a do menu nos créditos. Zera
+  `ReceptionManager.dia_em_andamento`.
 - `pause.tscn` + `pause.gd`: Esc pausa (`get_tree().paused`); Esc com a prancheta de regras aberta só
   fecha a prancheta (`rules_board.gd` usa `_shortcut_input`). "Menu principal" chama `Dialogue.clear_dialogue()`.
   `options_pause.tscn`: opções dentro do pause.
@@ -231,7 +242,14 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
 7. Erro (`fail`): tela avermelha, Marta fala `mensagem_falha`, até 6 s (ou Espaço) e recarrega a cena.
 8. Fila vazia → `_conclude_day`: (se `suspense_antes_do_fim` > 0, luzes piscam e a sala escurece:
    `_apagar_luzes`) Marta sai do elevador (com `sprite_marta_fim`, se houver) e fala `mensagem_fim`;
-   depois do Espaço, se houver `proximo_dia`, transição "Dia N" e recarrega a recepção.
+   depois do Espaço, se houver `proximo_dia`, transição "Dia N" e recarrega a recepção; se não houver e
+   o dia tiver `cena_final`, abre essa cena (tela de fim de jogo).
+
+**Hack de teste — F9** (`TECLA_PULAR_DIA` em `reception_manager.gd`): na recepção, pula o resto do dia: dia 1 → 2 →
+3 → tela final (créditos). Usa o mesmo `_ir_para_proximo_dia()` do fim normal do dia. Não funciona com o jogo
+pausado nem durante uma transição (aperte de novo quando a tela clarear). Ao sair, `_saindo = true` trava o painel
+e bloqueia falas da cena antiga (durante o escurecimento ela ainda roda); a recepção nova limpa o balão no `_ready`.
+Para trocar a tecla, mude a constante; para desligar o hack, use uma tecla inexistente ou remova `_unhandled_key_input`.
 
 As rotinas com `await` param se a cena sair da árvore (`if not is_inside_tree(): return`): pause →
 menu principal ou reload no meio de uma fala não geram erro.
@@ -251,7 +269,7 @@ Ordem de aplicação:
 Códigos: andares 1–6, subsolo **-1**, negar **999** (`RuleValidator.DENY_ACTION`, `ElevatorPanel.DENY_CODE`).
 
 ### 6.3 Agenda do dia (`day_schedule.gd` + `day_interaction.gd`)
-- `DayScheduleConfig`: `dia_numero`, `proximo_dia`, `sprite_marta_fim`, `suspense_antes_do_fim`,
+- `DayScheduleConfig`: `dia_numero`, `proximo_dia`, `cena_final` (só no último dia), `sprite_marta_fim`, `suspense_antes_do_fim`, `som_no_escuro`,
   mensagens da Marta (início, fim, falha), `intervalo_regras` (padrão 2; 0 desliga), `regras_por_dia`,
   `regras_marta` (banco sorteado), `regras_obrigatorias` (ditas todo dia), `pool_padrao`, `interacoes`,
   `andares_do_dia`, `falas_comuns`, `usar_falas_do_visitante` (desligado = só `falas_comuns`).
@@ -261,10 +279,13 @@ Códigos: andares 1–6, subsolo **-1**, negar **999** (`RuleValidator.DENY_ACTI
   - os visitantes **aleatórios** cobrem todos os `andares_do_dia` (padrão 1–6), cada um ao menos uma
     vez, em **ordem sorteada**; a fala de cada um é sorteada entre as falas daquele andar (do próprio
     visitante + `falas_comuns`), **sem repetir texto no dia**. Visitantes FIXOS mantêm a fala deles;
-  - sorteia `regras_por_dia` regras do banco `regras_marta` (pelo menos uma com efeito), em ordem
-    aleatória; regras que mudariam o destino de um visitante FIXO ficam de fora naquele dia;
-  - **garante 1 caso de regra**: uma regra com efeito é colocada numa aparição da Marta com visitante
-    aleatório depois, e o andar dela é posto nesse visitante (marcado com `"caso_regra": true`).
+  - escolhe `regras_por_dia` regras em **ordem fixa**: a 1ª aparição da Marta (depois do 2º visitante)
+    dita uma **regra de andar** (com efeito); as seguintes só **regras de lore** (sem efeito, não limitam
+    andar). `regras_obrigatorias` entram no grupo delas (as de lore vêm antes das sorteadas: nos dias 2 e 3
+    a 2ª regra é sempre o aviso da entrega/do Tião). Regras de andar que mudariam o destino de um
+    visitante FIXO ficam de fora naquele dia;
+  - **garante 1 caso de regra**: um visitante aleatório depois da regra de andar pede o andar dela
+    (marcado com `"caso_regra": true`); a ordem das regras não muda.
     O caso **nunca é o visitante logo depois da regra** (vem pelo menos um depois), e o visitante
     logo depois de qualquer regra com efeito não pede o andar dela (`_evitar_caso_no_proximo`).
 - Entrada da fila: `{visitor, dialogue, nome, sprite, cracha, fixo, caso_regra?}`.
@@ -294,8 +315,11 @@ falas próprias em `src/npcs/dialogue/dialoguesDia2/<N> andar/` (3 por andar, `u
   a outra regra é sorteada do banco de 7: 3→negar, 1→subsolo, 4→2º, 5→6º + 3 narrativas.
 - O entregador pede "entrega para a dona Marta" (`andar_desejado = -1`): o certo é o subsolo.
 - `sprite_marta_fim` = `Marta sangrenta.png`: só na fala de fim ela aparece ensanguentada ("é katchup!").
-  Durante o dia usa o sprite padrão. `suspense_antes_do_fim = 3.0`: depois que o entregador entra no elevador,
-  as luzes piscam, a sala fica escura e em silêncio, e só então a Marta sai do elevador (`_apagar_luzes`).
+  Durante o dia usa o sprite padrão. `suspense_antes_do_fim = 3.0` + `som_no_escuro = MartaSubsoloKetchup.mp3`:
+  depois que o entregador entra no elevador a música some, as luzes piscam e a sala fica quase preta (0,9);
+  1 s depois toca o `MartaSubsoloKetchup` com o cenário tremendo e um vermelho fraco no escuro; mais 3 s de
+  silêncio, o elevador chega grave e a Marta sai, para e encara 1,8 s sob luz vermelha que pulsa enquanto ela
+  fala (`_apagar_luzes`, `_tremer`, `_conclude_day`). A música só volta no dia seguinte.
 
 **Dia 3** (`day3.tres`): mesmo formato, falas em `src/npcs/dialogue/dialoguesDia3/<N> andar/`. Visitante fixo
 no fim: **Seu Tião**, o faxineiro (`src/npcs/resources/Day3/tiao.tres`, sprite `tiao/tiao_jardineiro.png`,
@@ -337,6 +361,34 @@ clareia; emite `finished`. Bloqueia cliques durante a troca.
   `company_directory.tres` (7 entradas: 1º–6º e Subsolo por último). Logo só aparece se preenchido.
 - `rules_board.gd`: `open()`, `close()`, `toggle()`, `add_rule(texto)`, `clear_rules()`.
 
+### 6.9 Áudio (`Audio` + `MusicMenu`)
+`MusicMenu` (autoload) toca `musica_menu.wav` no menu; para ao apertar **Jogar** (`menu.gd`) e volta quando o
+menu abre de novo (o menu também para a música do gameplay). `Audio` (`autoload/audio/audio.gd`, registrado pelo
+caminho) tem um player de música (bus Music), um de loop e 6 vozes de efeito (bus SFX):
+
+| Som | Quando | Onde |
+|---|---|---|
+| `musica_gameplay` | Recepção, dias 1 e 2 (em loop) | `reception_manager._ready` |
+| `musica_errada` | Recepção, a partir do dia 3 (em loop) | `reception_manager._ready` |
+| `BotãoPressionado` | Qualquer botão do painel do elevador (inclui X e Confirmar) | `elevator_button._gui_input` |
+| `chegou_elevador` | Porta do elevador abre estando fechada: -6 dB (50%); quando a Marta sai, volume normal e pitch 0,7 | `elevator._tocar_chegada` (`release(..., som_da_marta)`) |
+| `digitando` | Narração da intro (tutorial), enquanto o texto aparece | `tutorial._show_narration` |
+| `passando_pagina` | Setas do livro de andares | `company_book.next_page/previous_page` |
+| `sucess` / `erro` | Acerto / erro do andar | `_process_success` / `fail` |
+| `MartaSubsoloKetchup` | Fim do dia 2, no escuro (`som_no_escuro` do `day2.tres`) | `_apagar_luzes` |
+
+Os MP3 foram importados sem loop: `audio.gd` liga `loop` em código nas músicas e no `digitando`.
+`play_music` não reinicia a mesma música (ao falhar e recarregar a cena ela continua).
+
+### 6.10 Tela de cheat (`CheatMenu`)
+`autoload/cheat_menu/cheat_menu.gd` (registrado pelo caminho; interface montada em código, sem `.tscn`).
+A tecla **P** abre/fecha em qualquer cena e pausa o jogo; **Esc** também fecha (e não chega ao pause, então
+abrir por cima do pause e fechar volta ao pause). Botões: Primeira/Segunda/Terceira fase (Dia 1/2/3) e Menu inicial.
+Ir para um dia = `ReceptionManager.dia_em_andamento = dayN.tres` + `SceneTransition.transition_to(reception, "Dia N")`,
+o mesmo caminho do fim do dia. Antes de trocar: despausa, limpa a fala, para o loop do `Audio` e a música do menu;
+depois que a cena nova entra, limpa a fala de novo (a cena antiga continua rodando durante o fade).
+Para tirar da build final: remover a linha `CheatMenu` de `[autoload]` no `project.godot`.
+
 ---
 
 ## 7. Escala da arte e posições
@@ -354,7 +406,8 @@ clareia; emite `finished`. Bloqueia cliques durante a troca.
 | Quero mudar | Onde |
 |---|---|
 | Visitantes do dia, ordem, quantidade | `src/levels/schedules/dayN.tres` → `interacoes` |
-| Novo dia | copiar `day3.tres`, mudar `dia_numero` e apontar o `proximo_dia` do dia anterior para ele |
+| Novo dia | copiar `day3.tres`, mudar `dia_numero`, apontar o `proximo_dia` do dia anterior para ele e mover o `cena_final` para o novo último dia |
+| Epílogo e créditos finais | `src/ui/menus/scripts/end_screen.gd` → consts `EPILOGO` e `CREDITOS` |
 | Suspense / sprite da Marta no fim | `dayN.tres` → `suspense_antes_do_fim`, `sprite_marta_fim` |
 | Regras da Marta e intervalo | `dayN.tres` → grupo "Regras da Marta" |
 | Falas/andar de um NPC | `.tres` em `src/npcs/resources/Day*/` ou `src/npcs/dialogue/` |
@@ -432,6 +485,12 @@ clareia; emite `finished`. Bloqueia cliques durante a troca.
     cabeçalho, mas a Godot não o registra no cache (nem com `--headless -e`). É só aviso: a cena carrega
     pelo caminho e o jogo não é afetado.
 
+
+18. **Texto de várias linhas dentro de `.tscn`/`.tres` com CRLF.** Com o Git do Windows (`autocrlf`), uma
+    string que ocupa várias linhas no arquivo fica com `\r\n` dentro, e a Godot desenha o `\r` como
+    uma linha a mais (espaço dobrado). Aconteceu na lista da equipe em `credits.tscn`. Escreva o texto numa
+    linha só, com `\n` escapado: `text = "Rodrigo - Game Designer\nDaniel - Programador"`.
+
 ---
 
 ## 10. Pendências e inconsistências conhecidas
@@ -449,14 +508,11 @@ clareia; emite `finished`. Bloqueia cliques durante a troca.
 - Ao criar um dia novo, preencher `falas_comuns` (senão andares sem fala ficam sem visitante).
 - O tutorial destaca o "painel" e diz "escolher o andar no painel do elevador, ou negar o acesso";
   se a mecânica mudar, atualizar `tutorial_intro.tres`.
-- Não há tela de resumo/fim depois do último dia.
 - A prancheta de regras aberta cobre o crachá.
-- **Música do menu continua tocando no jogo**: `MusicMenu` tem `autoplay` e ninguém chama `stop_music()`;
-  ela segue no tutorial e na recepção. Os sons de gameplay (`musica_gameplay.mp3`, `musica_errada.mp3`,
-  `chegou_elevador.mp3`, `digitando.mp3`, `passando_pagina.mp3`) estão em `sounds/music/wav/` mas ainda
-  não são usados por nenhuma cena.
-- Nos dias 2 e 3, as regras só narrativas do banco não saem: a obrigatória já é narrativa e a outra
-  vaga é sempre de uma regra com efeito.
+- Volumes do `Audio` (`MUSIC_VOLUME_DB` -20, `SFX_VOLUME_DB` -6, `LOOP_VOLUME_DB` -10) foram chutados
+  sem ouvir; ajustar no jogo.
+- Nos dias 2 e 3, as regras de lore do banco não saem: a 2ª vaga (lore) é sempre a obrigatória
+  (entrega / Tião). Decisão do Gustavo: manter assim.
 
 ---
 
@@ -485,6 +541,9 @@ G=".../Godot_v4.7.2-stable_win64_console.exe"
 "$G" --path . --windowed --resolution 640x360 \
      --write-movie out/f.png --fixed-fps 20 --quit-after 200 -s roteiro.gd   # grava quadros (abre janela)
 ```
+- Em scripts `-s`, **não escreva `ReceptionManager` no código-fonte do teste**: isso compila o
+  `reception_manager.gd` antes dos autoloads e dá "Identifier not found: Audio". Use
+  `var RM = load("res://src/levels/scripts/reception_manager.gd")` e `RM.dia_em_andamento = ...`.
 - Scripts de teste (`extends SceneTree`) podem: `change_scene_to_file`, simular teclas com
   `Input.parse_input_event(InputEventAction)`, emitir `pressed` nos botões do elevador e consultar
   `RuleValidator.andar_esperado(...)` para responder certo.

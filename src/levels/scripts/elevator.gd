@@ -36,7 +36,9 @@ func _ready() -> void:
 	_sprite.pause()
 
 
-func open() -> void:
+## som_da_marta: a chegada fica grave e no volume cheio (ver _tocar_chegada).
+func open(som_da_marta: bool = false) -> void:
+	_tocar_chegada(som_da_marta)
 	_sprite.play("abrir")
 	await _sprite.animation_finished
 
@@ -44,6 +46,17 @@ func open() -> void:
 func close() -> void:
 	_sprite.play("fechar")
 	await _sprite.animation_finished
+
+
+## Som de chegada do elevador, só quando a porta estava fechada (não toca se já está aberta).
+## Comum: 50% mais baixo. Quando quem sai é a Marta: volume original e mais grave.
+func _tocar_chegada(som_da_marta: bool = false) -> void:
+	if _sprite.animation != &"fechar":
+		return
+	if som_da_marta:
+		Audio.play_sfx(Audio.CHEGOU_ELEVADOR, 0.0, Audio.ELEVADOR_MARTA_PITCH)
+	else:
+		Audio.play_sfx(Audio.CHEGOU_ELEVADOR, Audio.ELEVADOR_VOLUME_DB)
 
 
 ## Retângulo global da abertura da porta.
@@ -68,6 +81,7 @@ func is_busy() -> bool:
 ## O ator é liberado no fim.
 func receive(actor: Node2D) -> void:
 	_em_uso += 1
+	_tocar_chegada()
 	_sprite.play("abrir") # abre enquanto o ator caminha até a porta
 	var encaixe: Dictionary = _encaixe(actor)
 	var arrived: Array[bool] = [false]
@@ -100,7 +114,8 @@ func receive(actor: Node2D) -> void:
 
 ## O ator começa dentro do elevador (escondido), sai pela porta e anda até "destino".
 ## Termina quando o ator chega ao destino; a porta fecha atrás dele.
-func release(actor: Node2D, destino: Vector2) -> void:
+## som_da_marta: a chegada do elevador fica grave (a Marta saindo).
+func release(actor: Node2D, destino: Vector2, som_da_marta: bool = false) -> void:
 	actor.visible = false
 	while _em_uso > 0 or (_sprite.animation == &"fechar" and _sprite.is_playing()):
 		if not is_inside_tree():
@@ -115,7 +130,7 @@ func release(actor: Node2D, destino: Vector2) -> void:
 	actor.modulate = cor_dentro
 	actor.visible = true
 
-	await open()
+	await open(som_da_marta)
 	# Sai: vem de dentro até a porta, saindo da sombra
 	var leaving := create_tween().set_parallel(true)
 	leaving.tween_property(actor, "global_position", porta, tempo_entrando)

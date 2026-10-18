@@ -23,11 +23,13 @@ func page_count() -> int:
 
 
 func next_page() -> void:
+	Audio.play_sfx(Audio.PASSANDO_PAGINA)
 	_page = (_page + 1) % page_count()
 	_show_page()
 
 
 func previous_page() -> void:
+	Audio.play_sfx(Audio.PASSANDO_PAGINA)
 	_page = (_page - 1 + page_count()) % page_count()
 	_show_page()
 

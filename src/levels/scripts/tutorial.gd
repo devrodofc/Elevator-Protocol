@@ -70,6 +70,7 @@ func _show_narration(text: String) -> void:
 	_narration_tween = create_tween()
 	_narration_tween.tween_property(_narration_label, "visible_ratio", 1.0, text.length() / chars_per_second)
 	_narration_tween.finished.connect(_on_narration_typed)
+	Audio.start_loop(Audio.DIGITANDO)
 
 	while not _advance_requested and not _finished:
 		await get_tree().process_frame
@@ -77,6 +78,7 @@ func _show_narration(text: String) -> void:
 
 
 func _on_narration_typed() -> void:
+	Audio.stop_loop()
 	_narration_label.visible_ratio = 1.0
 	_narration_hint.text = "[Espaço] continuar"
 
@@ -179,6 +181,7 @@ func _go_to_reception() -> void:
 	if _finished:
 		return
 	_finished = true
+	Audio.stop_loop()
 	Dialogue.clear_dialogue() # também encerra a espera de Espaço em andamento
 	_set_highlight(TutorialStep.Destaque.NENHUM)
 	# Escurece, mostra o título do dia e clareia já na recepção
