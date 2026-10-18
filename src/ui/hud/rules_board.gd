@@ -12,12 +12,28 @@ signal toggled(is_open: bool)
 
 var is_open: bool = false
 
+var _rules: PackedStringArray = []
+
 var _tween: Tween
 
 
 func _ready() -> void:
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	position.y = _closed_y()
+
+
+## Anota uma regra nova na prancheta (ex.: ditada pela Marta).
+func add_rule(text: String) -> void:
+	_rules.append(text)
+	var linhas: PackedStringArray = []
+	for regra in _rules:
+		linhas.append("• " + regra)
+	%RulesText.text = "\n".join(linhas)
+
+
+func clear_rules() -> void:
+	_rules.clear()
+	%RulesText.text = "Nenhuma regra extra."
 
 
 func toggle() -> void:

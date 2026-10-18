@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://src/ui/hud/rules_board.gd" id="1_rules"]
 [ext_resource type="Texture2D" path="res://src/levels/assets/rules/regras_vazaio.png" id="2_board"]
+[ext_resource type="FontFile" uid="uid://bc3sbfcfbrh64" path="res://src/levels/assets/fonts/DynaPuff-VariableFont_wdth,wght.ttf" id="3_text"]
+[ext_resource type="FontFile" uid="uid://bfqv1huuduey3" path="res://src/levels/assets/fonts/Chewy-Regular.ttf" id="4_title"]
 
 [node name="RulesBoard" type="Control"]
 layout_mode = 3
@@ -17,3 +19,31 @@ offset_bottom = 151.0
 mouse_filter = 2
 texture = ExtResource("2_board")
 expand_mode = 1
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 11.0
+offset_right = 110.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(0.13, 0.12, 0.11, 1)
+theme_override_fonts/font = ExtResource("4_title")
+theme_override_font_sizes/font_size = 11
+text = "Regras do dia"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RulesText" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = 26.0
+offset_right = 108.0
+offset_bottom = 128.0
+theme_override_colors/font_color = Color(0.13, 0.12, 0.11, 1)
+theme_override_constants/line_spacing = -2
+theme_override_fonts/font = ExtResource("3_text")
+theme_override_font_sizes/font_size = 8
+text = "Nenhuma regra extra."
+autowrap_mode = 3
+clip_text = true

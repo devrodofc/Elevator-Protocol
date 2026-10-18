@@ -8,6 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://brwssu6vo4wn4" path="res://src/npcs/assets/lucas/lucas_entregrador.png" id="4_1mxdf"]
 [ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/Day1/common_npc_male1.tres" id="4_3djo4"]
 [ext_resource type="Resource" uid="uid://ylajsyngiss5" path="res://src/npcs/resources/Day1/common_npc_female1.tres" id="5_3djo4"]
+[ext_resource type="Script" path="res://src/levels/scripts/marta_rule.gd" id="9_rule"]
+[ext_resource type="Resource" uid="uid://b5qa6blw8wptq" path="res://src/npcs/dialogue/dialoguesCommon/4 andar/common4a.tres" id="d4a"]
+[ext_resource type="Resource" uid="uid://cruf2n81kiwg0" path="res://src/npcs/dialogue/dialoguesCommon/4 andar/common4b.tres" id="d4b"]
+[ext_resource type="Resource" uid="uid://g184fibsps7x" path="res://src/npcs/dialogue/dialoguesCommon/5 andar/common5a.tres" id="d5a"]
+[ext_resource type="Resource" uid="uid://daexj4ac2b52e" path="res://src/npcs/dialogue/dialoguesCommon/5 andar/common5b.tres" id="d5b"]
 
 [sub_resource type="Resource" id="Interaction_aleatorios"]
 script = ExtResource("3_inter")
@@ -32,14 +37,32 @@ repeticoes = 2
 pool = Array[ExtResource("1_ha2se")]([ExtResource("5_3djo4"), ExtResource("4_3djo4")])
 metadata/_custom_type_script = "uid://brn4guv252f6e"
 
-[sub_resource type="Resource" id="Resource_nkgg7"]
-script = ExtResource("3_inter")
-modo = 1
-metadata/_custom_type_script = "uid://brn4guv252f6e"
+[sub_resource type="Resource" id="Regra_subsolo"]
+script = ExtResource("9_rule")
+fala = "Ah, antes que eu me esqueça: quem pedir o 5º andar hoje... mande para o subsolo. Não precisa explicar nada. Eles vão entender quando chegarem lá."
+texto_prancheta = "Pediu o 5º andar? Mande para o subsolo."
+andar_pedido = 5
+andar_destino = -1
+falas_caso = Array[ExtResource("1_7wgci")]([ExtResource("d5a"), ExtResource("d5b")])
+
+[sub_resource type="Resource" id="Regra_rogerio"]
+script = ExtResource("9_rule")
+fala = "Se alguém perguntar por um tal de Rogério, diga que ninguém com esse nome trabalha aqui. Nunca trabalhou. Entendido? Ótimo."
+texto_prancheta = "Ninguém chamado Rogério trabalha aqui. Nunca trabalhou."
+
+[sub_resource type="Resource" id="Regra_quarto"]
+script = ExtResource("9_rule")
+fala = "O 4º andar está... indisponível. Negue o acesso a quem pedir. E se ouvir barulho vindo do elevador, finja que não ouviu."
+texto_prancheta = "4º andar: negar acesso. Ignore os barulhos."
+andar_pedido = 4
+andar_destino = 999
+falas_caso = Array[ExtResource("1_7wgci")]([ExtResource("d4a"), ExtResource("d4b")])
 
 [resource]
 script = ExtResource("2_1agin")
 mensagem_fim = "Excelente trabalho por hoje! ... Mas... você deixou aquele entregador ir para o terceiro andar, certo?... Tudo bem... você não sabia!"
 pool_padrao = Array[ExtResource("1_ha2se")]([ExtResource("4_3djo4"), ExtResource("5_3djo4")])
-interacoes = Array[ExtResource("3_inter")]([SubResource("Interaction_aleatorios"), SubResource("Interaction_entregador"), SubResource("Resource_df8m6"), SubResource("Resource_nkgg7")])
+intervalo_regras = 2
+regras_marta = Array[ExtResource("9_rule")]([SubResource("Regra_subsolo"), SubResource("Regra_rogerio"), SubResource("Regra_quarto")])
+interacoes = Array[ExtResource("3_inter")]([SubResource("Interaction_aleatorios"), SubResource("Resource_df8m6"), SubResource("Interaction_entregador")])
 metadata/_custom_type_script = "uid://dw560omsfs2go"

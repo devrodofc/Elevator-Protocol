@@ -51,10 +51,18 @@ func has_tag(tag_name: String) -> bool:
 	return tags.has(tag_name)
 
 
-func pick_visit(forced_dialogue: NPCDialogue = null, forced_sprite: Texture2D = null) -> Dictionary:
+## textos_usados: falas já sorteadas no dia (chave = texto); evita repetir fala no mesmo dia.
+func pick_visit(forced_dialogue: NPCDialogue = null, forced_sprite: Texture2D = null, textos_usados: Dictionary = {}) -> Dictionary:
 	var d: NPCDialogue = forced_dialogue
 	if d == null and not dialogos.is_empty():
-		d = dialogos.pick_random()
+		var livres: Array[NPCDialogue] = []
+		for f in dialogos:
+			if f and not textos_usados.has(f.texto):
+				livres.append(f)
+		# Se todas as falas já saíram hoje, volta a sortear entre todas
+		d = livres.pick_random() if not livres.is_empty() else dialogos.pick_random()
+	if d:
+		textos_usados[d.texto] = true
 	
 	return {
 		"visitor": self,
