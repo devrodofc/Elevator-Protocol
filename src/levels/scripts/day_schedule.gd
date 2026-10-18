@@ -11,7 +11,10 @@ extends Resource
 @export_group("Regras da Marta")
 ## A cada quantos atendimentos a Marta aparece para ditar uma regra. 0 = não aparece.
 @export_range(0, 20) var intervalo_regras: int = 2
-## Regras na ordem em que ela dita. Sem valor padrão "= []": com ele o editor descarta a lista salva.
+## Quantas regras a Marta dita por dia. Elas são sorteadas da lista abaixo
+## (pelo menos uma que muda o jogo) e a ordem também é sorteada.
+@export_range(0, 10) var regras_por_dia: int = 2
+## Banco de regras do dia. Sem valor padrão "= []": com ele o editor descarta a lista salva.
 @export var regras_marta: Array[MartaRule]
 
 @export_group("Visitantes")
@@ -19,6 +22,12 @@ extends Resource
 @export var pool_padrao: Array[VisitorData] = []
 ## Sequência do dia, na ordem em que os visitantes chegam
 @export var interacoes: Array[DayInteraction] = []
+## Andares que os visitantes aleatórios pedem. Todos aparecem pelo menos uma vez no dia
+## (se houver visitantes aleatórios suficientes), em ordem sorteada.
+@export var andares_do_dia: PackedInt32Array = PackedInt32Array([1, 2, 3, 4, 5, 6])
+## Falas que qualquer visitante aleatório pode usar, além das dele. O andar de cada fala
+## (andar_desejado) decide em qual sorteio ela entra. Sem "= []" pelo mesmo motivo acima.
+@export var falas_comuns: Array[NPCDialogue]
 
 
 ## Monta a fila completa do dia: {"visitor", "dialogue", "nome", "sprite", "fixo"} por visitante.
@@ -27,48 +36,106 @@ func build_queue() -> Array[Dictionary]:
 
 
 ## Monta o dia inteiro:
-## - "fila": visitantes na ordem, sem repetir fala no mesmo dia;
-## - "regras": regras da Marta na ordem em que ela vai ditar, com pelo menos uma
-##   regra com efeito tendo um visitante depois dela que se encaixa (regra sorteada).
+## - "fila": visitantes na ordem. Os aleatórios cobrem todos os andares_do_dia em ordem sorteada,
+##   cada um com uma fala sorteada daquele andar, sem repetir fala no mesmo dia. Fixos (ex.:
+##   entregador) mantêm a fala definida na interação.
+## - "regras": regras_por_dia regras sorteadas, na ordem em que a Marta vai ditar. Pelo menos uma
+##   muda o jogo e tem um visitante depois dela pedindo o andar afetado (caso garantido).
 func montar_dia() -> Dictionary:
-	var textos_usados: Dictionary = {}
 	var fila: Array[Dictionary] = []
 	for interacao in interacoes:
 		if interacao:
-			fila.append_array(interacao.build_entries(pool_padrao, textos_usados))
-	var regras: Array[MartaRule] = []
-	for regra in regras_marta:
-		if regra:
-			regras.append(regra)
-	_garantir_caso_de_regra(fila, regras, textos_usados)
+			fila.append_array(interacao.build_entries(pool_padrao, {}))
+
+	var livres: Array[int] = [] # índices da fila dos visitantes que recebem andar e fala sorteados
+	for i in fila.size():
+		if not fila[i].get("fixo", false):
+			livres.append(i)
+
+	var regras: Array[MartaRule] = _sortear_regras(fila)
+	var plano: Array[int] = _plano_de_andares(livres.size())
+	var caso: Dictionary = _garantir_caso_de_regra(regras, plano, livres)
+	_aplicar_falas(fila, livres, plano, caso)
 	return {"fila": fila, "regras": regras}
 
 
-## Sorteia uma regra com efeito, coloca ela numa aparição da Marta que ainda tenha visitantes
-## comuns depois, e troca a fala de um desses visitantes por uma das falas_caso da regra.
-func _garantir_caso_de_regra(fila: Array[Dictionary], regras: Array[MartaRule], textos_usados: Dictionary) -> void:
+## Quantas vezes a Marta consegue aparecer: depois de cada intervalo, se ainda houver visitante.
+func _aparicoes_possiveis(tamanho_fila: int) -> int:
 	if intervalo_regras <= 0:
-		return
+		return 0
+	return maxi(0, ceili(float(tamanho_fila) / intervalo_regras) - 1)
+
+
+## Sorteia as regras do dia: uma com efeito garantida + o resto aleatório, em ordem aleatória.
+## Regras que mudariam o destino de um visitante fixo (ex.: entregador) ficam de fora no dia,
+## para não alterar eventos roteirizados.
+func _sortear_regras(fila: Array[Dictionary]) -> Array[MartaRule]:
+	var quantidade: int = mini(regras_por_dia, _aparicoes_possiveis(fila.size()))
+	var escolhidas: Array[MartaRule] = []
+	if quantidade <= 0:
+		return escolhidas
+
+	var com_efeito: Array[MartaRule] = []
+	var restantes: Array[MartaRule] = []
+	var andares_fixos: Dictionary = {}
+	for entry in fila:
+		if entry.get("fixo", false) and entry.get("dialogue"):
+			andares_fixos[entry["dialogue"].andar_desejado] = true
+	for regra in regras_marta:
+		if regra and not (regra.tem_efeito() and andares_fixos.has(regra.andar_pedido)):
+			restantes.append(regra)
+			if regra.tem_efeito():
+				com_efeito.append(regra)
+	if not com_efeito.is_empty():
+		var garantida: MartaRule = com_efeito.pick_random()
+		escolhidas.append(garantida)
+		restantes.erase(garantida)
+
+	restantes.shuffle()
+	while escolhidas.size() < quantidade and not restantes.is_empty():
+		escolhidas.append(restantes.pop_back())
+	escolhidas.shuffle()
+	return escolhidas
+
+
+## Lista de andares para os visitantes aleatórios: cada andar_do_dia aparece uma vez em ordem
+## sorteada; se houver mais visitantes que andares, começa outra rodada sorteada.
+func _plano_de_andares(quantidade: int) -> Array[int]:
+	var plano: Array[int] = []
+	var rodada: Array[int] = []
+	while plano.size() < quantidade and not andares_do_dia.is_empty():
+		if rodada.is_empty():
+			for andar in andares_do_dia:
+				rodada.append(andar)
+			rodada.shuffle()
+		plano.append(rodada.pop_back())
+	return plano
+
+
+## Garante que uma regra com efeito (sorteada) tenha um visitante, depois de ser dita, pedindo o
+## andar que ela afeta. Ajusta a ordem das regras e do plano de andares.
+## Devolve {"posicao_livre": j, "regra": regra} do visitante que é o caso, ou {} se não deu.
+func _garantir_caso_de_regra(regras: Array[MartaRule], plano: Array[int], livres: Array[int]) -> Dictionary:
+	if intervalo_regras <= 0 or regras.is_empty() or plano.is_empty():
+		return {}
 
 	# A regra da posição k é dita depois de (k + 1) * intervalo atendimentos e vale para quem vem depois.
-	# Só servem aparições com algum visitante não fixo depois (o fixo mantém a própria fala).
 	var aparicoes: Array[Dictionary] = []
-	var k: int = 0
-	while k < regras.size() and (k + 1) * intervalo_regras < fila.size():
-		var vagas: Array[int] = []
-		for i in range((k + 1) * intervalo_regras, fila.size()):
-			if not fila[i].get("fixo", false):
-				vagas.append(i)
+	for k in regras.size():
+		var limite: int = (k + 1) * intervalo_regras
+		var vagas: Array[int] = [] # posições em "livres" (e em "plano") depois desta aparição
+		for j in livres.size():
+			if livres[j] >= limite:
+				vagas.append(j)
 		if not vagas.is_empty():
 			aparicoes.append({"posicao": k, "vagas": vagas})
-		k += 1
 
 	var candidatas: Array[MartaRule] = []
 	for regra in regras:
-		if regra.tem_efeito() and not regra.falas_caso.is_empty():
+		if regra.tem_efeito():
 			candidatas.append(regra)
 	if aparicoes.is_empty() or candidatas.is_empty():
-		return
+		return {}
 
 	var regra: MartaRule = candidatas.pick_random()
 	var aparicao: Dictionary = aparicoes.pick_random()
@@ -79,17 +146,57 @@ func _garantir_caso_de_regra(fila: Array[Dictionary], regras: Array[MartaRule], 
 	regras[de] = regras[para]
 	regras[para] = regra
 
-	# Um visitante comum depois dela passa a pedir o andar da regra
-	var livres: Array[NPCDialogue] = []
-	for fala in regra.falas_caso:
-		if fala and not textos_usados.has(fala.texto):
-			livres.append(fala)
-	var fala_caso: NPCDialogue = livres.pick_random() if not livres.is_empty() else regra.falas_caso.pick_random()
+	# O andar da regra tem de cair numa vaga depois da aparição
 	var vagas_aparicao: Array[int] = aparicao["vagas"]
-	var indice: int = vagas_aparicao.pick_random()
-	var anterior: NPCDialogue = fila[indice].get("dialogue")
-	if anterior:
-		textos_usados.erase(anterior.texto)
-	fila[indice]["dialogue"] = fala_caso
-	fila[indice]["caso_regra"] = true
-	textos_usados[fala_caso.texto] = true
+	var alvo: int = -1
+	for j in vagas_aparicao:
+		if plano[j] == regra.andar_pedido:
+			alvo = j
+			break
+	if alvo == -1:
+		alvo = vagas_aparicao.pick_random()
+		var atual: int = plano.find(regra.andar_pedido)
+		if atual != -1:
+			plano[atual] = plano[alvo] # troca: o andar continua aparecendo no dia
+		plano[alvo] = regra.andar_pedido
+	return {"posicao_livre": alvo, "regra": regra}
+
+
+## Dá a cada visitante aleatório uma fala do andar planejado, sem repetir texto no dia.
+func _aplicar_falas(fila: Array[Dictionary], livres: Array[int], plano: Array[int], caso: Dictionary) -> void:
+	var usados: Dictionary = {}
+	for entry in fila:
+		if entry.get("fixo", false) and entry.get("dialogue"):
+			usados[entry["dialogue"].texto] = true
+
+	for j in livres.size():
+		if j >= plano.size():
+			break
+		var entry: Dictionary = fila[livres[j]]
+		var preferidas: Array[NPCDialogue] = []
+		if not caso.is_empty() and caso["posicao_livre"] == j:
+			entry["caso_regra"] = true
+			preferidas = caso["regra"].falas_caso
+		var fala: NPCDialogue = _sortear_fala(entry["visitor"], plano[j], usados, preferidas)
+		if fala:
+			entry["dialogue"] = fala
+			usados[fala.texto] = true
+
+
+## Fala para o andar pedido: primeiro as preferidas, depois as do visitante + falas_comuns.
+## Evita textos já usados; se todas daquele andar já saíram, repete uma delas.
+func _sortear_fala(visitante: VisitorData, andar: int, usados: Dictionary, preferidas: Array[NPCDialogue]) -> NPCDialogue:
+	var grupos: Array = [preferidas, visitante.dialogos + falas_comuns]
+	for grupo in grupos:
+		var livres: Array[NPCDialogue] = []
+		var do_andar: Array[NPCDialogue] = []
+		for fala in grupo:
+			if fala and fala.andar_desejado == andar:
+				do_andar.append(fala)
+				if not usados.has(fala.texto):
+					livres.append(fala)
+		if not livres.is_empty():
+			return livres.pick_random()
+		if grupo != preferidas and not do_andar.is_empty():
+			return do_andar.pick_random()
+	return null
