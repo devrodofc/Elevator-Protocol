@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_mblye")
-texto = "Vou lá na Pesquisa do 5º andar... Tem um cheiro estranho de poeira e formol saindo daquela porta, mas me pagam hora extra pra não perguntar."
+texto = "Vou para a Pesquisa Avançada. O experimento de hoje é descobrir por que a impressora só funciona quando ninguém precisa dela."
 andar_desejado = 5
 metadata/_custom_type_script = "uid://30jqbkcb4q5"

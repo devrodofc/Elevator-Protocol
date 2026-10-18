@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_dlg")
-texto = "Sexto andar, por favor. O diretor pediu minha presença pessoalmente. Ele nunca pede nada pessoalmente."
+texto = "Sexto andar, por favor. Vou apresentar o orçamento para a diretoria e ensaiei o discurso no espelho a semana inteira."
 andar_desejado = 6

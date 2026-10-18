@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_dlg")
-texto = "Quinto andar, no Arquivo Morto. Me pediram para buscar uma pasta de 1987... com o meu nome nela."
+texto = "Quinto andar, no Arquivo Morto. Preciso achar uma nota fiscal de 2009 e só sei que a pasta é bege. Todas são bege."
 andar_desejado = 5

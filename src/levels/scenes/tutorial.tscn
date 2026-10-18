@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="3_marta"]
 [ext_resource type="PackedScene" path="res://src/ui/hud/reception_hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/elevator_panel.tscn" id="5_elevator"]
+[ext_resource type="PackedScene" path="res://src/levels/scenes/elevator.tscn" id="7_elevator_scene"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
 [ext_resource type="FontFile" uid="uid://bc3sbfcfbrh64" path="res://src/levels/assets/fonts/DynaPuff-VariableFont_wdth,wght.ttf" id="6_text"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_highlight"]
@@ -39,6 +41,15 @@ offset_right = 640.0
 offset_bottom = 201.0
 mouse_filter = 2
 color = Color(0.96862745, 0.96862745, 0.96862745, 1)
+
+[node name="Chairs" type="Sprite2D" parent="."]
+position = Vector2(17, 20)
+texture = ExtResource("10_cadeiras")
+centered = false
+
+[node name="Elevator" parent="." instance=ExtResource("7_elevator_scene")]
+position = Vector2(282, -38)
+scale = Vector2(1.4, 1.4)
 
 [node name="WindowClip" type="ColorRect" parent="."]
 clip_children = 2
