@@ -6,6 +6,8 @@ signal departed
 
 ## Instância visual carregada da cena da Clara (PackedScene)
 var current_visual_instance: Node = null
+## Textura sorteada para esta visita (usada no Sprite2D padrão quando não há "cena")
+var current_sprite: Texture2D = null
 
 @onready var default_sprite: Sprite2D = get_node_or_null("Sprite2D")
 
@@ -40,7 +42,8 @@ func _ready() -> void:
 		_apply_data(current_data)
 
 
-func setup(data: VisitorData) -> void:
+func setup(data: VisitorData, sprite: Texture2D = null) -> void:
+	current_sprite = sprite
 	current_data = data
 
 
@@ -58,7 +61,13 @@ func _apply_data(data: VisitorData) -> void:
 		if default_sprite:
 			default_sprite.visible = false
 	elif default_sprite:
+		var texture: Texture2D = current_sprite
+		if texture == null and data and not data.sprites.is_empty():
+			texture = data.sprites.pick_random()
+		default_sprite.texture = texture
 		default_sprite.visible = true
+		if data and texture == null:
+			push_warning("Visitor '%s' sem arte: defina 'cena' ou 'sprites' no VisitorData." % data.id)
 
 
 func get_visitor_name() -> String:

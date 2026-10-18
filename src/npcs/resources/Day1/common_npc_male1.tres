@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://cqu76s68bvugf"]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_odqj8"]
+[ext_resource type="Resource" uid="uid://bsnwfhgg8a3ta" path="res://src/npcs/dialogue/dialoguesCommon/1 andar/common1a.tres" id="2_t5l6f"]
+[ext_resource type="Resource" uid="uid://un6ed3n6rug6" path="res://src/npcs/dialogue/dialoguesCommon/1 andar/common1b.tres" id="3_tnuvc"]
+[ext_resource type="Resource" uid="uid://cm12lr1uaarn1" path="res://src/npcs/dialogue/dialoguesCommon/1 andar/common1c.tres" id="4_c7jlp"]
+[ext_resource type="Resource" uid="uid://blwwdvjuaj2u5" path="res://src/npcs/dialogue/dialoguesCommon/1 andar/common1d.tres" id="5_nqu7l"]
+[ext_resource type="Resource" uid="uid://d08fhsp3l45pm" path="res://src/npcs/dialogue/dialoguesCommon/2 andar/common2a.tres" id="6_ntsr7"]
+[ext_resource type="Resource" uid="uid://bkxaschsiredw" path="res://src/npcs/dialogue/dialoguesCommon/2 andar/common2b.tres" id="7_polyu"]
+[ext_resource type="Resource" uid="uid://u6dd5hxe7b6w" path="res://src/npcs/dialogue/dialoguesCommon/2 andar/common2c.tres" id="8_t70ns"]
+[ext_resource type="Resource" uid="uid://c1kx18xbhdnwf" path="res://src/npcs/dialogue/dialoguesCommon/2 andar/common2d.tres" id="9_piqpc"]
+[ext_resource type="Resource" uid="uid://c73a14xpcxu3y" path="res://src/npcs/dialogue/dialoguesCommon/3 andar/common3a.tres" id="10_7un1w"]
+[ext_resource type="Resource" uid="uid://c5xldf8nx3yb4" path="res://src/npcs/dialogue/dialoguesCommon/3 andar/common3b.tres" id="11_xlqvn"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="12_xyq2x"]
+[ext_resource type="Texture2D" uid="uid://2pn5jqcktxsw" path="res://src/npcs/assets/jose/npc.png" id="13_5asm4"]
+[ext_resource type="Texture2D" uid="uid://5kg5bi67f3rc" path="res://src/npcs/assets/homem2/npc homem 2 .png" id="14_iv1oq"]
+
+[sub_resource type="Resource" id="Resource_oni5j"]
+script = ExtResource("1_odqj8")
+texto = "Se eu não levar esta garrafa térmica cheia de café para os programadores do 3º andar, o sistema inteiro da empresa cai antes do meio-dia."
+andar_desejado = 3
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[resource]
+script = ExtResource("12_xyq2x")
+id = "001"
+nome = "MaleNPC1"
+nome_aleatorio = true
+sprites = Array[Texture2D]([ExtResource("13_5asm4"), ExtResource("14_iv1oq")])
+tags = Array[String](["Common"])
+dialogos = Array[ExtResource("1_odqj8")]([ExtResource("2_t5l6f"), ExtResource("3_tnuvc"), ExtResource("4_c7jlp"), ExtResource("5_nqu7l"), ExtResource("6_ntsr7"), ExtResource("7_polyu"), ExtResource("8_t70ns"), ExtResource("9_piqpc"), ExtResource("10_7un1w"), ExtResource("11_xlqvn"), SubResource("Resource_oni5j")])
+metadata/_custom_type_script = "uid://c8k1xw7vuahns"
