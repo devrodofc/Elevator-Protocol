@@ -2,18 +2,18 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://qeloeebw5ki7"
-path="res://.godot/imported/VCR_OSD_MONO_1.001.ttf-bbc421e18016072129643a5c151c0d6c.fontdata"
+uid="uid://buyl0e04pwhgv"
+path="res://.godot/imported/DynaPuff-Bold.ttf-921fe08dda54314eec0bf661f312c458.fontdata"
 
 [deps]
 
-source_file="res://src/levels/assets/fonts/VCR_OSD_MONO_1.001.ttf"
-dest_files=["res://.godot/imported/VCR_OSD_MONO_1.001.ttf-bbc421e18016072129643a5c151c0d6c.fontdata"]
+source_file="res://src/levels/assets/fonts/DynaPuff-Bold.ttf"
+dest_files=["res://.godot/imported/DynaPuff-Bold.ttf-921fe08dda54314eec0bf661f312c458.fontdata"]
 
 [params]
 
 Rendering=null
-antialiasing=0
+antialiasing=1
 generate_mipmaps=false
 disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
@@ -22,8 +22,8 @@ msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 modulate_color_glyphs=false
-hinting=0
-subpixel_positioning=0
+hinting=3
+subpixel_positioning=4
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null

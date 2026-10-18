@@ -2,18 +2,18 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://wgyeho3yroc0"
-path="res://.godot/imported/Pixelta.ttf-65993ec2545190f8866419cfc12c02a6.fontdata"
+uid="uid://bc3sbfcfbrh64"
+path="res://.godot/imported/DynaPuff-VariableFont_wdth,wght.ttf-0aaf4222d86b60a6ca1bc288eb1942f4.fontdata"
 
 [deps]
 
-source_file="res://src/levels/assets/fonts/Pixelta.ttf"
-dest_files=["res://.godot/imported/Pixelta.ttf-65993ec2545190f8866419cfc12c02a6.fontdata"]
+source_file="res://src/levels/assets/fonts/DynaPuff-VariableFont_wdth,wght.ttf"
+dest_files=["res://.godot/imported/DynaPuff-VariableFont_wdth,wght.ttf-0aaf4222d86b60a6ca1bc288eb1942f4.fontdata"]
 
 [params]
 
 Rendering=null
-antialiasing=0
+antialiasing=1
 generate_mipmaps=false
 disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
@@ -22,8 +22,8 @@ msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 modulate_color_glyphs=false
-hinting=0
-subpixel_positioning=0
+hinting=3
+subpixel_positioning=4
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null
