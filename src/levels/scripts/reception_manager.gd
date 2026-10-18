@@ -266,12 +266,22 @@ func _conclude_day() -> void:
 	if elevator_panel:
 		elevator_panel.set_panel_locked(true)
 		
+	var escuro: ColorRect = null
+	var suspense: float = schedule_config.suspense_antes_do_fim if schedule_config else 0.0
+	if suspense > 0.0:
+		escuro = await _apagar_luzes(suspense)
+		if not is_inside_tree():
+			return
+
 	if marta_scene != null:
 		# No fim do dia a Marta pode vir com outro sprite (dia 2: ensanguentada)
 		var sprite_fim: Texture2D = schedule_config.sprite_marta_fim if schedule_config else null
 		await _marta_arrive(true, sprite_fim) # sai do elevador e vem até a mesa
 	if not is_inside_tree():
 		return
+	if escuro:
+		# A luz volta só um pouco enquanto ela fala
+		create_tween().tween_property(escuro, "color:a", 0.25, 1.2)
 	var msg_fim: String = schedule_config.mensagem_fim if schedule_config else "Expediente encerrado. Você concluiu o dia!"
 	_show_dialogue_via_autoload("Marta", msg_fim, true)
 		
@@ -291,6 +301,39 @@ func _conclude_day() -> void:
 		transicao.transition_to(scene_file_path, "Dia %d" % proximo.dia_numero)
 	else:
 		get_tree().change_scene_to_file(scene_file_path)
+
+
+## Suspense do fim do dia: espera o último visitante sumir no elevador, as luzes piscam e a sala
+## fica escura e em silêncio por "segundos". Devolve o escurecimento (continua na tela).
+func _apagar_luzes(segundos: float) -> ColorRect:
+	while elevator and elevator.has_method("is_busy") and elevator.is_busy():
+		await get_tree().process_frame
+		if not is_inside_tree():
+			return null
+	await get_tree().create_timer(0.6).timeout
+	if not is_inside_tree():
+		return null
+
+	var escuro := ColorRect.new()
+	escuro.color = Color(0.0, 0.0, 0.02, 0.0)
+	escuro.set_anchors_preset(Control.PRESET_FULL_RECT)
+	escuro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if ui_canvas_layer:
+		ui_canvas_layer.add_child(escuro)
+	else:
+		add_child(escuro)
+
+	# Pisca como lâmpada falhando e apaga
+	var pisca := create_tween()
+	for alvo in [0.55, 0.1, 0.7, 0.2, 0.75, 0.35]:
+		pisca.tween_property(escuro, "color:a", alvo, 0.07)
+		pisca.tween_interval(randf_range(0.05, 0.2))
+	pisca.tween_property(escuro, "color:a", 0.7, 0.6)
+	await pisca.finished
+	if not is_inside_tree():
+		return null
+	await get_tree().create_timer(segundos).timeout
+	return escuro
 
 
 func _update_badge_visitor() -> void:

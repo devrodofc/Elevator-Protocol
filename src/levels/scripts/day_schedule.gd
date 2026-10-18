@@ -10,6 +10,9 @@ extends Resource
 @export_multiline var mensagem_fim: String = "Excelente trabalho por hoje! Você pegou o jeito muito rápido. Descanse um pouco e até amanhã!"
 ## Sprite da Marta só na fala de fim do dia (ex.: dia 2, ensanguentada). Vazio = o da cena Marta.tscn.
 @export var sprite_marta_fim: Texture2D
+## Suspense antes da fala de fim: depois que o último visitante entra no elevador, as luzes piscam,
+## a sala escurece e fica esses segundos em silêncio até a Marta sair do elevador. 0 = sem suspense.
+@export_range(0.0, 15.0, 0.5) var suspense_antes_do_fim: float = 0.0
 @export_multiline var mensagem_falha: String = "Você tinha um trabalho tão simples... mas falhou. Vamos tentar de novo, certo?"
 
 @export_group("Regras da Marta")
