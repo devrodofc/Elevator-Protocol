@@ -24,7 +24,8 @@ func _ready() -> void:
 	set_visitor(null)
 
 
-func set_visitor(visitor: Visitor, visit_name: String = "") -> void:
+## cracha: dados sorteados da visita ({"idade", "sexo", "ocupacao"}). Vazio = usa os do VisitorData.
+func set_visitor(visitor: Visitor, visit_name: String = "", cracha: Dictionary = {}) -> void:
 	_has_visitor = is_instance_valid(visitor) and visitor.current_data != null
 	if not _has_visitor:
 		_photo.texture = null
@@ -35,9 +36,10 @@ func set_visitor(visitor: Visitor, visit_name: String = "") -> void:
 	var data: VisitorData = visitor.current_data
 	_photo.texture = visitor.get_badge_photo()
 	_name.text = _text_or_default(visit_name if not visit_name.strip_edges().is_empty() else data.nome)
-	_age.text = str(data.idade) if data.idade > 0 else NOT_INFORMED
-	_sex.text = _text_or_default(data.sexo)
-	_occupation.text = _text_or_default(data.ocupacao)
+	var idade: int = cracha.get("idade", data.idade)
+	_age.text = str(idade) if idade > 0 else NOT_INFORMED
+	_sex.text = _text_or_default(cracha.get("sexo", data.sexo))
+	_occupation.text = _text_or_default(cracha.get("ocupacao", data.ocupacao))
 
 
 func open() -> void:
