@@ -65,10 +65,10 @@ layout_mode = 3
 anchors_preset = 0
 
 [node name="ElevatorPanel" parent="UI_CanvasLayer" unique_id=1702898045 instance=ExtResource("6_elevator")]
-offset_left = 531.0
-offset_top = 112.0
-offset_right = -7.0
-offset_bottom = -15.0
+offset_left = 495.0
+offset_top = 203.0
+offset_right = 879.0
+offset_bottom = 827.0
 
 [node name="ManualPanel" type="Control" parent="UI_CanvasLayer" unique_id=341641184]
 layout_mode = 3

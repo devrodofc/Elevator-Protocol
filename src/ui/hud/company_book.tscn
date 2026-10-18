@@ -7,6 +7,10 @@
 [ext_resource type="FontFile" uid="uid://bfqv1huuduey3" path="res://src/levels/assets/fonts/Chewy-Regular.ttf" id="6_c08jm"]
 [ext_resource type="Resource" uid="uid://bv1xf0actsq15" path="res://src/levels/resources/company_directory.tres" id="6_dir"]
 
+[sub_resource type="AtlasTexture" id="Atlas_arrow"]
+atlas = ExtResource("2_book")
+region = Rect2(700, 258, 36, 64)
+
 [node name="CompanyBook" type="Control" unique_id=504899324]
 layout_mode = 3
 anchors_preset = 0
@@ -27,7 +31,7 @@ expand_mode = 1
 [node name="LeftColumn" type="VBoxContainer" parent="." unique_id=1270833962]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 6.0
+offset_left = 16.0
 offset_top = 15.0
 offset_right = 94.0
 offset_bottom = 134.0
@@ -124,6 +128,28 @@ layout_mode = 0
 offset_left = 172.0
 offset_top = 60.0
 offset_right = 188.0
+offset_bottom = 86.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="PrevArrow" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 64.0
+offset_right = 16.0
+offset_bottom = 80.0
+mouse_filter = 2
+texture = SubResource("Atlas_arrow")
+expand_mode = 1
+flip_h = true
+
+[node name="PrevButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 60.0
+offset_right = 20.0
 offset_bottom = 86.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
