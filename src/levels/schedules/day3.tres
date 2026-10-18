@@ -1,0 +1,118 @@
+[gd_resource type="Resource" script_class="DayScheduleConfig" format=3]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_fala"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_visitor"]
+[ext_resource type="Script" uid="uid://dw560omsfs2go" path="res://src/levels/scripts/day_schedule.gd" id="2_dia"]
+[ext_resource type="Script" uid="uid://brn4guv252f6e" path="res://src/levels/scripts/day_interaction.gd" id="3_inter"]
+[ext_resource type="Script" uid="uid://dvpyfvnwc78bh" path="res://src/levels/scripts/marta_rule.gd" id="4_rule"]
+[ext_resource type="Resource" path="res://src/npcs/resources/Day3/tiao.tres" id="5_tiao"]
+[ext_resource type="Texture2D" path="res://src/npcs/assets/tiao/tiao_jardineiro.png" id="6_tiao_sprite"]
+[ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/Day1/common_npc_male1.tres" id="7_male"]
+[ext_resource type="Resource" uid="uid://ylajsyngiss5" path="res://src/npcs/resources/Day1/common_npc_female1.tres" id="8_female"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/1 andar/dia3_1a.tres" id="f1a"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/1 andar/dia3_1b.tres" id="f1b"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/1 andar/dia3_1c.tres" id="f1c"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/2 andar/dia3_2a.tres" id="f2a"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/2 andar/dia3_2b.tres" id="f2b"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/2 andar/dia3_2c.tres" id="f2c"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/3 andar/dia3_3a.tres" id="f3a"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/3 andar/dia3_3b.tres" id="f3b"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/3 andar/dia3_3c.tres" id="f3c"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/4 andar/dia3_4a.tres" id="f4a"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/4 andar/dia3_4b.tres" id="f4b"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/4 andar/dia3_4c.tres" id="f4c"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/5 andar/dia3_5a.tres" id="f5a"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/5 andar/dia3_5b.tres" id="f5b"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/5 andar/dia3_5c.tres" id="f5c"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/6 andar/dia3_6a.tres" id="f6a"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/6 andar/dia3_6b.tres" id="f6b"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia3/6 andar/dia3_6c.tres" id="f6c"]
+
+[sub_resource type="Resource" id="Interaction_aleatorios"]
+script = ExtResource("3_inter")
+repeticoes = 4
+
+[sub_resource type="Resource" id="Interaction_aleatorias_pool"]
+script = ExtResource("3_inter")
+repeticoes = 2
+pool = Array[ExtResource("1_visitor")]([ExtResource("8_female"), ExtResource("7_male")])
+
+[sub_resource type="Resource" id="Fala_tiao"]
+script = ExtResource("1_fala")
+texto = "Bom dia, meu filho! Sou o Tião, da limpeza. Me pediram para dar um trato na sala do diretor, lá no 6º. Me leva lá?"
+andar_desejado = 6
+metadata/_custom_type_script = "uid://30jqbkcb4q5"
+
+[sub_resource type="Resource" id="Interaction_tiao"]
+script = ExtResource("3_inter")
+modo = 1
+visitante = ExtResource("5_tiao")
+sprite = ExtResource("6_tiao_sprite")
+dialogo = SubResource("Fala_tiao")
+
+[sub_resource type="Resource" id="Regra_tiao"]
+script = ExtResource("4_rule")
+fala = "Ah, o Seu Tião, nosso faxineiro, vai passar aqui hoje. Não importa o andar que ele pedir: mande para o subsolo. Tem uma sujeira enorme lá embaixo, e ele é o único que limpa sem fazer perguntas."
+texto_prancheta = "Seu Tião (faxineiro)? Sempre para o subsolo."
+
+[sub_resource type="Resource" id="Regra_rh"]
+script = ExtResource("4_rule")
+fala = "O RH está em... reestruturação. Quem pedir o 2º andar, mande esperar no refeitório. Vão esperar bastante."
+texto_prancheta = "Pediu o 2º andar? Mande para o 1º."
+andar_pedido = 2
+andar_destino = 1
+falas_caso = Array[ExtResource("1_fala")]([ExtResource("f2a"), ExtResource("f2b"), ExtResource("f2c")])
+
+[sub_resource type="Resource" id="Regra_marketing"]
+script = ExtResource("4_rule")
+fala = "O Marketing está gravando uma campanha nova lá no subsolo. Quem pedir o 4º andar, mande lá para baixo. Eles vão adorar o cenário."
+texto_prancheta = "Pediu o 4º andar? Mande para o subsolo."
+andar_pedido = 4
+andar_destino = -1
+falas_caso = Array[ExtResource("1_fala")]([ExtResource("f4a"), ExtResource("f4b"), ExtResource("f4c")])
+
+[sub_resource type="Resource" id="Regra_ti"]
+script = ExtResource("4_rule")
+fala = "A TI se mudou para a Pesquisa Avançada. Quem pedir o 3º andar, mande para o 5º. Eles... se adaptaram bem."
+texto_prancheta = "Pediu o 3º andar? Mande para o 5º."
+andar_pedido = 3
+andar_destino = 5
+falas_caso = Array[ExtResource("1_fala")]([ExtResource("f3a"), ExtResource("f3b"), ExtResource("f3c")])
+
+[sub_resource type="Resource" id="Regra_refeitorio"]
+script = ExtResource("4_rule")
+fala = "O refeitório está interditado hoje. Negue quem pedir o 1º andar. E não pergunte qual é o cardápio."
+texto_prancheta = "1º andar: negar acesso."
+andar_pedido = 1
+andar_destino = 999
+falas_caso = Array[ExtResource("1_fala")]([ExtResource("f1a"), ExtResource("f1b"), ExtResource("f1c")])
+
+[sub_resource type="Resource" id="Regra_cheiro"]
+script = ExtResource("4_rule")
+fala = "Se sentir um cheiro forte de produto de limpeza, é normal. Muito normal. Respire pela boca."
+texto_prancheta = "Cheiro de produto de limpeza é normal."
+
+[sub_resource type="Resource" id="Regra_entregador"]
+script = ExtResource("4_rule")
+fala = "Se alguém perguntar pelo entregador de ontem, a gente nunca teve entregador. Nunca."
+texto_prancheta = "Nunca tivemos entregador."
+
+[sub_resource type="Resource" id="Regra_gaveta"]
+script = ExtResource("4_rule")
+fala = "Não abra a gaveta de baixo da sua mesa. Ela é minha. O que tem dentro também."
+texto_prancheta = "Não abra a gaveta de baixo."
+
+[resource]
+script = ExtResource("2_dia")
+dia_numero = 3
+suspense_antes_do_fim = 2.0
+mensagem_inicio = "Bom dia, querido! Hoje o dia vai ser levinho, eu prometo. Ah, e o Seu Tião vai passar por aqui. Ele é um amor de pessoa... já já eu te explico o que fazer com ele."
+mensagem_fim = "Viu como o Seu Tião é eficiente? Daqui a pouco não sobra nem uma manchinha de katchup lá embaixo. Nem do katchup, nem de... bom, de nada. Até amanhã! Se você voltar, claro."
+mensagem_falha = "Três dias e ainda errando? Tudo bem... o Seu Tião limpa qualquer bagunça. Vamos de novo."
+regras_obrigatorias = Array[ExtResource("4_rule")]([SubResource("Regra_tiao")])
+regras_marta = Array[ExtResource("4_rule")]([SubResource("Regra_rh"), SubResource("Regra_marketing"), SubResource("Regra_ti"), SubResource("Regra_refeitorio"), SubResource("Regra_cheiro"), SubResource("Regra_entregador"), SubResource("Regra_gaveta")])
+pool_padrao = Array[ExtResource("1_visitor")]([ExtResource("8_female"), ExtResource("7_male")])
+interacoes = Array[ExtResource("3_inter")]([SubResource("Interaction_aleatorios"), SubResource("Interaction_aleatorias_pool"), SubResource("Interaction_tiao")])
+usar_falas_do_visitante = false
+falas_comuns = Array[ExtResource("1_fala")]([ExtResource("f1a"), ExtResource("f1b"), ExtResource("f1c"), ExtResource("f2a"), ExtResource("f2b"), ExtResource("f2c"), ExtResource("f3a"), ExtResource("f3b"), ExtResource("f3c"), ExtResource("f4a"), ExtResource("f4b"), ExtResource("f4c"), ExtResource("f5a"), ExtResource("f5b"), ExtResource("f5c"), ExtResource("f6a"), ExtResource("f6b"), ExtResource("f6c")])
+metadata/_custom_type_script = "uid://dw560omsfs2go"
