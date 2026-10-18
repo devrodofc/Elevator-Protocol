@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_pwlk3")
-texto = "Preciso ir ao setor de Pesquisa Avançada. Minha entrada já foi notificada à supervisão."
+texto = "Quinto andar, por favor. Vou ajudar a organizar o Arquivo Morto. Trouxe máscara, luvas e uma playlist de três horas."
 andar_desejado = 5
 metadata/_custom_type_script = "uid://30jqbkcb4q5"
