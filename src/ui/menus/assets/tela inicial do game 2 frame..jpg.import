@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dx268n3lhjdjl"
-path="res://.godot/imported/background_menu1.png-d4efbcd20ffde87275f68655a4b57d12.ctex"
+uid="uid://c3aqthjkwwge1"
+path="res://.godot/imported/tela inicial do game 2 frame..jpg-3e35b970adba8c150a7dd2f6b5a736f8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/menus/assets/background_menu1.png"
-dest_files=["res://.godot/imported/background_menu1.png-d4efbcd20ffde87275f68655a4b57d12.ctex"]
+source_file="res://src/ui/menus/assets/tela inicial do game 2 frame..jpg"
+dest_files=["res://.godot/imported/tela inicial do game 2 frame..jpg-3e35b970adba8c150a7dd2f6b5a736f8.ctex"]
 
 [params]
 

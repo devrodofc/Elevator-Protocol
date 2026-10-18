@@ -1,12 +1,21 @@
 [gd_scene format=3 uid="uid://b6hgpbqqj2j76"]
 
 [ext_resource type="Script" uid="uid://d4iivy11yyffy" path="res://src/ui/menus/scripts/menu.gd" id="1_wcxd3"]
-[ext_resource type="Texture2D" uid="uid://dx268n3lhjdjl" path="res://src/ui/menus/assets/background_menu1.png" id="2_kl4nh"]
-[ext_resource type="Texture2D" uid="uid://14bkwadxycu1" path="res://src/ui/menus/assets/background_menu2.png" id="3_i33cf"]
+[ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/tela inicial do game 1 frame.jpg" id="2_2t3vq"]
 [ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://src/levels/assets/fonts/PixeloidSans.ttf" id="3_lrlgq"]
-[ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://src/levels/assets/fonts/PixeloidSans-Bold.ttf" id="4_22vns"]
+[ext_resource type="Texture2D" uid="uid://dntswdhj64eo5" path="res://src/ui/menus/assets/buttons/play/botão play normal.png" id="4_7pniv"]
+[ext_resource type="Texture2D" uid="uid://c5nip1qfix1p5" path="res://src/ui/menus/assets/buttons/play/botão play pressionado.png" id="5_6jtff"]
+[ext_resource type="Texture2D" uid="uid://xjonlwky86wr" path="res://src/ui/menus/assets/buttons/play/botão play hover.png" id="6_j15jl"]
+[ext_resource type="Texture2D" uid="uid://dbfnjqpbmmsi8" path="res://src/ui/menus/assets/buttons/config/botão configurações normal.png" id="7_8mwgn"]
+[ext_resource type="Texture2D" uid="uid://dsn1jxjhyneu5" path="res://src/ui/menus/assets/buttons/config/botão config pressionado.png" id="8_2t3vq"]
+[ext_resource type="Texture2D" uid="uid://pdilltp34icn" path="res://src/ui/menus/assets/buttons/config/botão config hover.png" id="9_1ot40"]
+[ext_resource type="Texture2D" uid="uid://cj5vrlcewba00" path="res://src/ui/menus/assets/buttons/off/botão desligar.png" id="10_jw4ia"]
+[ext_resource type="Texture2D" uid="uid://c2erl7ciuhqmo" path="res://src/ui/menus/assets/buttons/off/botão desligar pressionado.png" id="11_g3cxf"]
+[ext_resource type="Texture2D" uid="uid://c7nvg4d8qi36v" path="res://src/ui/menus/assets/buttons/off/botão desligar hover.png" id="12_cfvon"]
+[ext_resource type="Texture2D" uid="uid://c3aqthjkwwge1" path="res://src/ui/menus/assets/tela inicial do game 2 frame..jpg" id="13_1ot40"]
+[ext_resource type="Texture2D" uid="uid://bh61au3d0p3ne" path="res://src/ui/menus/assets/tela inicial do game 3 frame..jpg" id="14_jw4ia"]
 
-[sub_resource type="Animation" id="Animation_lrlgq"]
+[sub_resource type="Animation" id="Animation_g3cxf"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -18,11 +27,11 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_kl4nh")]
+"values": [ExtResource("2_2t3vq")]
 }
 
-[sub_resource type="Animation" id="Animation_22vns"]
-resource_name = "background_loop"
+[sub_resource type="Animation" id="Animation_cfvon"]
+resource_name = "background"
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -31,16 +40,16 @@ tracks/0/path = NodePath("TextureRect:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("2_kl4nh"), ExtResource("3_i33cf")]
+"values": [ExtResource("2_2t3vq"), ExtResource("13_1ot40"), ExtResource("14_jw4ia")]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_7pniv"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yyfxb"]
 _data = {
-&"RESET": SubResource("Animation_lrlgq"),
-&"background_loop": SubResource("Animation_22vns")
+&"RESET": SubResource("Animation_g3cxf"),
+&"background": SubResource("Animation_cfvon")
 }
 
 [node name="Menu" type="Control" unique_id=1171505832]
@@ -48,24 +57,35 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 89.0
+offset_top = 40.0
+offset_right = 89.0
+offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_wcxd3")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=987170725]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -407.0
+offset_top = -218.0
+offset_right = 865.0
+offset_bottom = 508.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.5, 0.5)
 mouse_filter = 2
-texture = ExtResource("2_kl4nh")
+texture = ExtResource("2_2t3vq")
 expand_mode = 1
 stretch_mode = 6
-metadata/_edit_lock_ = true
 
 [node name="DarkOverlay" type="ColorRect" parent="." unique_id=1509569264]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -76,65 +96,49 @@ color = Color(0, 0, 0, 0.15686275)
 
 [node name="GameTitle" type="Label" parent="." unique_id=1936966435]
 layout_mode = 0
-offset_left = 218.0
-offset_top = 73.0
-offset_right = 428.0
-offset_bottom = 118.0
+offset_left = 115.0
+offset_top = 41.0
+offset_right = 352.0
+offset_bottom = 86.0
 theme_override_fonts/font = ExtResource("3_lrlgq")
 theme_override_font_sizes/font_size = 32
 text = "Titulo do jogo"
 
-[node name="Options" type="LinkButton" parent="." unique_id=1845285801]
+[node name="Play" type="TextureButton" parent="." unique_id=925288588]
+texture_filter = 1
 layout_mode = 0
-offset_left = 284.0
+offset_left = 120.0
+offset_top = 195.0
+offset_right = 248.0
+offset_bottom = 323.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("4_7pniv")
+texture_pressed = ExtResource("5_6jtff")
+texture_hover = ExtResource("6_j15jl")
+stretch_mode = 5
+
+[node name="Options" type="TextureButton" parent="." unique_id=1639284561]
+layout_mode = 0
+offset_left = 215.0
 offset_top = 191.0
-offset_right = 370.0
-offset_bottom = 225.0
-focus_mode = 2
-theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
-theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_fonts/font = ExtResource("4_22vns")
-theme_override_font_sizes/font_size = 24
-text = "Opções"
-underline = 2
+offset_right = 343.0
+offset_bottom = 319.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("7_8mwgn")
+texture_pressed = ExtResource("8_2t3vq")
+texture_hover = ExtResource("9_1ot40")
 
-[node name="Quit" type="LinkButton" parent="." unique_id=2098872156]
-layout_mode = 0
-offset_left = 303.0
-offset_top = 241.0
-offset_right = 362.0
-offset_bottom = 275.0
-focus_mode = 2
-theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
-theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_fonts/font = ExtResource("4_22vns")
-theme_override_font_sizes/font_size = 24
-text = "Sair"
-underline = 2
-
-[node name="Play" type="LinkButton" parent="." unique_id=80030593]
+[node name="Quit" type="TextureButton" parent="." unique_id=1574169354]
 layout_mode = 0
 offset_left = 297.0
-offset_top = 136.0
-offset_right = 356.0
-offset_bottom = 170.0
-focus_mode = 2
-theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
-theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_fonts/font = ExtResource("4_22vns")
-theme_override_font_sizes/font_size = 24
-text = "Jogar"
-underline = 2
+offset_top = 199.0
+offset_right = 429.0
+offset_bottom = 327.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("10_jw4ia")
+texture_pressed = ExtResource("11_g3cxf")
+texture_hover = ExtResource("12_cfvon")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1482249748]
-libraries/ = SubResource("AnimationLibrary_7pniv")
-autoplay = &"background_loop"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=402486734]
+libraries/ = SubResource("AnimationLibrary_yyfxb")
+autoplay = &"background"

@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="7_katl8"]
 [ext_resource type="PackedScene" uid="uid://drkdyxoqm4uv5" path="res://src/ui/hud/reception_hud.tscn" id="8_hud"]
 [ext_resource type="PackedScene" path="res://src/levels/scenes/elevator.tscn" id="9_elevator_scene"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
+[ext_resource type="Texture2D" uid="uid://decmd1y1x72a6" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
 
 [node name="Reception" type="Node2D" unique_id=1772593470]
 script = ExtResource("1_2llwu")
@@ -25,12 +25,12 @@ offset_bottom = 201.0
 mouse_filter = 2
 color = Color(0.96862745, 0.96862745, 0.96862745, 1)
 
-[node name="Chairs" type="Sprite2D" parent="."]
+[node name="Chairs" type="Sprite2D" parent="." unique_id=742082018]
 position = Vector2(17, 20)
 texture = ExtResource("10_cadeiras")
 centered = false
 
-[node name="Elevator" parent="." instance=ExtResource("9_elevator_scene")]
+[node name="Elevator" parent="." unique_id=648447603 instance=ExtResource("9_elevator_scene")]
 position = Vector2(282, -38)
 scale = Vector2(1.4, 1.4)
 
@@ -93,6 +93,5 @@ anchors_preset = 0
 
 [node name="FeedbackAudio" type="AudioStreamPlayer2D" parent="." unique_id=2050434788]
 position = Vector2(0, -3)
-bus = &"SFX"
 
 [node name="Pause" parent="." unique_id=1030095812 instance=ExtResource("6_mgc41")]
