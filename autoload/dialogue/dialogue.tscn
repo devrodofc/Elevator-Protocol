@@ -1,15 +1,15 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://c1ranrma1xab"]
 
-[ext_resource type="Script" path="res://autoload/dialogue/dialogue.gd" id="1_dialogue"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/fala_vazia.png" id="2_board"]
-[ext_resource type="FontFile" path="res://src/levels/assets/fonts/Pixelta.ttf" id="3_title"]
-[ext_resource type="FontFile" path="res://src/levels/assets/fonts/VCR_OSD_MONO_1.001.ttf" id="4_text"]
+[ext_resource type="Script" uid="uid://bk8v746kly784" path="res://autoload/dialogue/dialogue.gd" id="1_dialogue"]
+[ext_resource type="Texture2D" uid="uid://mjtuoi20jqou" path="res://src/levels/assets/main_hud/fala_vazia.png" id="2_board"]
+[ext_resource type="FontFile" uid="uid://bfqv1huuduey3" path="res://src/levels/assets/fonts/Chewy-Regular.ttf" id="3_n7s1t"]
+[ext_resource type="FontFile" uid="uid://bc3sbfcfbrh64" path="res://src/levels/assets/fonts/DynaPuff-VariableFont_wdth,wght.ttf" id="4_shes3"]
 
-[node name="Dialogue" type="CanvasLayer"]
+[node name="Dialogue" type="CanvasLayer" unique_id=154982614]
 layer = 10
 script = ExtResource("1_dialogue")
 
-[node name="Board" type="TextureRect" parent="."]
+[node name="Board" type="TextureRect" parent="." unique_id=443430972]
 offset_left = 280.0
 offset_top = 21.0
 offset_right = 473.0
@@ -18,7 +18,7 @@ mouse_filter = 2
 texture = ExtResource("2_board")
 expand_mode = 1
 
-[node name="NameLabel" type="Label" parent="Board"]
+[node name="NameLabel" type="Label" parent="Board" unique_id=673891945]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 8.0
@@ -26,13 +26,13 @@ offset_top = 24.0
 offset_right = 182.0
 offset_bottom = 42.0
 theme_override_colors/font_color = Color(0.13, 0.12, 0.11, 1)
-theme_override_fonts/font = ExtResource("3_title")
+theme_override_fonts/font = ExtResource("3_n7s1t")
 theme_override_font_sizes/font_size = 16
 text = "Nome Do NPC"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextLabel" type="Label" parent="Board"]
+[node name="TextLabel" type="Label" parent="Board" unique_id=1807665199]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 10.0
@@ -41,14 +41,14 @@ offset_right = 180.0
 offset_bottom = 120.0
 theme_override_colors/font_color = Color(0.13, 0.12, 0.11, 1)
 theme_override_constants/line_spacing = -1
-theme_override_fonts/font = ExtResource("4_text")
+theme_override_fonts/font = ExtResource("4_shes3")
 theme_override_font_sizes/font_size = 10
 text = "Texto informando sobre o que o npc está fazendo aqui e para onde ele pretende ir"
 horizontal_alignment = 1
 autowrap_mode = 3
 clip_text = true
 
-[node name="SkipHint" type="Label" parent="Board"]
+[node name="SkipHint" type="Label" parent="Board" unique_id=2070799569]
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
@@ -57,7 +57,7 @@ offset_top = 116.0
 offset_right = 150.0
 offset_bottom = 128.0
 theme_override_colors/font_color = Color(0.45, 0.33, 0.21, 1)
-theme_override_fonts/font = ExtResource("4_text")
+theme_override_fonts/font = ExtResource("4_shes3")
 theme_override_font_sizes/font_size = 10
 text = "[Espaço] acelerar"
 vertical_alignment = 1

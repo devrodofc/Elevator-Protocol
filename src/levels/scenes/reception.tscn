@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bummgya0ukifq" path="res://src/levels/scripts/reception_manager.gd" id="1_2llwu"]
 [ext_resource type="Resource" uid="uid://crs2g0lcexipn" path="res://src/levels/schedules/day1.tres" id="2_d2spp"]
-[ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
 [ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="7_katl8"]
 [ext_resource type="PackedScene" path="res://src/ui/hud/reception_hud.tscn" id="8_hud"]
 
@@ -12,7 +12,7 @@ schedule_config = ExtResource("2_d2spp")
 marta_scene = ExtResource("7_katl8")
 visitor_scale = Vector2(3.4594595, 3.4594595)
 
-[node name="Wall" type="ColorRect" parent="."]
+[node name="Wall" type="ColorRect" parent="." unique_id=205692571]
 offset_right = 640.0
 offset_bottom = 181.0
 mouse_filter = 2
@@ -25,7 +25,7 @@ offset_bottom = 181.0
 mouse_filter = 2
 color = Color(0.96862745, 0.96862745, 0.96862745, 1)
 
-[node name="Actors" type="Node2D" parent="WindowClip"]
+[node name="Actors" type="Node2D" parent="WindowClip" unique_id=1037816994]
 unique_name_in_owner = true
 
 [node name="VisitorSpawnPoint" type="Marker2D" parent="WindowClip/Actors" unique_id=764996381]
@@ -46,7 +46,7 @@ position = Vector2(141, 235)
 
 [node name="UI_CanvasLayer" type="CanvasLayer" parent="." unique_id=333661408]
 
-[node name="ReceptionHUD" parent="UI_CanvasLayer" instance=ExtResource("8_hud")]
+[node name="ReceptionHUD" parent="UI_CanvasLayer" unique_id=130300641 instance=ExtResource("8_hud")]
 
 [node name="DialogueUI" type="Control" parent="UI_CanvasLayer" unique_id=260762140]
 layout_mode = 3
