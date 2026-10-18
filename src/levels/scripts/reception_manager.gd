@@ -85,15 +85,23 @@ func _start_day_intro() -> void:
 
 	# Primeira aparição do dia: a Marta chega pela esquerda...
 	await _marta_arrive(false)
+	if not is_inside_tree(): # a cena foi trocada (ex.: menu principal pelo pause)
+		return
 	var texto_inicio: String = schedule_config.mensagem_inicio if schedule_config else "Bom dia!"
 	_show_dialogue_via_autoload("Marta", texto_inicio, true)
 	await _wait_dialogue(0.0) # sem tempo limite: a Marta só sai quando o jogador aperta Espaço
+	if not is_inside_tree():
+		return
 	_clear_dialogue_via_autoload()
 
 	# ...e vai embora pelo elevador
 	await _marta_leave()
+	if not is_inside_tree():
+		return
 	if delay_between_visitors > 0.0:
 		await get_tree().create_timer(delay_between_visitors).timeout
+	if not is_inside_tree():
+		return
 	_call_next_visitor()
 
 
@@ -182,11 +190,15 @@ func _process_success(floor_code: int = RuleValidator.DENY_ACTION) -> void:
 	
 	if delay_between_visitors > 0.0:
 		await get_tree().create_timer(delay_between_visitors).timeout
+	if not is_inside_tree():
+		return
 	
 	# A cada N atendimentos a Marta aparece para ditar uma regra nova
 	var rule: MartaRule = _rule_due()
 	if rule:
 		await _marta_announce_rule(rule)
+		if not is_inside_tree():
+			return
 		
 	_call_next_visitor()
 
@@ -202,6 +214,8 @@ func fail() -> void:
 		
 	# 1. Espera um momento de choque antes da reação
 	await get_tree().create_timer(1.0).timeout
+	if not is_inside_tree():
+		return
 	
 	# 2. Cria overlay para avermelhar a tela lentamente
 	var red_overlay: ColorRect = ColorRect.new()
@@ -226,11 +240,15 @@ func fail() -> void:
 	# 4. Marta sai do elevador e assume a posição
 	if marta_scene != null:
 		await _marta_arrive(true) # sai do elevador e vem até a mesa
+	if not is_inside_tree():
+		return
 	var msg_falha: String = schedule_config.mensagem_falha if schedule_config else "Você falhou. Vamos tentar de novo."
 	_show_dialogue_via_autoload("Marta", msg_falha, true)
 		
 	# 5. Tempo total com a tela avermelhada e diálogo antes de reiniciar a cena
 	await _wait_dialogue(6.0) # Espaço encerra antes
+	if not is_inside_tree():
+		return
 	get_tree().reload_current_scene()
 
 
@@ -242,6 +260,8 @@ func _conclude_day() -> void:
 		
 	if marta_scene != null:
 		await _marta_arrive(true) # sai do elevador e vem até a mesa
+	if not is_inside_tree():
+		return
 	var msg_fim: String = schedule_config.mensagem_fim if schedule_config else "Expediente encerrado. Você concluiu o dia!"
 	_show_dialogue_via_autoload("Marta", msg_fim, true)
 		
@@ -362,7 +382,8 @@ func _wait_dialogue(seconds: float) -> void:
 		await dialogue_singleton.wait_for_advance(seconds)
 	else:
 		# Sem a caixa de fala não há como apertar Espaço: usa um tempo fixo
-		await get_tree().create_timer(seconds if seconds > 0.0 else 10.0).timeout
+		if is_inside_tree():
+			await get_tree().create_timer(seconds if seconds > 0.0 else 10.0).timeout
 
 
 ## Cria a Marta dentro da janela. Ela usa o script do visitante, que muda de escala sozinho
@@ -404,9 +425,13 @@ func _rule_due() -> MartaRule:
 ## A Marta entra, dita a regra (Espaço continua), a regra é anotada na prancheta e ela sai.
 func _marta_announce_rule(rule: MartaRule) -> void:
 	await _marta_arrive(true)
+	if not is_inside_tree():
+		return
 
 	_show_dialogue_via_autoload("Marta", rule.fala, true)
 	await _wait_dialogue(0.0)
+	if not is_inside_tree():
+		return
 	_clear_dialogue_via_autoload()
 
 	active_rules.append(rule)
@@ -416,7 +441,7 @@ func _marta_announce_rule(rule: MartaRule) -> void:
 		_flash_rules_board(rules_board)
 
 	await _marta_leave()
-	if delay_between_visitors > 0.0:
+	if delay_between_visitors > 0.0 and is_inside_tree():
 		await get_tree().create_timer(delay_between_visitors).timeout
 
 
@@ -426,7 +451,7 @@ func _flash_rules_board(rules_board: Control) -> void:
 		return
 	rules_board.open()
 	await get_tree().create_timer(1.8).timeout
-	if is_instance_valid(rules_board):
+	if is_instance_valid(rules_board) and rules_board.is_inside_tree():
 		rules_board.close()
 
 
@@ -434,7 +459,7 @@ func _flash_rules_board(rules_board: Control) -> void:
 func _await_callback(starter: Callable) -> void:
 	var finished: Array[bool] = [false]
 	starter.call(func(): finished[0] = true)
-	while not finished[0]:
+	while not finished[0] and is_inside_tree():
 		await get_tree().process_frame
 
 

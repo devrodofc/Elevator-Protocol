@@ -79,8 +79,10 @@ func receive(actor: Node2D) -> void:
 		arrived[0] = true
 	if _sprite.animation == &"abrir" and _sprite.is_playing():
 		await _sprite.animation_finished
-	while not arrived[0] and is_instance_valid(actor):
+	while not arrived[0] and is_instance_valid(actor) and is_inside_tree():
 		await get_tree().process_frame
+	if not is_inside_tree(): # a cena foi trocada no meio (ex.: menu principal pelo pause)
+		return
 
 	if is_instance_valid(actor):
 		# Entra: segue para dentro e vai ficando na sombra; o recorte esconde o que passa da porta
@@ -88,6 +90,8 @@ func receive(actor: Node2D) -> void:
 		entering.tween_property(actor, "global_position:x", actor.global_position.x + distancia_entrando, tempo_entrando)
 		entering.tween_property(actor, "modulate", cor_dentro, tempo_entrando)
 		await entering.finished
+		if not is_inside_tree():
+			return
 		actor.queue_free()
 	_em_uso -= 1
 	if _em_uso == 0:
@@ -99,6 +103,8 @@ func receive(actor: Node2D) -> void:
 func release(actor: Node2D, destino: Vector2) -> void:
 	actor.visible = false
 	while _em_uso > 0 or (_sprite.animation == &"fechar" and _sprite.is_playing()):
+		if not is_inside_tree():
+			return
 		await get_tree().process_frame
 	_em_uso += 1
 	var escala_final: Vector2 = actor.scale
@@ -115,6 +121,8 @@ func release(actor: Node2D, destino: Vector2) -> void:
 	leaving.tween_property(actor, "global_position", porta, tempo_entrando)
 	leaving.tween_property(actor, "modulate", Color.WHITE, tempo_entrando)
 	await leaving.finished
+	if not is_inside_tree():
+		return
 
 	# Anda até o destino voltando ao tamanho normal; a porta fecha logo depois que ele sai
 	var arrived: Array[bool] = [false]
@@ -127,10 +135,12 @@ func release(actor: Node2D, destino: Vector2) -> void:
 		actor.scale = escala_final
 		arrived[0] = true
 	await get_tree().create_timer(0.3).timeout
+	if not is_inside_tree():
+		return
 	_em_uso -= 1
 	if _em_uso == 0:
 		await close()
-	while not arrived[0] and is_instance_valid(actor):
+	while not arrived[0] and is_instance_valid(actor) and is_inside_tree():
 		await get_tree().process_frame
 
 

@@ -75,5 +75,8 @@ func quit_game() -> void:
 func _hide_global_dialogue() -> void:
 	var dialogue = get_node_or_null("/root/Dialogue")
 
-	if dialogue is CanvasLayer or dialogue is CanvasItem:
+	# clear_dialogue também encerra o wait_for_advance pendente da recepção
+	if dialogue and dialogue.has_method("clear_dialogue"):
+		dialogue.clear_dialogue()
+	elif dialogue is CanvasLayer or dialogue is CanvasItem:
 		dialogue.visible = false

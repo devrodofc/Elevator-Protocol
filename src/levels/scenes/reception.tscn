@@ -93,5 +93,6 @@ anchors_preset = 0
 
 [node name="FeedbackAudio" type="AudioStreamPlayer2D" parent="." unique_id=2050434788]
 position = Vector2(0, -3)
+bus = &"SFX"
 
 [node name="Pause" parent="." unique_id=1030095812 instance=ExtResource("6_mgc41")]

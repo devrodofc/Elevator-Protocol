@@ -81,7 +81,8 @@ func _gui_input(event: InputEvent) -> void:
 		toggle()
 
 
-func _unhandled_input(event: InputEvent) -> void:
+## _shortcut_input roda antes do _unhandled_key_input do pause: com a prancheta aberta, Esc só fecha ela.
+func _shortcut_input(event: InputEvent) -> void:
 	if is_open and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		close()
