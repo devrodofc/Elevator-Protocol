@@ -380,6 +380,15 @@ caminho) tem um player de música (bus Music), um de loop e 6 vozes de efeito (b
 Os MP3 foram importados sem loop: `audio.gd` liga `loop` em código nas músicas e no `digitando`.
 `play_music` não reinicia a mesma música (ao falhar e recarregar a cena ela continua).
 
+**Volumes (tudo no `audio.gd`):**
+- `DEFAULT_BUS_PERCENT`: volume inicial dos buses em %, aplicado só ao abrir o jogo (Master 100, **Music 50**,
+  SFX 100). É o que os sliders das opções mostram; depois quem manda são os sliders (o volume não é salvo).
+- `MENU_MUSIC_VOLUME_DB` (-6): o `audio.gd` sobrescreve o `volume_db` do `MusicMenu` (o -33 do `music_menu.tscn`
+  não vale mais). `MUSIC_VOLUME_DB` (0), `SFX_VOLUME_DB`, `LOOP_VOLUME_DB`: **em dB, não em %**.
+- A música do gameplay veio ~17 dB mais baixa que a do menu (média -30,7 dBFS): passa pelo bus `MusicaGameplay`
+  (criado em código, manda para `Music`) com `AudioEffectHardLimiter` (+15 dB, teto -1 dB).
+- Medido com Música em 50%: menu ~-25,5 dBFS e gameplay ~-25,1 dBFS de média (antes o menu saía a -46,7).
+
 ### 6.10 Tela de cheat (`CheatMenu`)
 `autoload/cheat_menu/cheat_menu.gd` (registrado pelo caminho; interface montada em código, sem `.tscn`).
 A tecla **P** abre/fecha em qualquer cena e pausa o jogo; **Esc** também fecha (e não chega ao pause, então
@@ -509,8 +518,8 @@ Para tirar da build final: remover a linha `CheatMenu` de `[autoload]` no `proje
 - O tutorial destaca o "painel" e diz "escolher o andar no painel do elevador, ou negar o acesso";
   se a mecânica mudar, atualizar `tutorial_intro.tres`.
 - A prancheta de regras aberta cobre o crachá.
-- Volumes do `Audio` (`MUSIC_VOLUME_DB` -20, `SFX_VOLUME_DB` -6, `LOOP_VOLUME_DB` -10) foram chutados
-  sem ouvir; ajustar no jogo.
+- Os efeitos sonoros vieram baixos nos arquivos (ex.: `sucess` -46 dBFS de média, `passando_pagina` -61):
+  se ficarem enterrados sob a música, subir `SFX_VOLUME_DB` (até ~+6) ou reexportar os arquivos.
 - Nos dias 2 e 3, as regras de lore do banco não saem: a 2ª vaga (lore) é sempre a obrigatória
   (entrega / Tião). Decisão do Gustavo: manter assim.
 
