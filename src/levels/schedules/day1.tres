@@ -15,7 +15,9 @@ metadata/_custom_type_script = "uid://30jqbkcb4q5"
 [resource]
 script = ExtResource("2_1agin")
 mensagem_fim = "Excelente trabalho por hoje! ... Mas... você deixou aquele entregador ir para o terceiro andar, certo?... Tudo bem... você não sabia!"
+qtd_primeira_fase = 4
 pool_primeira_fase = Array[ExtResource("1_ha2se")]([ExtResource("4_3djo4")])
 npc_fixo = ExtResource("2_00xs8")
 dialogo_fixo = SubResource("Resource_6es8l")
+qtd_segunda_fase = 0
 metadata/_custom_type_script = "uid://dw560omsfs2go"
