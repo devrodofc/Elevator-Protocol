@@ -39,7 +39,7 @@ position = Vector2(17, 20)
 texture = ExtResource("10_cadeiras")
 centered = false
 
-[node name="Elevator" parent="." instance=ExtResource("9_elevator_scene")]
+[node name="Elevator" parent="." unique_id=648447603 instance=ExtResource("9_elevator_scene")]
 position = Vector2(282, -38)
 scale = Vector2(1.4, 1.4)
 
@@ -102,6 +102,5 @@ anchors_preset = 0
 
 [node name="FeedbackAudio" type="AudioStreamPlayer2D" parent="." unique_id=2050434788]
 position = Vector2(0, -3)
-bus = &"SFX"
 
 [node name="Pause" parent="." unique_id=1030095812 instance=ExtResource("6_mgc41")]

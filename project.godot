@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Dialogue="*res://autoload/dialogue/dialogue.tscn"
 SceneTransition="*res://autoload/scene_transition/scene_transition.tscn"
+MusicMenu="*uid://cuj5w2e7m2ud2"
 
 [display]
 
