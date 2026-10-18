@@ -107,6 +107,5 @@ mensagem_fim = "Excelente trabalho por hoje! ... Mas... você deixou aquele entr
 regras_marta = Array[ExtResource("9_rule")]([SubResource("Regra_subsolo"), SubResource("Regra_rogerio"), SubResource("Regra_quarto"), SubResource("Regra_presidencia"), SubResource("Regra_rh"), SubResource("Regra_batidas"), SubResource("Regra_cameras")])
 pool_padrao = Array[ExtResource("1_ha2se")]([ExtResource("4_3djo4"), ExtResource("5_3djo4")])
 interacoes = Array[ExtResource("3_inter")]([SubResource("Interaction_aleatorios"), SubResource("Resource_df8m6"), SubResource("Interaction_entregador")])
-andares_do_dia = null
-falas_comuns = Array[ExtResource("1_7wgci")]([ExtResource("fc_common1a"), ExtResource("fc_common1b"), ExtResource("fc_common1c"), ExtResource("fc_common1d"), ExtResource("fc_common2a"), ExtResource("fc_common2b"), ExtResource("fc_common2c"), ExtResource("fc_common2d"), ExtResource("fc_common3a"), ExtResource("fc_common3b"), ExtResource("fc_common3c"), ExtResource("fc_common3d"), ExtResource("d4a"), ExtResource("d4b"), ExtResource("fc_common4c"), ExtResource("fc_common4d"), ExtResource("d5a"), ExtResource("d5b"), ExtResource("fc_common5c"), ExtResource("fc_common6a"), ExtResource("fc_common6b"), ExtResource("fc_common6c"), ExtResource("fc_common5d"), ExtResource("fc_common6d")])
+andares_do_dia = PackedInt32Array(1, 2, 4, 5, 6)
 metadata/_custom_type_script = "uid://dw560omsfs2go"

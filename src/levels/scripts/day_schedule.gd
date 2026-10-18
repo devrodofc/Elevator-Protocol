@@ -24,6 +24,7 @@ extends Resource
 @export var interacoes: Array[DayInteraction] = []
 ## Andares que os visitantes aleatórios pedem. Todos aparecem pelo menos uma vez no dia
 ## (se houver visitantes aleatórios suficientes), em ordem sorteada.
+## Dia 1: sem o 3º andar, que fica só para o entregador.
 @export var andares_do_dia: PackedInt32Array = PackedInt32Array([1, 2, 3, 4, 5, 6])
 ## Falas que qualquer visitante aleatório pode usar, além das dele. O andar de cada fala
 ## (andar_desejado) decide em qual sorteio ela entra. Sem "= []" pelo mesmo motivo acima.
@@ -41,6 +42,7 @@ func build_queue() -> Array[Dictionary]:
 ##   entregador) mantêm a fala definida na interação.
 ## - "regras": regras_por_dia regras sorteadas, na ordem em que a Marta vai ditar. Pelo menos uma
 ##   muda o jogo e tem um visitante depois dela pedindo o andar afetado (caso garantido).
+##   O visitante logo depois de uma regra nunca é o caso dela: o caso vem mais tarde.
 func montar_dia() -> Dictionary:
 	var fila: Array[Dictionary] = []
 	for interacao in interacoes:
@@ -55,6 +57,7 @@ func montar_dia() -> Dictionary:
 	var regras: Array[MartaRule] = _sortear_regras(fila)
 	var plano: Array[int] = _plano_de_andares(livres.size())
 	var caso: Dictionary = _garantir_caso_de_regra(regras, plano, livres)
+	_evitar_caso_no_proximo(regras, plano, livres, caso)
 	_aplicar_falas(fila, livres, plano, caso)
 	return {"fila": fila, "regras": regras}
 
@@ -120,12 +123,13 @@ func _garantir_caso_de_regra(regras: Array[MartaRule], plano: Array[int], livres
 		return {}
 
 	# A regra da posição k é dita depois de (k + 1) * intervalo atendimentos e vale para quem vem depois.
+	# O caso não pode ser o visitante logo em seguida (índice "limite"): fica previsível demais.
 	var aparicoes: Array[Dictionary] = []
 	for k in regras.size():
 		var limite: int = (k + 1) * intervalo_regras
-		var vagas: Array[int] = [] # posições em "livres" (e em "plano") depois desta aparição
+		var vagas: Array[int] = [] # posições em "livres" (e em "plano") depois do próximo visitante
 		for j in livres.size():
-			if livres[j] >= limite:
+			if livres[j] > limite:
 				vagas.append(j)
 		if not vagas.is_empty():
 			aparicoes.append({"posicao": k, "vagas": vagas})
@@ -160,6 +164,35 @@ func _garantir_caso_de_regra(regras: Array[MartaRule], plano: Array[int], livres
 			plano[atual] = plano[alvo] # troca: o andar continua aparecendo no dia
 		plano[alvo] = regra.andar_pedido
 	return {"posicao_livre": alvo, "regra": regra}
+
+
+## O visitante logo depois de cada regra com efeito não pede o andar dela: troca o andar dele
+## com o de outro visitante aleatório (que não seja o caso garantido nem o próximo de outra regra).
+func _evitar_caso_no_proximo(regras: Array[MartaRule], plano: Array[int], livres: Array[int], caso: Dictionary) -> void:
+	if intervalo_regras <= 0:
+		return
+	var proibido: Dictionary = {} # posição em "plano" -> andar que ela não pode pedir
+	for k in regras.size():
+		if regras[k].tem_efeito():
+			var j: int = livres.find((k + 1) * intervalo_regras)
+			if j != -1 and j < plano.size():
+				proibido[j] = regras[k].andar_pedido
+
+	for j in proibido:
+		if plano[j] != proibido[j]:
+			continue
+		var trocas: Array[int] = []
+		for t in plano.size():
+			if t == j or plano[t] == plano[j] or proibido.has(t):
+				continue
+			if not caso.is_empty() and caso["posicao_livre"] == t:
+				continue
+			trocas.append(t)
+		if not trocas.is_empty():
+			var t: int = trocas.pick_random()
+			var andar: int = plano[j]
+			plano[j] = plano[t]
+			plano[t] = andar
 
 
 ## Dá a cada visitante aleatório uma fala do andar planejado, sem repetir texto no dia.

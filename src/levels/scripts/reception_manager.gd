@@ -229,12 +229,14 @@ func fail() -> void:
 		add_child(red_overlay)
 		
 	var red_tween: Tween = create_tween()
-	red_tween.tween_property(red_overlay, "color:a", 0.65, 3.5)\
+	red_tween.tween_property(red_overlay, "color:a", 0.15, 3.5)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
-	# 3. Descarta o visitante que estava no balcão
+	# 3. O visitante que estava no balcão vai embora pela porta (esquerda) enquanto a Marta chega
 	if is_instance_valid(current_visitor_node):
-		current_visitor_node.queue_free()
+		if current_visitor_node.arrived.is_connected(_update_badge_visitor):
+			current_visitor_node.arrived.disconnect(_update_badge_visitor)
+		current_visitor_node.leave_to(spawn_point.global_position)
 		current_visitor_node = null
 		
 	# 4. Marta sai do elevador e assume a posição
