@@ -1,15 +1,13 @@
 [gd_scene format=3 uid="uid://drkdyxoqm4uv5"]
 
-[ext_resource type="Texture2D" uid="uid://b4f4fe76kd8xh" path="res://src/levels/assets/main_hud/janela.png" id="1_janela"]
-[ext_resource type="Texture2D" uid="uid://cqh4hq2qcw1p7" path="res://src/levels/assets/main_hud/mesa.png" id="2_mesa"]
-[ext_resource type="Texture2D" uid="uid://mjtuoi20jqou" path="res://src/levels/assets/main_hud/fala_vazia.png" id="3_fala"]
-[ext_resource type="PackedScene" uid="uid://b37cn5b28tskj" path="res://src/ui/hud/company_book.tscn" id="5_livro"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/mesa.png" id="2_mesa"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/company_book.tscn" id="5_livro"]
 [ext_resource type="PackedScene" path="res://src/ui/hud/rules_board.tscn" id="6_regras"]
-[ext_resource type="Texture2D" uid="uid://vwsm204g4spq" path="res://src/levels/assets/badge/cracha.png" id="7_cracha"]
-[ext_resource type="Script" uid="uid://cx1opqq8b8356" path="res://src/ui/hud/reception_hud.gd" id="8_script"]
-[ext_resource type="PackedScene" uid="uid://jvxu5gtg6ah4" path="res://src/ui/hud/badge_details.tscn" id="9_badge_details"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/badge/cracha.png" id="7_cracha"]
+[ext_resource type="Script" path="res://src/ui/hud/reception_hud.gd" id="8_script"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/badge_details.tscn" id="9_badge_details"]
 
-[node name="ReceptionHUD" type="Control" unique_id=82547869]
+[node name="ReceptionHUD" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,16 +17,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("8_script")
 
-[node name="Window" type="TextureRect" parent="." unique_id=1058709521]
-layout_mode = 0
-offset_left = 282.0
-offset_right = 698.0
-offset_bottom = 185.0
-mouse_filter = 2
-texture = ExtResource("1_janela")
-expand_mode = 1
-
-[node name="Desk" type="TextureRect" parent="." unique_id=1664553197]
+[node name="Desk" type="TextureRect" parent="."]
 layout_mode = 0
 offset_top = 201.0
 offset_right = 678.0
@@ -37,17 +26,7 @@ mouse_filter = 2
 texture = ExtResource("2_mesa")
 expand_mode = 1
 
-[node name="SpeechBoard" type="TextureRect" parent="." unique_id=761434494]
-layout_mode = 0
-offset_left = 280.0
-offset_top = 21.0
-offset_right = 473.0
-offset_bottom = 159.0
-mouse_filter = 2
-texture = ExtResource("3_fala")
-expand_mode = 1
-
-[node name="Badge" type="TextureRect" parent="." unique_id=293822894]
+[node name="Badge" type="TextureRect" parent="."]
 texture_filter = 1
 layout_mode = 0
 offset_left = 115.0
@@ -59,22 +38,20 @@ mouse_default_cursor_shape = 2
 texture = ExtResource("7_cracha")
 expand_mode = 1
 
-[node name="CompanyBook" parent="." unique_id=118191879 instance=ExtResource("5_livro")]
-layout_mode = 0
+[node name="CompanyBook" parent="." instance=ExtResource("5_livro")]
 offset_left = 246.0
 offset_top = 216.0
 offset_right = 439.0
 offset_bottom = 358.0
 
-[node name="RulesBoard" parent="." unique_id=844554545 instance=ExtResource("6_regras")]
-layout_mode = 0
+[node name="RulesBoard" parent="." instance=ExtResource("6_regras")]
 offset_left = 78.0
 offset_top = 314.0
 offset_right = 194.0
 offset_bottom = 465.0
 
-[node name="BadgeOverlay" type="CanvasLayer" parent="." unique_id=1868256776]
+[node name="BadgeOverlay" type="CanvasLayer" parent="."]
 layer = 10
 
-[node name="BadgeDetails" parent="BadgeOverlay" unique_id=2143515127 instance=ExtResource("9_badge_details")]
+[node name="BadgeDetails" parent="BadgeOverlay" instance=ExtResource("9_badge_details")]
 visible = false

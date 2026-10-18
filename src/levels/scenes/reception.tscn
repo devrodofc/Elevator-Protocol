@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://btagpc2oh1ho6" path="res://src/ui/menus/scenes/pause.tscn" id="6_mgc41"]
 [ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="7_katl8"]
 [ext_resource type="PackedScene" uid="uid://drkdyxoqm4uv5" path="res://src/ui/hud/reception_hud.tscn" id="8_hud"]
+[ext_resource type="PackedScene" path="res://src/levels/scenes/elevator.tscn" id="9_elevator_scene"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
 
 [node name="Reception" type="Node2D" unique_id=1772593470]
 script = ExtResource("1_2llwu")
@@ -23,9 +25,18 @@ offset_bottom = 201.0
 mouse_filter = 2
 color = Color(0.96862745, 0.96862745, 0.96862745, 1)
 
+[node name="Chairs" type="Sprite2D" parent="."]
+position = Vector2(17, 20)
+texture = ExtResource("10_cadeiras")
+centered = false
+
+[node name="Elevator" parent="." instance=ExtResource("9_elevator_scene")]
+position = Vector2(282, -38)
+scale = Vector2(1.4, 1.4)
+
 [node name="WindowClip" type="ColorRect" parent="." unique_id=1097790414]
-clip_children = 2
-offset_right = 282.0
+clip_children = 1
+offset_right = 465.0
 offset_bottom = 201.0
 mouse_filter = 2
 color = Color(0.96862745, 0.96862745, 0.96862745, 1)
@@ -55,7 +66,7 @@ position = Vector2(-150, 140)
 
 [node name="MartaExitPoint" type="Marker2D" parent="WindowClip/Actors" unique_id=1198187424]
 unique_name_in_owner = true
-position = Vector2(440, 140)
+position = Vector2(-150, 140)
 
 [node name="UI_CanvasLayer" type="CanvasLayer" parent="." unique_id=333661408]
 
