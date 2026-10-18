@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dosqpdlw7y1sp"
-path="res://.godot/imported/botão audio.png-a4064a32b65e0656eb09d3d01ed35546.ctex"
+uid="uid://c3aqthjkwwge1"
+path="res://.godot/imported/tela inicial do game 2 frame..jpg-26f9369616bb73a2890a3ac993174adc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/assets/buttons/botão audio.png"
-dest_files=["res://.godot/imported/botão audio.png-a4064a32b65e0656eb09d3d01ed35546.ctex"]
+source_file="res://src/ui/menus/assets/background/tela inicial do game 2 frame..jpg"
+dest_files=["res://.godot/imported/tela inicial do game 2 frame..jpg-26f9369616bb73a2890a3ac993174adc.ctex"]
 
 [params]
 

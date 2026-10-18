@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dinbn4qil1vaj"
-path="res://.godot/imported/botão desligar pressionado.png-f21cc830d529ec599366e27f35678f83.ctex"
+uid="uid://dpure34tj7c4l"
+path="res://.godot/imported/botão voltar hover(1).png-c6ac9a511033d1fd54fa26830a33c0ec.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/assets/buttons/botão desligar pressionado.png"
-dest_files=["res://.godot/imported/botão desligar pressionado.png-f21cc830d529ec599366e27f35678f83.ctex"]
+source_file="res://src/ui/menus/assets/buttons/return/botão voltar hover(1).png"
+dest_files=["res://.godot/imported/botão voltar hover(1).png-c6ac9a511033d1fd54fa26830a33c0ec.ctex"]
 
 [params]
 

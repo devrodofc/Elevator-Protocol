@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8oupjq23767n"
-path="res://.godot/imported/botão play normal 1.1.png-ed5ac72b9eb7a4c9e1a4d79acc205e3d.ctex"
+uid="uid://t754jy2y87if"
+path="res://.godot/imported/botão pressionado pause.png-107e929f6a6470194c2383607a428110.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/assets/buttons/botão play normal 1.1.png"
-dest_files=["res://.godot/imported/botão play normal 1.1.png-ed5ac72b9eb7a4c9e1a4d79acc205e3d.ctex"]
+source_file="res://src/ui/assets/buttons/pause/botão pressionado pause.png"
+dest_files=["res://.godot/imported/botão pressionado pause.png-107e929f6a6470194c2383607a428110.ctex"]
 
 [params]
 

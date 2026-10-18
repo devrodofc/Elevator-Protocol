@@ -2,6 +2,8 @@ extends Control
 
 signal back_requested
 
+const DisplayMode = preload("res://src/ui/menus/scripts/display_mode.gd")
+
 @onready var master_slider: HSlider = $MasterVolume
 @onready var music_slider: HSlider = $MusicVolume
 @onready var sfx_slider: HSlider = $SFXVolume
@@ -31,6 +33,7 @@ func _ready() -> void:
 
 
 func refresh() -> void:
+	_update_fullscreen_text()
 	_load_slider(master_slider, "Master")
 	_load_slider(music_slider, "Music")
 	_load_slider(sfx_slider, "SFX")
@@ -70,14 +73,16 @@ func _set_volume(bus_name: String, value: float) -> void:
 
 
 func _toggle_fullscreen() -> void:
-	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
-		DisplayServer.window_set_mode(
-			DisplayServer.WINDOW_MODE_WINDOWED
-		)
-	else:
-		DisplayServer.window_set_mode(
-			DisplayServer.WINDOW_MODE_FULLSCREEN
-		)
+	await DisplayMode.cycle(get_tree())
+	_update_fullscreen_text()
+
+
+func _process(_delta: float) -> void:
+	_update_fullscreen_text()
+
+
+func _update_fullscreen_text() -> void:
+	fullscreen_button.text = DisplayMode.current_text()
 
 
 func _go_back() -> void:

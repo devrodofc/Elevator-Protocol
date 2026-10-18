@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://t754jy2y87if"
-path="res://.godot/imported/botão pressionado pause.png-2a7051b5a52cc88f30f483d25d0cd26c.ctex"
+uid="uid://b0mp8o0wqthyq"
+path="res://.godot/imported/tela inicial do game 1 frame.jpg-0027ef6a521918a8ddc6759bafc785c4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/assets/buttons/botão pressionado pause.png"
-dest_files=["res://.godot/imported/botão pressionado pause.png-2a7051b5a52cc88f30f483d25d0cd26c.ctex"]
+source_file="res://src/ui/menus/assets/background/tela inicial do game 1 frame.jpg"
+dest_files=["res://.godot/imported/tela inicial do game 1 frame.jpg-0027ef6a521918a8ddc6759bafc785c4.ctex"]
 
 [params]
 

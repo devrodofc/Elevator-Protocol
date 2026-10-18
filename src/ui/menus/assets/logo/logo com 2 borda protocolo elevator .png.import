@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2qn0yc3mafp1"
-path="res://.godot/imported/votão desligar normal.png-11fa5ae75d5ca69f8fa82e5ef5c213d4.ctex"
+uid="uid://bkff7v7pecnr7"
+path="res://.godot/imported/logo com 2 borda protocolo elevator .png-0e7e77797cd583103553fff02a31a702.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/assets/buttons/votão desligar normal.png"
-dest_files=["res://.godot/imported/votão desligar normal.png-11fa5ae75d5ca69f8fa82e5ef5c213d4.ctex"]
+source_file="res://src/ui/menus/assets/logo/logo com 2 borda protocolo elevator .png"
+dest_files=["res://.godot/imported/logo com 2 borda protocolo elevator .png-0e7e77797cd583103553fff02a31a702.ctex"]
 
 [params]
 

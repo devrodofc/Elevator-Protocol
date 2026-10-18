@@ -1,12 +1,16 @@
 [gd_scene format=3 uid="uid://cm886bfqi3fo8"]
 
 [ext_resource type="Script" uid="uid://bjqvjv6o462d1" path="res://src/ui/menus/scripts/credits.gd" id="1_o6xkx"]
-[ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/tela inicial do game 1 frame.jpg" id="2_gtovi"]
+[ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/background/tela inicial do game 1 frame.jpg" id="2_gtovi"]
 [ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://fonts/resources/dynapuff_regular.tres" id="3_gtovi"]
-[ext_resource type="Texture2D" uid="uid://c3aqthjkwwge1" path="res://src/ui/menus/assets/tela inicial do game 2 frame..jpg" id="3_qwbe7"]
+[ext_resource type="Texture2D" uid="uid://c3aqthjkwwge1" path="res://src/ui/menus/assets/background/tela inicial do game 2 frame..jpg" id="3_qwbe7"]
+[ext_resource type="Texture2D" uid="uid://bh61au3d0p3ne" path="res://src/ui/menus/assets/background/tela inicial do game 3 frame..jpg" id="5_qwbe7"]
+[ext_resource type="Texture2D" uid="uid://410knbpyr5xn" path="res://src/ui/menus/assets/buttons/return/botão voltar(1).png" id="6_kblmx"]
+[ext_resource type="Texture2D" uid="uid://bmejs05qhamrh" path="res://src/ui/menus/assets/buttons/return/botão voltar pressionado(1).png" id="7_0iwbd"]
+[ext_resource type="Texture2D" uid="uid://dpure34tj7c4l" path="res://src/ui/menus/assets/buttons/return/botão voltar hover(1).png" id="8_iwru1"]
 
-[sub_resource type="Animation" id="Animation_lrlgq"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_cfvon"]
+length = 1.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -14,14 +18,15 @@ tracks/0/path = NodePath("TextureRect:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("2_gtovi")]
+"values": [ExtResource("2_gtovi"), ExtResource("3_qwbe7"), ExtResource("5_qwbe7")]
 }
 
-[sub_resource type="Animation" id="Animation_22vns"]
-resource_name = "background_loop"
+[sub_resource type="Animation" id="Animation_yyfxb"]
+resource_name = "background"
+length = 2.0
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -30,16 +35,16 @@ tracks/0/path = NodePath("TextureRect:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("2_gtovi"), ExtResource("3_qwbe7")]
+"values": [ExtResource("2_gtovi"), ExtResource("3_qwbe7"), ExtResource("5_qwbe7")]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_7pniv"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c1aaw"]
 _data = {
-&"RESET": SubResource("Animation_lrlgq"),
-&"background_loop": SubResource("Animation_22vns")
+&"RESET": SubResource("Animation_cfvon"),
+&"background": SubResource("Animation_yyfxb")
 }
 
 [node name="Credits" type="Control" unique_id=1171505832]
@@ -75,10 +80,11 @@ color = Color(0, 0, 0, 0.15686275)
 
 [node name="CreditsTitle" type="Label" parent="." unique_id=1936966435]
 layout_mode = 0
-offset_left = 219.0
-offset_top = 62.0
-offset_right = 429.0
-offset_bottom = 107.0
+offset_left = 220.0
+offset_top = 74.0
+offset_right = 430.0
+offset_bottom = 119.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_gtovi")
 theme_override_font_sizes/font_size = 32
 text = "Opções"
@@ -86,43 +92,51 @@ horizontal_alignment = 1
 
 [node name="Studio" type="Label" parent="." unique_id=720760481]
 layout_mode = 0
-offset_left = 228.0
-offset_top = 104.0
-offset_right = 419.0
-offset_bottom = 127.0
+offset_left = 223.0
+offset_top = 121.0
+offset_right = 427.0
+offset_bottom = 144.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_gtovi")
 text = "Coffee & Games Studios"
 
 [node name="Team" type="Label" parent="." unique_id=573932509]
 layout_mode = 0
-offset_left = 225.0
-offset_top = 132.0
-offset_right = 423.0
-offset_bottom = 244.0
+offset_left = 110.0
+offset_top = 150.0
+offset_right = 322.0
+offset_bottom = 239.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_gtovi")
 text = "Rodrigo - Game Designer
 Daniel - Programador
 Gustavo - Programador
-Clara - Artista
+"
+
+[node name="Team2" type="Label" parent="." unique_id=185301026]
+layout_mode = 0
+offset_left = 340.0
+offset_top = 150.0
+offset_right = 526.0
+offset_bottom = 193.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_gtovi")
+text = "Clara - Artista
 Mari - UI/UX Designer"
 
-[node name="Back" type="LinkButton" parent="." unique_id=2098872156]
-layout_mode = 0
-offset_left = 296.0
-offset_top = 247.0
-offset_right = 355.0
-offset_bottom = 281.0
-focus_mode = 2
-theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
-theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_fonts/font = ExtResource("3_gtovi")
-theme_override_font_sizes/font_size = 24
-text = "Back"
-underline = 2
+[node name="AnimationBackground" type="AnimationPlayer" parent="." unique_id=1606285248]
+libraries/ = SubResource("AnimationLibrary_c1aaw")
+autoplay = &"background"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1482249748]
-libraries/ = SubResource("AnimationLibrary_7pniv")
-autoplay = &"background_loop"
+[node name="Back" type="TextureButton" parent="." unique_id=1953442762]
+texture_filter = 1
+layout_mode = 0
+offset_left = 425.0
+offset_top = 248.00002
+offset_right = 553.0
+offset_bottom = 376.0
+scale = Vector2(0.35, 0.35)
+texture_normal = ExtResource("6_kblmx")
+texture_pressed = ExtResource("7_0iwbd")
+texture_hover = ExtResource("8_iwru1")
+stretch_mode = 5
