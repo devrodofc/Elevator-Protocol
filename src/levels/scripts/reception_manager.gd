@@ -13,17 +13,21 @@ extends Node2D
 @export var marta_scene: PackedScene
 ## Cena base do visitante comum
 @export var visitor_base_scene: PackedScene = preload("res://src/npcs/scenes/visitor.tscn")
+## Escala do visitante dentro da janela (3.46 = arte 256 px em tamanho real)
+@export var visitor_scale: Vector2 = Vector2.ONE
 
 @export_group("Escala e Profundidade da Marta")
 @export var marta_start_scale: Vector2 = Vector2(0.75, 0.75)
 @export var marta_focus_scale: Vector2 = Vector2(3.0, 3.0)
 
 @export_group("Nós do Cenário")
-@onready var spawn_point: Node2D = $VisitorSpawnPoint
-@onready var marta_point: Node2D = $MartaPoint
+@onready var spawn_point: Node2D = %VisitorSpawnPoint
+@onready var marta_point: Node2D = %MartaPoint
 ## Usamos o DeskPoint1 como o balcão único de atendimento
-@onready var desk_point: Node2D = $VisitorDeskPoint1
-@onready var exit_point: Node2D = $VisitorExitPoint
+@onready var desk_point: Node2D = %VisitorDeskPoint1
+@onready var exit_point: Node2D = %VisitorExitPoint
+## Atores (visitante e Marta) ficam aqui dentro para serem recortados pela janela
+@onready var actors_root: Node = get_node_or_null("%Actors")
 
 @export_group("Interface & Áudio")
 @onready var ui_canvas_layer: CanvasLayer = $UI_CanvasLayer
@@ -77,7 +81,7 @@ func _start_day_intro() -> void:
 		return
 		
 	marta_instance = marta_scene.instantiate() as Node2D
-	add_child(marta_instance)
+	_add_actor(marta_instance)
 	marta_instance.global_position = spawn_point.global_position
 	marta_instance.scale = marta_start_scale
 	
@@ -85,9 +89,9 @@ func _start_day_intro() -> void:
 	
 	_move_actor(marta_instance, target_pos, func():
 		var texto_inicio: String = schedule_config.mensagem_inicio if schedule_config else "Bom dia!"
-		_show_dialogue_via_autoload("Marta", texto_inicio)
+		_show_dialogue_via_autoload("Marta", texto_inicio, true)
 		
-		await get_tree().create_timer(10.0).timeout
+		await _wait_dialogue(0.0) # sem tempo limite: a Marta só sai quando o jogador aperta Espaço
 		_clear_dialogue_via_autoload()
 		
 		_leave_actor(marta_instance, exit_point.global_position, func():
@@ -109,7 +113,10 @@ func _call_next_visitor() -> void:
 	var v_data: VisitorData = current_entry["visitor"]
 	
 	current_visitor_node = visitor_base_scene.instantiate() as Visitor
-	add_child(current_visitor_node)
+	# Na janela o visitante entra de lado: mesma escala na fila e no balcão
+	current_visitor_node.queue_scale = visitor_scale
+	current_visitor_node.desk_scale = visitor_scale
+	_add_actor(current_visitor_node)
 	current_visitor_node.global_position = spawn_point.global_position
 	current_visitor_node.setup(v_data)
 	
@@ -207,20 +214,20 @@ func fail() -> void:
 	
 	if marta_scene != null:
 		marta_instance = marta_scene.instantiate() as Node2D
-		add_child(marta_instance)
+		_add_actor(marta_instance)
 		marta_instance.global_position = spawn_point.global_position
 		marta_instance.scale = marta_start_scale
 		
 		_move_actor(marta_instance, target_pos, func():
 			var msg_falha: String = schedule_config.mensagem_falha if schedule_config else "Você falhou. Vamos tentar de novo."
-			_show_dialogue_via_autoload("Marta", msg_falha)
+			_show_dialogue_via_autoload("Marta", msg_falha, true)
 		)
 	else:
 		var msg_falha: String = schedule_config.mensagem_falha if schedule_config else "Você falhou. Vamos tentar de novo."
-		_show_dialogue_via_autoload("Marta", msg_falha)
+		_show_dialogue_via_autoload("Marta", msg_falha, true)
 		
 	# 5. Tempo total com a tela avermelhada e diálogo antes de reiniciar a cena
-	await get_tree().create_timer(6.0).timeout
+	await _wait_dialogue(6.0) # Espaço encerra antes
 	get_tree().reload_current_scene()
 
 
@@ -233,17 +240,17 @@ func _conclude_day() -> void:
 	
 	if marta_scene != null:
 		marta_instance = marta_scene.instantiate() as Node2D
-		add_child(marta_instance)
+		_add_actor(marta_instance)
 		marta_instance.global_position = exit_point.global_position
 		marta_instance.scale = marta_start_scale
 		
 		_move_actor(marta_instance, target_pos, func():
 			var msg_fim: String = schedule_config.mensagem_fim if schedule_config else "Expediente encerrado. Você concluiu o dia!"
-			_show_dialogue_via_autoload("Marta", msg_fim)
+			_show_dialogue_via_autoload("Marta", msg_fim, true)
 		)
 	else:
 		var msg_fim: String = schedule_config.mensagem_fim if schedule_config else "Expediente encerrado. Você concluiu o dia!"
-		_show_dialogue_via_autoload("Marta", msg_fim)
+		_show_dialogue_via_autoload("Marta", msg_fim, true)
 		
 	print("Dia concluído com sucesso!")
 
@@ -280,7 +287,8 @@ func _leave_actor(actor: Node2D, target_pos: Vector2, on_finished: Callable = Ca
 		)
 
 
-func _show_dialogue_via_autoload(speaker_name: String, speech_text: String) -> void:
+## skippable: mostra "[Espaço] acelerar" e deixa o jogador apressar a fala (usado pela Marta).
+func _show_dialogue_via_autoload(speaker_name: String, speech_text: String, skippable: bool = false) -> void:
 	var dialogue_singleton = get_node_or_null("/root/Dialogue")
 	if dialogue_singleton == null:
 		return
@@ -289,7 +297,7 @@ func _show_dialogue_via_autoload(speaker_name: String, speech_text: String) -> v
 		dialogue_singleton.visible = true
 		
 	if dialogue_singleton.has_method("display_dialogue"):
-		dialogue_singleton.call("display_dialogue", speaker_name, speech_text)
+		dialogue_singleton.call("display_dialogue", speaker_name, speech_text, skippable)
 	elif dialogue_singleton.has_method("start_dialogue"):
 		dialogue_singleton.call("start_dialogue", speech_text)
 	elif dialogue_singleton.has_method("show_dialogue"):
@@ -320,3 +328,22 @@ func _clear_dialogue_via_autoload() -> void:
 		dialogue_singleton.call("hide_dialogue")
 	elif "visible" in dialogue_singleton:
 		dialogue_singleton.visible = false
+
+
+## Adiciona um ator (visitante/Marta) dentro da janela recortada, ou na raiz se não houver.
+func _add_actor(actor: Node) -> void:
+	if actors_root:
+		actors_root.add_child(actor)
+	else:
+		add_child(actor)
+
+
+## Espera a fala acelerável: termina em "seconds" ou quando o jogador aperta Espaço.
+## seconds <= 0: espera só o jogador.
+func _wait_dialogue(seconds: float) -> void:
+	var dialogue_singleton = get_node_or_null("/root/Dialogue")
+	if dialogue_singleton and dialogue_singleton.has_method("wait_for_advance"):
+		await dialogue_singleton.wait_for_advance(seconds)
+	else:
+		# Sem a caixa de fala não há como apertar Espaço: usa um tempo fixo
+		await get_tree().create_timer(seconds if seconds > 0.0 else 10.0).timeout
