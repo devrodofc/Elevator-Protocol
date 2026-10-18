@@ -55,7 +55,8 @@ Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu pri
 - Dias encadeados: no fim do dia, depois do Espaço na fala da Marta, a recepção é recarregada com
   `proximo_dia` (transição "Dia N"). O dia atual fica em `ReceptionManager.dia_em_andamento`
   (static); o tutorial zera para o dia 1. Dia 1 → `day1.tres`, Dia 2 → `day2.tres`, Dia 3 → `day3.tres` (último por enquanto).
-- Não existe ainda tela de fim de jogo (o dia 3 termina na fala da Marta).
+- **Fim de jogo**: depois da fala de fim do dia 3 (Espaço), transição para `src/ui/menus/scenes/end_screen.tscn`
+  (campo `cena_final` do `day3.tres`): epílogo narrado, "Fim.", créditos subindo e "Voltar ao menu".
 
 ---
 
@@ -70,7 +71,7 @@ Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu pri
 | Snap 2D | `snap_2d_transforms_to_pixel=true` | |
 | Autoloads | `Dialogue`, `SceneTransition`, `MusicMenu`, `Audio` | Ver seção 6. `MusicMenu` é registrado pelo **caminho** (`res://sounds/music/menu/music_menu.tscn`): pelo uid dava "Unrecognized UID" |
 | Áudio | `default_bus_layout.tres` | Buses `Master`, `Music`, `SFX` (os sliders das opções usam esses nomes) |
-| Input | `hack_level1`, `hack_level2` | Declarados, **não usados** em nenhum script |
+| Input | `hack_level1`, `hack_level2` | Declarados, **não usados** em nenhum script. O hack de pular dia usa **F9** direto no código (`TECLA_PULAR_DIA`) |
 
 Fontes em uso (`src/levels/assets/fonts/`, desde o PR #36): **PixeloidSans** e **PixeloidSans-Bold**
 (texto e títulos), além de PixeloidMono e Jersey10. Os recursos `fonts/resources/dynapuff_*.tres` mantêm o nome
@@ -211,7 +212,13 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
 - `src/ui/menus/scenes/menu.tscn`: fundo animado com os 3 quadros `tela inicial do game N frame.jpg`
   (`AnimationPlayer`) e botões `TextureButton` (`Play`, `Options`, `Quit`, arte em `assets/buttons/`).
   `menu.gd` chama `MusicMenu.play_if_stopped()`.
-- `options.tscn` (tela cheia, volumes Master/Music/SFX), `credits.tscn`.
+- `options.tscn` (tela cheia, volumes Master/Music/SFX), `credits.tscn` (texto centralizado dentro da tela
+  azul do computador do fundo: x 100–553, y 73–250).
+- `end_screen.tscn` + `scripts/end_screen.gd`: tela de fim de jogo. Epílogo em tela escura (const `EPILOGO`,
+  Espaço acelera/continua, como a narração do tutorial), "Fim.", créditos subindo (const `CREDITOS`,
+  `[estilo, texto]` com estilos titulo/sub/secao/nome/espaco) e "Voltar ao menu". Esc pula para o fim dos
+  créditos; Esc de novo volta ao menu. Abaixa a música do jogo e toca a do menu nos créditos. Zera
+  `ReceptionManager.dia_em_andamento`.
 - `pause.tscn` + `pause.gd`: Esc pausa (`get_tree().paused`); Esc com a prancheta de regras aberta só
   fecha a prancheta (`rules_board.gd` usa `_shortcut_input`). "Menu principal" chama `Dialogue.clear_dialogue()`.
   `options_pause.tscn`: opções dentro do pause.
@@ -234,7 +241,14 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
 7. Erro (`fail`): tela avermelha, Marta fala `mensagem_falha`, até 6 s (ou Espaço) e recarrega a cena.
 8. Fila vazia → `_conclude_day`: (se `suspense_antes_do_fim` > 0, luzes piscam e a sala escurece:
    `_apagar_luzes`) Marta sai do elevador (com `sprite_marta_fim`, se houver) e fala `mensagem_fim`;
-   depois do Espaço, se houver `proximo_dia`, transição "Dia N" e recarrega a recepção.
+   depois do Espaço, se houver `proximo_dia`, transição "Dia N" e recarrega a recepção; se não houver e
+   o dia tiver `cena_final`, abre essa cena (tela de fim de jogo).
+
+**Hack de teste — F9** (`TECLA_PULAR_DIA` em `reception_manager.gd`): na recepção, pula o resto do dia: dia 1 → 2 →
+3 → tela final (créditos). Usa o mesmo `_ir_para_proximo_dia()` do fim normal do dia. Não funciona com o jogo
+pausado nem durante uma transição (aperte de novo quando a tela clarear). Ao sair, `_saindo = true` trava o painel
+e bloqueia falas da cena antiga (durante o escurecimento ela ainda roda); a recepção nova limpa o balão no `_ready`.
+Para trocar a tecla, mude a constante; para desligar o hack, use uma tecla inexistente ou remova `_unhandled_key_input`.
 
 As rotinas com `await` param se a cena sair da árvore (`if not is_inside_tree(): return`): pause →
 menu principal ou reload no meio de uma fala não geram erro.
@@ -254,7 +268,7 @@ Ordem de aplicação:
 Códigos: andares 1–6, subsolo **-1**, negar **999** (`RuleValidator.DENY_ACTION`, `ElevatorPanel.DENY_CODE`).
 
 ### 6.3 Agenda do dia (`day_schedule.gd` + `day_interaction.gd`)
-- `DayScheduleConfig`: `dia_numero`, `proximo_dia`, `sprite_marta_fim`, `suspense_antes_do_fim`, `som_no_escuro`,
+- `DayScheduleConfig`: `dia_numero`, `proximo_dia`, `cena_final` (só no último dia), `sprite_marta_fim`, `suspense_antes_do_fim`, `som_no_escuro`,
   mensagens da Marta (início, fim, falha), `intervalo_regras` (padrão 2; 0 desliga), `regras_por_dia`,
   `regras_marta` (banco sorteado), `regras_obrigatorias` (ditas todo dia), `pool_padrao`, `interacoes`,
   `andares_do_dia`, `falas_comuns`, `usar_falas_do_visitante` (desligado = só `falas_comuns`).
@@ -382,7 +396,8 @@ Os MP3 foram importados sem loop: `audio.gd` liga `loop` em código nas músicas
 | Quero mudar | Onde |
 |---|---|
 | Visitantes do dia, ordem, quantidade | `src/levels/schedules/dayN.tres` → `interacoes` |
-| Novo dia | copiar `day3.tres`, mudar `dia_numero` e apontar o `proximo_dia` do dia anterior para ele |
+| Novo dia | copiar `day3.tres`, mudar `dia_numero`, apontar o `proximo_dia` do dia anterior para ele e mover o `cena_final` para o novo último dia |
+| Epílogo e créditos finais | `src/ui/menus/scripts/end_screen.gd` → consts `EPILOGO` e `CREDITOS` |
 | Suspense / sprite da Marta no fim | `dayN.tres` → `suspense_antes_do_fim`, `sprite_marta_fim` |
 | Regras da Marta e intervalo | `dayN.tres` → grupo "Regras da Marta" |
 | Falas/andar de um NPC | `.tres` em `src/npcs/resources/Day*/` ou `src/npcs/dialogue/` |
@@ -460,6 +475,12 @@ Os MP3 foram importados sem loop: `audio.gd` liga `loop` em código nas músicas
     cabeçalho, mas a Godot não o registra no cache (nem com `--headless -e`). É só aviso: a cena carrega
     pelo caminho e o jogo não é afetado.
 
+
+18. **Texto de várias linhas dentro de `.tscn`/`.tres` com CRLF.** Com o Git do Windows (`autocrlf`), uma
+    string que ocupa várias linhas no arquivo fica com `\r\n` dentro, e a Godot desenha o `\r` como
+    uma linha a mais (espaço dobrado). Aconteceu na lista da equipe em `credits.tscn`. Escreva o texto numa
+    linha só, com `\n` escapado: `text = "Rodrigo - Game Designer\nDaniel - Programador"`.
+
 ---
 
 ## 10. Pendências e inconsistências conhecidas
@@ -477,7 +498,6 @@ Os MP3 foram importados sem loop: `audio.gd` liga `loop` em código nas músicas
 - Ao criar um dia novo, preencher `falas_comuns` (senão andares sem fala ficam sem visitante).
 - O tutorial destaca o "painel" e diz "escolher o andar no painel do elevador, ou negar o acesso";
   se a mecânica mudar, atualizar `tutorial_intro.tres`.
-- Não há tela de resumo/fim depois do último dia.
 - A prancheta de regras aberta cobre o crachá.
 - Volumes do `Audio` (`MUSIC_VOLUME_DB` -20, `SFX_VOLUME_DB` -6, `LOOP_VOLUME_DB` -10) foram chutados
   sem ouvir; ajustar no jogo.
@@ -511,6 +531,9 @@ G=".../Godot_v4.7.2-stable_win64_console.exe"
 "$G" --path . --windowed --resolution 640x360 \
      --write-movie out/f.png --fixed-fps 20 --quit-after 200 -s roteiro.gd   # grava quadros (abre janela)
 ```
+- Em scripts `-s`, **não escreva `ReceptionManager` no código-fonte do teste**: isso compila o
+  `reception_manager.gd` antes dos autoloads e dá "Identifier not found: Audio". Use
+  `var RM = load("res://src/levels/scripts/reception_manager.gd")` e `RM.dia_em_andamento = ...`.
 - Scripts de teste (`extends SceneTree`) podem: `change_scene_to_file`, simular teclas com
   `Input.parse_input_event(InputEventAction)`, emitir `pressed` nos botões do elevador e consultar
   `RuleValidator.andar_esperado(...)` para responder certo.

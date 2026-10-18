@@ -75,43 +75,44 @@ color = Color(0, 0, 0, 0.15686275)
 
 [node name="CreditsTitle" type="Label" parent="." unique_id=1936966435]
 layout_mode = 0
-offset_left = 219.0
-offset_top = 62.0
-offset_right = 429.0
-offset_bottom = 107.0
+offset_left = 100.0
+offset_top = 76.0
+offset_right = 553.0
+offset_bottom = 106.0
 theme_override_fonts/font = ExtResource("3_gtovi")
-theme_override_font_sizes/font_size = 32
-text = "Opções"
+theme_override_font_sizes/font_size = 24
+text = "Créditos"
 horizontal_alignment = 1
 
 [node name="Studio" type="Label" parent="." unique_id=720760481]
 layout_mode = 0
-offset_left = 228.0
-offset_top = 104.0
-offset_right = 419.0
-offset_bottom = 127.0
+offset_left = 100.0
+offset_top = 106.0
+offset_right = 553.0
+offset_bottom = 124.0
 theme_override_fonts/font = ExtResource("3_gtovi")
+theme_override_font_sizes/font_size = 14
 text = "Coffee & Games Studios"
+horizontal_alignment = 1
 
 [node name="Team" type="Label" parent="." unique_id=573932509]
 layout_mode = 0
-offset_left = 225.0
-offset_top = 132.0
-offset_right = 423.0
-offset_bottom = 244.0
+offset_left = 100.0
+offset_top = 130.0
+offset_right = 553.0
+offset_bottom = 209.0
+theme_override_constants/line_spacing = 1
 theme_override_fonts/font = ExtResource("3_gtovi")
-text = "Rodrigo - Game Designer
-Daniel - Programador
-Gustavo - Programador
-Clara - Artista
-Mari - UI/UX Designer"
+theme_override_font_sizes/font_size = 12
+text = "Rodrigo - Game Designer\nDaniel - Programador\nGustavo - Programador\nClara - Artista\nMari - UI/UX Designer"
+horizontal_alignment = 1
 
 [node name="Back" type="LinkButton" parent="." unique_id=2098872156]
 layout_mode = 0
-offset_left = 296.0
-offset_top = 247.0
-offset_right = 355.0
-offset_bottom = 281.0
+offset_left = 300.0
+offset_top = 220.0
+offset_right = 352.0
+offset_bottom = 242.0
 focus_mode = 2
 theme_override_colors/font_color = Color(0.9098039, 0.89411765, 0.8627451, 1)
 theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
@@ -119,8 +120,8 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_fonts/font = ExtResource("3_gtovi")
-theme_override_font_sizes/font_size = 24
-text = "Back"
+theme_override_font_sizes/font_size = 16
+text = "Voltar"
 underline = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1482249748]
