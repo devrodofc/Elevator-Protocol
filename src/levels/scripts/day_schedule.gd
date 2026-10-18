@@ -81,42 +81,45 @@ func _aparicoes_possiveis(tamanho_fila: int) -> int:
 	return maxi(0, ceili(float(tamanho_fila) / intervalo_regras) - 1)
 
 
-## Sorteia as regras do dia: uma com efeito garantida + o resto aleatório, em ordem aleatória.
-## Regras que mudariam o destino de um visitante fixo (ex.: entregador) ficam de fora no dia,
-## para não alterar eventos roteirizados.
+## Sorteia as regras do dia, em ordem fixa: a 1ª aparição da Marta dita uma regra de andar (com
+## efeito) e as seguintes só regras de lore (sem efeito, não limitam nenhum andar). As obrigatórias
+## entram no grupo delas (as de lore vêm antes das sorteadas). Regras que mudariam o destino de um
+## visitante fixo (ex.: entregador) ficam de fora no dia, para não alterar eventos roteirizados.
 func _sortear_regras(fila: Array[Dictionary]) -> Array[MartaRule]:
 	var quantidade: int = mini(regras_por_dia, _aparicoes_possiveis(fila.size()))
 	var escolhidas: Array[MartaRule] = []
 	if quantidade <= 0:
 		return escolhidas
 
-	for regra in regras_obrigatorias:
-		if regra and escolhidas.size() < quantidade:
-			escolhidas.append(regra)
-
-	var com_efeito: Array[MartaRule] = []
-	var restantes: Array[MartaRule] = []
 	var andares_fixos: Dictionary = {}
 	for entry in fila:
 		if entry.get("fixo", false) and entry.get("dialogue"):
 			andares_fixos[entry["dialogue"].andar_desejado] = true
-	for regra in regras_marta:
-		if regra and not (regra.tem_efeito() and andares_fixos.has(regra.andar_pedido)):
-			restantes.append(regra)
-			if regra.tem_efeito():
-				com_efeito.append(regra)
-	var ja_tem_efeito: bool = false
-	for regra in escolhidas:
-		ja_tem_efeito = ja_tem_efeito or regra.tem_efeito()
-	if not com_efeito.is_empty() and not ja_tem_efeito and escolhidas.size() < quantidade:
-		var garantida: MartaRule = com_efeito.pick_random()
-		escolhidas.append(garantida)
-		restantes.erase(garantida)
 
-	restantes.shuffle()
-	while escolhidas.size() < quantidade and not restantes.is_empty():
-		escolhidas.append(restantes.pop_back())
-	escolhidas.shuffle()
+	var de_andar: Array[MartaRule] = []
+	var de_lore: Array[MartaRule] = []
+	for regra in regras_marta:
+		if regra == null or regras_obrigatorias.has(regra):
+			continue
+		if not regra.tem_efeito():
+			de_lore.append(regra)
+		elif not andares_fixos.has(regra.andar_pedido):
+			de_andar.append(regra)
+	de_andar.shuffle()
+	de_lore.shuffle()
+	for regra in regras_obrigatorias:
+		if regra:
+			if regra.tem_efeito():
+				de_andar.push_front(regra)
+			else:
+				de_lore.push_front(regra)
+
+	# 1ª aparição: regra de andar
+	if not de_andar.is_empty():
+		escolhidas.append(de_andar[0])
+	# Depois: só lore
+	while escolhidas.size() < quantidade and not de_lore.is_empty():
+		escolhidas.append(de_lore.pop_front())
 	return escolhidas
 
 
@@ -134,8 +137,8 @@ func _plano_de_andares(quantidade: int) -> Array[int]:
 	return plano
 
 
-## Garante que uma regra com efeito (sorteada) tenha um visitante, depois de ser dita, pedindo o
-## andar que ela afeta. Ajusta a ordem das regras e do plano de andares.
+## Garante que uma regra com efeito tenha um visitante, depois de ser dita, pedindo o andar que ela
+## afeta. Não muda a ordem das regras (a de andar é sempre a 1ª); só ajusta o plano de andares.
 ## Devolve {"posicao_livre": j, "regra": regra} do visitante que é o caso, ou {} se não deu.
 func _garantir_caso_de_regra(regras: Array[MartaRule], plano: Array[int], livres: Array[int]) -> Dictionary:
 	if intervalo_regras <= 0 or regras.is_empty() or plano.is_empty():
@@ -145,6 +148,8 @@ func _garantir_caso_de_regra(regras: Array[MartaRule], plano: Array[int], livres
 	# O caso não pode ser o visitante logo em seguida (índice "limite"): fica previsível demais.
 	var aparicoes: Array[Dictionary] = []
 	for k in regras.size():
+		if not regras[k].tem_efeito():
+			continue
 		var limite: int = (k + 1) * intervalo_regras
 		var vagas: Array[int] = [] # posições em "livres" (e em "plano") depois do próximo visitante
 		for j in livres.size():
@@ -152,22 +157,11 @@ func _garantir_caso_de_regra(regras: Array[MartaRule], plano: Array[int], livres
 				vagas.append(j)
 		if not vagas.is_empty():
 			aparicoes.append({"posicao": k, "vagas": vagas})
-
-	var candidatas: Array[MartaRule] = []
-	for regra in regras:
-		if regra.tem_efeito():
-			candidatas.append(regra)
-	if aparicoes.is_empty() or candidatas.is_empty():
+	if aparicoes.is_empty():
 		return {}
 
-	var regra: MartaRule = candidatas.pick_random()
 	var aparicao: Dictionary = aparicoes.pick_random()
-
-	# Coloca a regra sorteada nessa aparição (troca de lugar com a que estava lá)
-	var de: int = regras.find(regra)
-	var para: int = aparicao["posicao"]
-	regras[de] = regras[para]
-	regras[para] = regra
+	var regra: MartaRule = regras[aparicao["posicao"]]
 
 	# O andar da regra tem de cair numa vaga depois da aparição
 	var vagas_aparicao: Array[int] = aparicao["vagas"]
