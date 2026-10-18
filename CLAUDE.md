@@ -69,7 +69,7 @@ Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu pri
 | Stretch | `canvas_items` | Texto é desenhado na resolução da janela (fica liso) |
 | Filtro de textura | Nearest (`default_texture_filter=0`) | Pixel art nítido |
 | Snap 2D | `snap_2d_transforms_to_pixel=true` | |
-| Autoloads | `Dialogue`, `SceneTransition`, `MusicMenu`, `Audio` | Ver seção 6. `MusicMenu` é registrado pelo **caminho** (`res://sounds/music/menu/music_menu.tscn`): pelo uid dava "Unrecognized UID" |
+| Autoloads | `Dialogue`, `SceneTransition`, `MusicMenu`, `Audio`, `CheatMenu` | Ver seção 6. `MusicMenu` é registrado pelo **caminho** (`res://sounds/music/menu/music_menu.tscn`): pelo uid dava "Unrecognized UID" |
 | Áudio | `default_bus_layout.tres` | Buses `Master`, `Music`, `SFX` (os sliders das opções usam esses nomes) |
 | Input | `hack_level1`, `hack_level2` | Declarados, **não usados** em nenhum script. O hack de pular dia usa **F9** direto no código (`TECLA_PULAR_DIA`) |
 
@@ -87,6 +87,7 @@ caminho que não existe: elas carregam pelo `uid`. Se o uid se perder, corrija o
 autoload/
   dialogue/            Caixa de fala global (balão de fala, com páginas)
   scene_transition/    Fade + título entre cenas
+  cheat_menu/          cheat_menu.gd (autoload CheatMenu: tecla P, ver 6.10)
   audio/               audio.gd (autoload Audio: música do gameplay + efeitos sonoros, ver 6.9)
 sounds/music/
   menu/                music_menu.tscn/.gd (autoload MusicMenu: toca musica_menu.wav no bus Music)
@@ -378,6 +379,15 @@ caminho) tem um player de música (bus Music), um de loop e 6 vozes de efeito (b
 
 Os MP3 foram importados sem loop: `audio.gd` liga `loop` em código nas músicas e no `digitando`.
 `play_music` não reinicia a mesma música (ao falhar e recarregar a cena ela continua).
+
+### 6.10 Tela de cheat (`CheatMenu`)
+`autoload/cheat_menu/cheat_menu.gd` (registrado pelo caminho; interface montada em código, sem `.tscn`).
+A tecla **P** abre/fecha em qualquer cena e pausa o jogo; **Esc** também fecha (e não chega ao pause, então
+abrir por cima do pause e fechar volta ao pause). Botões: Primeira/Segunda/Terceira fase (Dia 1/2/3) e Menu inicial.
+Ir para um dia = `ReceptionManager.dia_em_andamento = dayN.tres` + `SceneTransition.transition_to(reception, "Dia N")`,
+o mesmo caminho do fim do dia. Antes de trocar: despausa, limpa a fala, para o loop do `Audio` e a música do menu;
+depois que a cena nova entra, limpa a fala de novo (a cena antiga continua rodando durante o fade).
+Para tirar da build final: remover a linha `CheatMenu` de `[autoload]` no `project.godot`.
 
 ---
 
