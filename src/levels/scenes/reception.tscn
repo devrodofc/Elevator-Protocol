@@ -4,44 +4,49 @@
 [ext_resource type="Resource" uid="uid://crs2g0lcexipn" path="res://src/levels/schedules/day1.tres" id="2_d2spp"]
 [ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
 [ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="7_katl8"]
+[ext_resource type="PackedScene" path="res://src/ui/hud/reception_hud.tscn" id="8_hud"]
 
 [node name="Reception" type="Node2D" unique_id=1772593470]
 script = ExtResource("1_2llwu")
 schedule_config = ExtResource("2_d2spp")
 marta_scene = ExtResource("7_katl8")
+visitor_scale = Vector2(3.4594595, 3.4594595)
 
-[node name="Background" type="ColorRect" parent="." unique_id=1097790414]
-offset_left = -19.0
-offset_top = -20.0
-offset_right = 1627.0
-offset_bottom = 911.0
-color = Color(0.12156863, 0.12941177, 0.14901961, 0.6666667)
+[node name="Wall" type="ColorRect" parent="."]
+offset_right = 640.0
+offset_bottom = 181.0
+mouse_filter = 2
+color = Color(0.96862745, 0.96862745, 0.96862745, 1)
 
-[node name="VisitorSpawnPoint" type="Marker2D" parent="." unique_id=764996381]
-position = Vector2(246, -109)
+[node name="WindowClip" type="ColorRect" parent="." unique_id=1097790414]
+clip_children = 2
+offset_right = 282.0
+offset_bottom = 181.0
+mouse_filter = 2
+color = Color(0.96862745, 0.96862745, 0.96862745, 1)
 
-[node name="VisitorDeskPoint1" type="Marker2D" parent="." unique_id=1308736993]
-position = Vector2(231, 236)
+[node name="Actors" type="Node2D" parent="WindowClip"]
+unique_name_in_owner = true
 
-[node name="VisitorDeskPoint2" type="Marker2D" parent="." unique_id=494710076]
-position = Vector2(549, -67)
+[node name="VisitorSpawnPoint" type="Marker2D" parent="WindowClip/Actors" unique_id=764996381]
+unique_name_in_owner = true
+position = Vector2(-150, 235)
 
-[node name="VisitorDeskPoint3" type="Marker2D" parent="." unique_id=1740972590]
-position = Vector2(598, -60)
+[node name="VisitorDeskPoint1" type="Marker2D" parent="WindowClip/Actors" unique_id=1308736993]
+unique_name_in_owner = true
+position = Vector2(141, 235)
 
-[node name="VisitorDeskPoint4" type="Marker2D" parent="." unique_id=83516864]
-position = Vector2(659, -65)
+[node name="VisitorExitPoint" type="Marker2D" parent="WindowClip/Actors" unique_id=484986941]
+unique_name_in_owner = true
+position = Vector2(440, 235)
 
-[node name="VisitorDeskPoint5" type="Marker2D" parent="." unique_id=1073765186]
-position = Vector2(706, -34)
-
-[node name="VisitorExitPoint" type="Marker2D" parent="." unique_id=484986941]
-position = Vector2(643, 413)
-
-[node name="MartaPoint" type="Marker2D" parent="." unique_id=449364708]
-position = Vector2(317, 246)
+[node name="MartaPoint" type="Marker2D" parent="WindowClip/Actors" unique_id=449364708]
+unique_name_in_owner = true
+position = Vector2(141, 235)
 
 [node name="UI_CanvasLayer" type="CanvasLayer" parent="." unique_id=333661408]
+
+[node name="ReceptionHUD" parent="UI_CanvasLayer" instance=ExtResource("8_hud")]
 
 [node name="DialogueUI" type="Control" parent="UI_CanvasLayer" unique_id=260762140]
 layout_mode = 3
