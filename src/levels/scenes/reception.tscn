@@ -7,7 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="7_katl8"]
 [ext_resource type="PackedScene" uid="uid://drkdyxoqm4uv5" path="res://src/ui/hud/reception_hud.tscn" id="8_hud"]
 [ext_resource type="PackedScene" path="res://src/levels/scenes/elevator.tscn" id="9_elevator_scene"]
-[ext_resource type="Texture2D" uid="uid://decmd1y1x72a6" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/piso e parede.png" id="11_piso"]
 
 [node name="Reception" type="Node2D" unique_id=1772593470]
 script = ExtResource("1_2llwu")
@@ -25,7 +26,15 @@ offset_bottom = 201.0
 mouse_filter = 2
 color = Color(0.96862745, 0.96862745, 0.96862745, 1)
 
-[node name="Chairs" type="Sprite2D" parent="." unique_id=742082018]
+[node name="PisoParede" type="TextureRect" parent="."]
+texture_repeat = 2
+offset_right = 640.0
+offset_bottom = 201.0
+mouse_filter = 2
+texture = ExtResource("11_piso")
+stretch_mode = 1
+
+[node name="Chairs" type="Sprite2D" parent="."]
 position = Vector2(17, 20)
 texture = ExtResource("10_cadeiras")
 centered = false

@@ -55,6 +55,10 @@ var _next_rule_index: int = 0
 ## Regras da Marta na ordem sorteada para hoje (montada junto com a fila)
 var _rules_today: Array[MartaRule] = []
 
+## Dia em andamento entre trocas de cena: a recepção é recarregada para o dia seguinte e
+## ao falhar (reload). null = usa o schedule_config da cena (dia 1). O tutorial zera.
+static var dia_em_andamento: DayScheduleConfig = null
+
 
 func _ready() -> void:
 	reception_hud.badge_details.toggled.connect(_on_badge_toggled)
@@ -63,6 +67,8 @@ func _ready() -> void:
 		elevator_panel.floor_selected.connect(_on_floor_selected)
 		elevator_panel.set_panel_locked(true)
 		
+	if dia_em_andamento:
+		schedule_config = dia_em_andamento
 	_build_schedule_data()
 	_start_day_intro()
 
@@ -260,14 +266,74 @@ func _conclude_day() -> void:
 	if elevator_panel:
 		elevator_panel.set_panel_locked(true)
 		
+	var escuro: ColorRect = null
+	var suspense: float = schedule_config.suspense_antes_do_fim if schedule_config else 0.0
+	if suspense > 0.0:
+		escuro = await _apagar_luzes(suspense)
+		if not is_inside_tree():
+			return
+
 	if marta_scene != null:
-		await _marta_arrive(true) # sai do elevador e vem até a mesa
+		# No fim do dia a Marta pode vir com outro sprite (dia 2: ensanguentada)
+		var sprite_fim: Texture2D = schedule_config.sprite_marta_fim if schedule_config else null
+		await _marta_arrive(true, sprite_fim) # sai do elevador e vem até a mesa
 	if not is_inside_tree():
 		return
+	if escuro:
+		# A luz volta só um pouco enquanto ela fala
+		create_tween().tween_property(escuro, "color:a", 0.25, 1.2)
 	var msg_fim: String = schedule_config.mensagem_fim if schedule_config else "Expediente encerrado. Você concluiu o dia!"
 	_show_dialogue_via_autoload("Marta", msg_fim, true)
 		
 	print("Dia concluído com sucesso!")
+
+	# Próximo dia: depois do Espaço, a recepção é recarregada com a agenda seguinte
+	var proximo: DayScheduleConfig = schedule_config.proximo_dia if schedule_config else null
+	if proximo == null:
+		return
+	await _wait_dialogue(0.0)
+	if not is_inside_tree():
+		return
+	_clear_dialogue_via_autoload()
+	dia_em_andamento = proximo
+	var transicao = get_node_or_null("/root/SceneTransition")
+	if transicao:
+		transicao.transition_to(scene_file_path, "Dia %d" % proximo.dia_numero)
+	else:
+		get_tree().change_scene_to_file(scene_file_path)
+
+
+## Suspense do fim do dia: espera o último visitante sumir no elevador, as luzes piscam e a sala
+## fica escura e em silêncio por "segundos". Devolve o escurecimento (continua na tela).
+func _apagar_luzes(segundos: float) -> ColorRect:
+	while elevator and elevator.has_method("is_busy") and elevator.is_busy():
+		await get_tree().process_frame
+		if not is_inside_tree():
+			return null
+	await get_tree().create_timer(0.6).timeout
+	if not is_inside_tree():
+		return null
+
+	var escuro := ColorRect.new()
+	escuro.color = Color(0.0, 0.0, 0.02, 0.0)
+	escuro.set_anchors_preset(Control.PRESET_FULL_RECT)
+	escuro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if ui_canvas_layer:
+		ui_canvas_layer.add_child(escuro)
+	else:
+		add_child(escuro)
+
+	# Pisca como lâmpada falhando e apaga
+	var pisca := create_tween()
+	for alvo in [0.55, 0.1, 0.7, 0.2, 0.75, 0.35]:
+		pisca.tween_property(escuro, "color:a", alvo, 0.07)
+		pisca.tween_interval(randf_range(0.05, 0.2))
+	pisca.tween_property(escuro, "color:a", 0.7, 0.6)
+	await pisca.finished
+	if not is_inside_tree():
+		return null
+	await get_tree().create_timer(segundos).timeout
+	return escuro
 
 
 func _update_badge_visitor() -> void:
@@ -390,11 +456,15 @@ func _wait_dialogue(seconds: float) -> void:
 
 ## Cria a Marta dentro da janela. Ela usa o script do visitante, que muda de escala sozinho
 ## entre fila e balcão; aqui a escala fica fixa em marta_focus_scale do começo ao fim.
-func _spawn_marta(at_position: Vector2) -> Node2D:
+func _spawn_marta(at_position: Vector2, sprite: Texture2D = null) -> Node2D:
 	var marta: Node2D = marta_scene.instantiate() as Node2D
 	if "queue_scale" in marta:
 		marta.queue_scale = marta_focus_scale
 		marta.desk_scale = marta_focus_scale
+	# Sprite diferente do padrão (mesmo tamanho), ex.: fim do dia 2
+	var sprite_node := marta.get_node_or_null("Sprite2D") as Sprite2D
+	if sprite and sprite_node:
+		sprite_node.texture = sprite
 	_add_actor(marta)
 	marta.global_position = at_position
 	marta.scale = marta_focus_scale
@@ -466,13 +536,13 @@ func _await_callback(starter: Callable) -> void:
 
 
 ## A Marta chega até a mesa: pela esquerda (from_elevator = false) ou saindo do elevador.
-func _marta_arrive(from_elevator: bool) -> void:
+func _marta_arrive(from_elevator: bool, sprite: Texture2D = null) -> void:
 	var target_pos: Vector2 = marta_point.global_position if marta_point else desk_point.global_position
 	if from_elevator and elevator and elevator.has_method("release"):
-		marta_instance = _spawn_marta(elevator.door_position())
+		marta_instance = _spawn_marta(elevator.door_position(), sprite)
 		await elevator.release(marta_instance, target_pos)
 	else:
-		marta_instance = _spawn_marta(_marta_spawn_pos())
+		marta_instance = _spawn_marta(_marta_spawn_pos(), sprite)
 		await _await_callback(func(done: Callable): _move_actor(marta_instance, target_pos, done))
 
 
