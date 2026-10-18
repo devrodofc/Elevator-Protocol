@@ -59,6 +59,14 @@ var _rules_today: Array[MartaRule] = []
 ## ao falhar (reload). null = usa o schedule_config da cena (dia 1). O tutorial zera.
 static var dia_em_andamento: DayScheduleConfig = null
 
+## Hack de teste: esta tecla pula para o próximo dia (dia 1 → 2 → 3) e, no último dia, para a tela
+## final (créditos). Funciona a qualquer momento na recepção, menos com o jogo pausado.
+const TECLA_PULAR_DIA: Key = KEY_F9
+
+## true depois de pedir a troca de dia: durante o escurecimento a cena antiga ainda roda, e nenhuma
+## fala dela pode aparecer por cima do dia seguinte.
+var _saindo: bool = false
+
 
 func _ready() -> void:
 	reception_hud.badge_details.toggled.connect(_on_badge_toggled)
@@ -69,6 +77,7 @@ func _ready() -> void:
 		
 	if dia_em_andamento:
 		schedule_config = dia_em_andamento
+	_clear_dialogue_via_autoload() # nada da cena anterior fica no balão
 	_build_schedule_data()
 	# Dias 1 e 2: música do gameplay; a partir do dia 3: música "errada"
 	var dia: int = schedule_config.dia_numero if schedule_config else 1
@@ -307,20 +316,57 @@ func _conclude_day() -> void:
 		
 	print("Dia concluído com sucesso!")
 
-	# Próximo dia: depois do Espaço, a recepção é recarregada com a agenda seguinte
-	var proximo: DayScheduleConfig = schedule_config.proximo_dia if schedule_config else null
-	if proximo == null:
+	# Depois do Espaço: próximo dia (a recepção é recarregada com a agenda seguinte) ou, no último
+	# dia, a cena final (tela de fim de jogo)
+	if not _tem_proximo_dia():
 		return
 	await _wait_dialogue(0.0)
 	if not is_inside_tree():
 		return
+	_ir_para_proximo_dia()
+
+
+## Há para onde ir depois deste dia? (próximo dia ou cena final)
+func _tem_proximo_dia() -> bool:
+	if schedule_config == null:
+		return false
+	return schedule_config.proximo_dia != null or not schedule_config.cena_final.is_empty()
+
+
+## Troca para o próximo dia (transição "Dia N") ou, no último dia, para a cena final.
+func _ir_para_proximo_dia() -> void:
+	if not _tem_proximo_dia() or _saindo:
+		return
+	_saindo = true
+	if elevator_panel:
+		elevator_panel.set_panel_locked(true)
 	_clear_dialogue_via_autoload()
-	dia_em_andamento = proximo
+	var proximo: DayScheduleConfig = schedule_config.proximo_dia
+	var destino: String = scene_file_path
+	var titulo: String = ""
+	if proximo:
+		dia_em_andamento = proximo
+		titulo = "Dia %d" % proximo.dia_numero
+	else:
+		dia_em_andamento = null
+		destino = schedule_config.cena_final
 	var transicao = get_node_or_null("/root/SceneTransition")
 	if transicao:
-		transicao.transition_to(scene_file_path, "Dia %d" % proximo.dia_numero)
+		transicao.transition_to(destino, titulo)
 	else:
-		get_tree().change_scene_to_file(scene_file_path)
+		get_tree().change_scene_to_file(destino)
+
+
+## Hack de teste (TECLA_PULAR_DIA): pula o resto do dia.
+func _unhandled_key_input(event: InputEvent) -> void:
+	var tecla := event as InputEventKey
+	if tecla == null or not tecla.pressed or tecla.echo or tecla.keycode != TECLA_PULAR_DIA:
+		return
+	var transicao = get_node_or_null("/root/SceneTransition")
+	if transicao and transicao.has_method("is_busy") and transicao.is_busy():
+		return
+	get_viewport().set_input_as_handled()
+	_ir_para_proximo_dia()
 
 
 ## Suspense do fim do dia: espera o último visitante sumir no elevador, a música some, as luzes
@@ -441,6 +487,8 @@ func _leave_actor(actor: Node2D, target_pos: Vector2, on_finished: Callable = Ca
 
 ## skippable: mostra "[Espaço] acelerar" e deixa o jogador apressar a fala (usado pela Marta).
 func _show_dialogue_via_autoload(speaker_name: String, speech_text: String, skippable: bool = false) -> void:
+	if _saindo:
+		return
 	var dialogue_singleton = get_node_or_null("/root/Dialogue")
 	if dialogue_singleton == null:
 		return

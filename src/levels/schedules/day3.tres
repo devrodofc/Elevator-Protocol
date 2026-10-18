@@ -105,6 +105,7 @@ texto_prancheta = "Não abra a gaveta de baixo."
 [resource]
 script = ExtResource("2_dia")
 dia_numero = 3
+cena_final = "res://src/ui/menus/scenes/end_screen.tscn"
 suspense_antes_do_fim = 2.0
 mensagem_inicio = "Bom dia, querido! Hoje o dia vai ser levinho, eu prometo. Ah, e o Seu Tião vai passar por aqui. Ele é um amor de pessoa... já já eu te explico o que fazer com ele."
 mensagem_fim = "Viu como o Seu Tião é eficiente? Daqui a pouco não sobra nem uma manchinha de katchup lá embaixo. Nem do katchup, nem de... bom, de nada. Até amanhã! Se você voltar, claro."
