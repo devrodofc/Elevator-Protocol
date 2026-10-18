@@ -343,7 +343,7 @@ func _update_badge_visitor() -> void:
 		reception_hud.set_current_visitor(null)
 		return
 	var data: VisitorData = current_entry["visitor"]
-	reception_hud.set_current_visitor(current_visitor_node, current_entry.get("nome", data.nome))
+	reception_hud.set_current_visitor(current_visitor_node, current_entry.get("nome", data.nome), current_entry.get("cracha", {}))
 
 
 func _on_badge_toggled(is_open: bool) -> void:
