@@ -8,14 +8,14 @@ extends Node
 ## Volumes: ao abrir o jogo, os buses começam em DEFAULT_BUS_PERCENT (o que os sliders das opções
 ## mostram; Music = 50%). Os *_VOLUME_DB abaixo são em dB (não em %) e equilibram os arquivos entre si.
 
-const BOTAO := preload("res://sounds/music/wav/BotãoPressionado.mp3")
-const CHEGOU_ELEVADOR := preload("res://sounds/music/wav/chegou_elevador.mp3")
-const DIGITANDO := preload("res://sounds/music/wav/digitando.mp3")
-const ERRO := preload("res://sounds/music/wav/erro.mp3")
-const SUCESSO := preload("res://sounds/music/wav/sucess.mp3")
-const PASSANDO_PAGINA := preload("res://sounds/music/wav/passando_pagina.mp3")
-const MUSICA_GAMEPLAY := preload("res://sounds/music/wav/musica_gameplay.mp3")
-const MUSICA_ERRADA := preload("res://sounds/music/wav/musica_errada.mp3")
+const BOTAO := preload("res://sounds/sfx/BotãoPressionado.mp3")
+const CHEGOU_ELEVADOR := preload("res://sounds/sfx/chegou_elevador.mp3")
+const DIGITANDO := preload("res://sounds/sfx/digitando.mp3")
+const ERRO := preload("res://sounds/sfx/erro.mp3")
+const SUCESSO := preload("res://sounds/sfx/sucess.mp3")
+const PASSANDO_PAGINA := preload("res://sounds/sfx/passando_pagina.mp3")
+const MUSICA_GAMEPLAY := preload("res://sounds/music/musica_gameplay.mp3")
+const MUSICA_ERRADA := preload("res://sounds/music/musica_errada.mp3")
 
 ## Volume inicial de cada bus, em % (0 a 100), igual aos sliders das opções. 50% = -6 dB.
 const DEFAULT_BUS_PERCENT := {&"Master": 100.0, &"Music": 50.0, &"SFX": 100.0}

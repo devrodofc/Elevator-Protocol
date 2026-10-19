@@ -89,32 +89,32 @@ autoload/
   scene_transition/    Fade + título entre cenas
   cheat_menu/          cheat_menu.gd (autoload CheatMenu: tecla P, ver 6.10)
   audio/               audio.gd (autoload Audio: música do gameplay + efeitos sonoros, ver 6.9)
-sounds/music/
-  menu/                music_menu.tscn/.gd (autoload MusicMenu: toca musica_menu.wav no bus Music)
-  wav/                 musica_menu.wav + mp3 do jogo (musica_gameplay, musica_errada, BotãoPressionado,
-                       chegou_elevador, digitando, erro, sucess, passando_pagina)
+sounds/
+  music/               musica_menu.wav, musica_gameplay.mp3, musica_errada.mp3
+    menu/              music_menu.tscn/.gd (autoload MusicMenu: toca musica_menu.wav no bus Music)
+  sfx/                 BotãoPressionado.mp3, chegou_elevador.mp3, digitando.mp3, erro.mp3,
+                       sucess.mp3, passando_pagina.mp3, MartaSubsoloKetchup.mp3
 default_bus_layout.tres  buses Music e SFX
 src/
   levels/
     assets/            Arte da HUD (4x): main_hud, badge, buttons, company_book, rules, Elevador, fonts
     resources/         company_directory.tres (livro de andares)
-    scenes/            reception.tscn, tutorial.tscn
+    scenes/            reception.tscn
     schedules/         day1.tres, day2.tres, day3.tres (agendas dos dias)
     scripts/           reception_manager, day_schedule, day_interaction, marta_rule,
-                       company_data/directory, tutorial, tutorial_step/script
-    tutorial/          tutorial_intro.tres (roteiro do tutorial)
+                       company_data/directory
+    tutorial/          tutorial.tscn, tutorial.gd, tutorial_step.gd, tutorial_script.gd, tutorial_intro.tres (roteiro)
   npcs/
     assets/            Sprites 256x256 dos NPCs (jose, marta, lucas, tiao, manfredo, ...)
     dialogue/          npc_dialogue.gd + dialoguesCommon/ (dia 1), dialoguesDia2/, dialoguesDia3/ (<N> andar/*.tres)
     resources/         visitor_data.gd, Day1/, Day2/, Day3/ (tiao.tres), name_list.gd, male_names.tres, ...
-    scenes/            visitor.tscn, characters/ (cenas visuais dos NPCs)
-    Marta/             Marta.tscn
+    scenes/            visitor.tscn, marta.tscn, characters/ (cenas visuais dos NPCs)
     scripts/           visitor.gd
   shared/              rule_validator.gd
   ui/
     hud/               reception_hud, elevator_panel/button, company_book, rules_board,
                        badge_details, shift_summary
-    menus/             menu, options, credits, pause, options_pause; assets/ (tela inicial *.jpg, buttons/)
+    menus/             scenes/ (cenas), scripts/ (menu, options, credits, pause, options_pause); assets/ (tela inicial *.jpg, buttons/)
 docs/                  decisions/, game-design/, references/, team/ (vazias no repo)
 tools/createscene.gd   EditorScript antigo (desatualizado, ver seção 9)
 ```
@@ -185,12 +185,13 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
   `painel elevador botões.png`. Os sprites "sem contorno" foram gerados a partir dos originais
   trocando os pixels amarelos pela cor da face.
 
-### 5.4 `src/levels/scenes/tutorial.tscn` — tutorial
+### 5.4 `src/levels/tutorial/tutorial.tscn` — tutorial
 - Mesmo cenário da recepção (`PisoParede`, cadeiras, elevador, HUD; painel travado). O `WindowClip` tem de ser
   igual ao da recepção (`clip_children = 1`, largura 465): com `clip_children = 2` ele desenha um retângulo
   branco por cima do fundo e das cadeiras.
 - `NarrationLayer` (layer 5): tela escura com texto (narração da história do protagonista).
 - `SkipLayer` (layer 20): botão "Pular tutorial [Esc]".
+- Scripts: `src/levels/tutorial/tutorial.gd`, `src/levels/tutorial/tutorial_script.gd` e `src/levels/tutorial/tutorial_step.gd`.
 - Roteiro: `src/levels/tutorial/tutorial_intro.tres` (12 passos: 4 narrações + 8 falas da Marta).
   Cada `TutorialStep` tem `falante` (vazio = narração), `texto`, `destaque`
   (NENHUM, FALA, LIVRO, REGRAS, CRACHA, PAINEL). O destaque é um contorno vermelho piscando que
@@ -208,7 +209,7 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
 - `autoload/scene_transition/scene_transition.tscn`: CanvasLayer 50, `Fade` + `Title` (PixeloidSans).
 - `src/ui/hud/company_book.tscn`, `rules_board.tscn`, `badge_details.tscn`: componentes da HUD.
 - `src/npcs/scenes/visitor.tscn`: nó base do visitante (script `visitor.gd`).
-- `src/npcs/Marta/Marta.tscn`: Marta = `visitor.gd` + Sprite2D 256 px.
+- `src/npcs/scenes/marta.tscn`: Marta = `visitor.gd` + Sprite2D 256 px.
 - `src/npcs/scenes/characters/*`: cenas visuais dos NPCs (jose, CommonNPCs, PassaroTeste).
 - `src/ui/menus/scenes/menu.tscn`: fundo animado com os 3 quadros `tela inicial do game N frame.jpg`
   (`AnimationPlayer`) e botões `TextureButton` (`Play`, `Options`, `Quit`, arte em `assets/buttons/`).
@@ -220,9 +221,9 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
   `[estilo, texto]` com estilos titulo/sub/secao/nome/espaco) e "Voltar ao menu". Esc pula para o fim dos
   créditos; Esc de novo volta ao menu. Abaixa a música do jogo e toca a do menu nos créditos. Zera
   `ReceptionManager.dia_em_andamento`.
-- `pause.tscn` + `pause.gd`: Esc pausa (`get_tree().paused`); Esc com a prancheta de regras aberta só
+- `src/ui/menus/scenes/pause.tscn` + `src/ui/menus/scripts/pause.gd`: Esc pausa (`get_tree().paused`); Esc com a prancheta de regras aberta só
   fecha a prancheta (`rules_board.gd` usa `_shortcut_input`). "Menu principal" chama `Dialogue.clear_dialogue()`.
-  `options_pause.tscn`: opções dentro do pause.
+  `src/ui/menus/scenes/options_pause.tscn` + `src/ui/menus/scripts/options_pause.gd`: opções dentro do pause.
 
 ---
 
@@ -362,7 +363,8 @@ clareia; emite `finished`. Bloqueia cliques durante a troca.
 - `rules_board.gd`: `open()`, `close()`, `toggle()`, `add_rule(texto)`, `clear_rules()`.
 
 ### 6.9 Áudio (`Audio` + `MusicMenu`)
-`MusicMenu` (autoload) toca `musica_menu.wav` no menu; para ao apertar **Jogar** (`menu.gd`) e volta quando o
+As músicas ficam em `sounds/music/`; os efeitos, incluindo `MartaSubsoloKetchup.mp3`, em `sounds/sfx/`.
+`MusicMenu` (autoload) toca `sounds/music/musica_menu.wav` no menu; para ao apertar **Jogar** (`menu.gd`) e volta quando o
 menu abre de novo (o menu também para a música do gameplay). `Audio` (`autoload/audio/audio.gd`, registrado pelo
 caminho) tem um player de música (bus Music), um de loop e 6 vozes de efeito (bus SFX):
 
@@ -424,7 +426,7 @@ Para tirar da build final: remover a linha `CheatMenu` de `[autoload]` no `proje
 | Roteiro do tutorial | `src/levels/tutorial/tutorial_intro.tres` |
 | Lista de nomes | `src/npcs/resources/male_names.tres` |
 | Ritmo da recepção | nó `Reception`: `delay_between_visitors`, `visitor_move_speed` |
-| Título da transição | `tutorial.tscn` → `titulo_dia` |
+| Título da transição | `src/levels/tutorial/tutorial.tscn` → `titulo_dia` |
 
 ---
 

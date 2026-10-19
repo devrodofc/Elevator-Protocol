@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://brwssu6vo4wn4" path="res://src/npcs/assets/lucas/lucas_entregrador.png" id="6_lucas"]
 [ext_resource type="Texture2D" path="res://src/npcs/assets/marta/Marta sangrenta.png" id="9_marta"]
 [ext_resource type="Resource" path="res://src/levels/schedules/day3.tres" id="10_dia3"]
-[ext_resource type="AudioStream" uid="uid://c0uvc5hjrrjyk" path="res://sounds/music/wav/MartaSubsoloKetchup.mp3" id="11_ketchup"]
+[ext_resource type="AudioStream" uid="uid://c0uvc5hjrrjyk" path="res://sounds/sfx/MartaSubsoloKetchup.mp3" id="11_ketchup"]
 [ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/Day1/common_npc_male1.tres" id="7_male"]
 [ext_resource type="Resource" uid="uid://ylajsyngiss5" path="res://src/npcs/resources/Day1/common_npc_female1.tres" id="8_female"]
 [ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesDia2/1 andar/dia2_1a.tres" id="f1a"]
