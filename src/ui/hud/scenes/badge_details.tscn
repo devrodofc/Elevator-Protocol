@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://jvxu5gtg6ah4"]
 
 [ext_resource type="Texture2D" uid="uid://xmhiu8hpfk18" path="res://src/levels/assets/badge/cracha_ab_semnada.png" id="1_aee4l"]
-[ext_resource type="Script" uid="uid://bx8km0lr85p2m" path="res://src/ui/hud/badge_details.gd" id="1_es7kt"]
-[ext_resource type="FontFile" path="res://fonts/PixeloidSans.ttf" id="3_j3k3l"]
+[ext_resource type="Script" uid="uid://bx8km0lr85p2m" path="res://src/ui/hud/scripts/badge_details.gd" id="1_es7kt"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="3_j3k3l"]
 
 [node name="BadgeDetails" type="Control" unique_id=855157169]
 texture_filter = 1

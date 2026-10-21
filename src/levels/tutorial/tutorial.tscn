@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://b83dyvlp1c64y"]
 
-[ext_resource type="Script" uid="uid://wp8qgvlkyc8i" path="res://src/levels/scripts/tutorial.gd" id="1_tutorial"]
+[ext_resource type="Script" uid="uid://wp8qgvlkyc8i" path="res://src/levels/tutorial/tutorial.gd" id="1_tutorial"]
 [ext_resource type="Resource" uid="uid://d02lrjb830jbu" path="res://src/levels/tutorial/tutorial_intro.tres" id="2_roteiro"]
-[ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="3_marta"]
+[ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/scenes/marta.tscn" id="3_marta"]
 [ext_resource type="PackedScene" uid="uid://drkdyxoqm4uv5" path="res://src/ui/hud/reception_hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/elevator_panel.tscn" id="5_elevator"]
 [ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="6_text"]

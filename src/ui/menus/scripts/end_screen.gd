@@ -20,18 +20,22 @@ const CREDITOS := [
 	["titulo", "Elevator Protocol"],
 	["sub", "Coffee & Games Studios"],
 	["espaco", ""],
+	["secao", "Arte e Sprites"],
+	["nome", "Clara"],
+	["espaco", ""],
+	["secao", "Interface (UI/UX)"],
+	["nome", "Mari"],
+	["espaco", ""],
+	["secao", "Música e efeitos sonoros"],
+	["nome", "Daniel"],
+	["espaco", ""],
 	["secao", "Game Design"],
 	["nome", "Rodrigo"],
 	["espaco", ""],
 	["secao", "Programação"],
 	["nome", "Daniel"],
 	["nome", "Gustavo"],
-	["espaco", ""],
-	["secao", "Arte e Sprites"],
-	["nome", "Clara"],
-	["espaco", ""],
-	["secao", "Interface (UI/UX)"],
-	["nome", "Mari"],
+	["nome", "Rodrigo"],
 	["espaco", ""],
 	["secao", "Feito para a"],
 	["nome", "GameJamPlus 2026/27"],
@@ -196,7 +200,7 @@ func _voltar_ao_menu() -> void:
 
 
 func _montar_creditos() -> void:
-	var fonte: Font = load("res://fonts/resources/dynapuff_regular.tres")
+	var fonte: Font = load("res://fonts/PixeloidSans.ttf")
 	var negrito: Font = load("res://fonts/PixeloidSans-Bold.ttf")
 	for item in CREDITOS:
 		var estilo: String = item[0]

@@ -2,12 +2,15 @@
 
 [ext_resource type="Script" uid="uid://bjqvjv6o462d1" path="res://src/ui/menus/scripts/credits.gd" id="1_o6xkx"]
 [ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/background/tela inicial do game 1 frame.jpg" id="2_gtovi"]
-[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://fonts/resources/dynapuff_regular.tres" id="3_gtovi"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="3_kblmx"]
 [ext_resource type="Texture2D" uid="uid://c3aqthjkwwge1" path="res://src/ui/menus/assets/background/tela inicial do game 2 frame..jpg" id="3_qwbe7"]
 [ext_resource type="Texture2D" uid="uid://bh61au3d0p3ne" path="res://src/ui/menus/assets/background/tela inicial do game 3 frame..jpg" id="5_qwbe7"]
 [ext_resource type="Texture2D" uid="uid://410knbpyr5xn" path="res://src/ui/menus/assets/buttons/return/botão voltar(1).png" id="6_kblmx"]
 [ext_resource type="Texture2D" uid="uid://bmejs05qhamrh" path="res://src/ui/menus/assets/buttons/return/botão voltar pressionado(1).png" id="7_0iwbd"]
 [ext_resource type="Texture2D" uid="uid://dpure34tj7c4l" path="res://src/ui/menus/assets/buttons/return/botão voltar hover(1).png" id="8_iwru1"]
+
+[sub_resource type="FontVariation" id="FontVariation_0iwbd"]
+base_font = ExtResource("3_kblmx")
 
 [sub_resource type="Animation" id="Animation_cfvon"]
 length = 1.5
@@ -85,7 +88,7 @@ offset_top = 74.0
 offset_right = 430.0
 offset_bottom = 119.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_gtovi")
+theme_override_fonts/font = SubResource("FontVariation_0iwbd")
 theme_override_font_sizes/font_size = 24
 text = "Créditos"
 horizontal_alignment = 1
@@ -97,7 +100,7 @@ offset_top = 121.0
 offset_right = 427.0
 offset_bottom = 144.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_gtovi")
+theme_override_fonts/font = SubResource("FontVariation_0iwbd")
 theme_override_font_sizes/font_size = 14
 text = "Coffee & Games Studios"
 horizontal_alignment = 1
@@ -109,7 +112,7 @@ offset_top = 150.0
 offset_right = 322.0
 offset_bottom = 239.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_gtovi")
+theme_override_fonts/font = SubResource("FontVariation_0iwbd")
 text = "Rodrigo - Game Designer
 Daniel - Programador
 Gustavo - Programador
@@ -122,7 +125,7 @@ offset_top = 150.0
 offset_right = 526.0
 offset_bottom = 193.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_gtovi")
+theme_override_fonts/font = SubResource("FontVariation_0iwbd")
 text = "Clara - Artista
 Mari - UI/UX Designer"
 

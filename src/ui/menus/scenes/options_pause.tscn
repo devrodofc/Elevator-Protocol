@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://bfmon6s3y20l"]
 
-[ext_resource type="Script" uid="uid://bm5rjsblsmu7u" path="res://src/ui/menus/scenes/options_pause.gd" id="1_ngfjj"]
+[ext_resource type="Script" uid="uid://bm5rjsblsmu7u" path="res://src/ui/menus/scripts/options_pause.gd" id="1_ngfjj"]
 [ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://fonts/PixeloidSans-Bold.ttf" id="2_wj4tm"]
 [ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="3_7n0b6"]
-[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://fonts/resources/dynapuff_regular.tres" id="4_7n0b6"]
 
 [node name="OptionsPause" type="Control" unique_id=1171505832]
 layout_mode = 3
@@ -58,7 +57,6 @@ offset_top = 182.0
 offset_right = 297.0
 offset_bottom = 205.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("4_7n0b6")
 text = "Volume Geral"
 
 [node name="MasterVolume" type="HSlider" parent="." unique_id=1292147177]
@@ -75,7 +73,6 @@ offset_top = 210.0
 offset_right = 303.0
 offset_bottom = 233.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("4_7n0b6")
 text = "Volume Música"
 
 [node name="MusicVolume" type="HSlider" parent="." unique_id=492216733]
@@ -92,7 +89,6 @@ offset_top = 232.0
 offset_right = 310.0
 offset_bottom = 255.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("4_7n0b6")
 text = "Efeitos sonoros"
 
 [node name="SFXVolume" type="HSlider" parent="." unique_id=1819719651]

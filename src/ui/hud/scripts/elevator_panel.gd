@@ -8,7 +8,7 @@ signal floor_selected(floor_number: int)
 const DENY_CODE: int = 999
 const SUBSOLO_CODE: int = -1
 ## Carregado pelo caminho (e não pelo class_name) para não depender do cache de classes do editor.
-const ElevatorButtonScript := preload("res://src/ui/hud/elevator_button.gd")
+const ElevatorButtonScript := preload("res://src/ui/hud/scripts/elevator_button.gd")
 
 var locked: bool = true
 

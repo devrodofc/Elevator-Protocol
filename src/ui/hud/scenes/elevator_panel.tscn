@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://3ehfranwnf7p"]
 
-[ext_resource type="Script" uid="uid://6gn0hyc28ndp" path="res://src/ui/hud/elevator_panel.gd" id="1_panel"]
-[ext_resource type="Script" uid="uid://b3uduovofky1y" path="res://src/ui/hud/elevator_button.gd" id="2_button"]
+[ext_resource type="Script" uid="uid://6gn0hyc28ndp" path="res://src/ui/hud/scripts/elevator_panel.gd" id="1_panel"]
+[ext_resource type="Script" uid="uid://b3uduovofky1y" path="res://src/ui/hud/scripts/elevator_button.gd" id="2_button"]
 [ext_resource type="Texture2D" uid="uid://c7j3wj536b1fl" path="res://src/levels/assets/Elevador/painel elevador.png" id="3_panel"]
 [ext_resource type="Texture2D" uid="uid://cg78eid27qumv" path="res://src/levels/assets/Elevador/botão elevador.png" id="4_normal"]
 [ext_resource type="Texture2D" uid="uid://ce8lbt86jksjn" path="res://src/levels/assets/Elevador/botão elevador pressionado sem contorno.png" id="5_pressed"]

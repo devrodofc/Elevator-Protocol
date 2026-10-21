@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" uid="uid://bummgya0ukifq" path="res://src/levels/scripts/reception_manager.gd" id="1_2llwu"]
 [ext_resource type="Resource" uid="uid://crs2g0lcexipn" path="res://src/levels/schedules/day1.tres" id="2_d2spp"]
-[ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/elevator_panel.tscn" id="6_elevator"]
+[ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/scenes/elevator_panel.tscn" id="6_elevator"]
 [ext_resource type="PackedScene" uid="uid://btagpc2oh1ho6" path="res://src/ui/menus/scenes/pause.tscn" id="6_mgc41"]
-[ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/Marta/Marta.tscn" id="7_katl8"]
-[ext_resource type="PackedScene" uid="uid://drkdyxoqm4uv5" path="res://src/ui/hud/reception_hud.tscn" id="8_hud"]
-[ext_resource type="PackedScene" path="res://src/levels/scenes/elevator.tscn" id="9_elevator_scene"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
-[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/piso e parede.png" id="11_piso"]
+[ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/scenes/marta.tscn" id="7_katl8"]
+[ext_resource type="PackedScene" uid="uid://drkdyxoqm4uv5" path="res://src/ui/hud/scenes/reception_hud.tscn" id="8_hud"]
+[ext_resource type="PackedScene" uid="uid://cos1f6nb23ivp" path="res://src/levels/scenes/elevator.tscn" id="9_elevator_scene"]
+[ext_resource type="Texture2D" uid="uid://decmd1y1x72a6" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
+[ext_resource type="Texture2D" uid="uid://dv5c0uo2o37g4" path="res://src/levels/assets/main_hud/piso e parede.png" id="11_piso"]
 
 [node name="Reception" type="Node2D" unique_id=1772593470]
 script = ExtResource("1_2llwu")

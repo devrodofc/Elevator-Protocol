@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://0s2adho6lhr3"]
 
 [ext_resource type="Script" uid="uid://dycu3xihjorki" path="res://src/ui/menus/scripts/options.gd" id="1_jqr15"]
-[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://fonts/resources/dynapuff_regular.tres" id="3_1um8p"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="3_jfahk"]
 [ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/background/tela inicial do game 1 frame.jpg" id="3_quti6"]
 [ext_resource type="Texture2D" uid="uid://410knbpyr5xn" path="res://src/ui/menus/assets/buttons/return/botão voltar(1).png" id="4_jfahk"]
 [ext_resource type="Texture2D" uid="uid://bmejs05qhamrh" path="res://src/ui/menus/assets/buttons/return/botão voltar pressionado(1).png" id="5_3uegq"]
@@ -85,7 +85,7 @@ offset_top = 73.0
 offset_right = 428.0
 offset_bottom = 118.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_1um8p")
+theme_override_fonts/font = ExtResource("3_jfahk")
 theme_override_font_sizes/font_size = 32
 text = "Opções"
 horizontal_alignment = 1
@@ -102,7 +102,7 @@ theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_fonts/font = ExtResource("3_1um8p")
+theme_override_fonts/font = ExtResource("3_jfahk")
 theme_override_font_sizes/font_size = 16
 text = "TELA CHEIA"
 underline = 2
@@ -114,7 +114,7 @@ offset_top = 146.0
 offset_right = 289.0
 offset_bottom = 169.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_1um8p")
+theme_override_fonts/font = ExtResource("3_jfahk")
 text = "Volume Geral"
 
 [node name="MasterVolume" type="HSlider" parent="." unique_id=928112800]
@@ -131,7 +131,7 @@ offset_top = 174.0
 offset_right = 295.0
 offset_bottom = 197.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_1um8p")
+theme_override_fonts/font = ExtResource("3_jfahk")
 text = "Volume Música"
 
 [node name="MusicVolume" type="HSlider" parent="." unique_id=1904012095]
@@ -148,7 +148,7 @@ offset_top = 196.0
 offset_right = 302.0
 offset_bottom = 219.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_1um8p")
+theme_override_fonts/font = ExtResource("3_jfahk")
 text = "Efeitos sonoros"
 
 [node name="SFXVolume" type="HSlider" parent="." unique_id=1879119154]
@@ -170,7 +170,7 @@ theme_override_colors/font_focus_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.81960785, 0.4, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.81960785, 0.4, 1)
-theme_override_fonts/font = ExtResource("3_1um8p")
+theme_override_fonts/font = ExtResource("3_jfahk")
 theme_override_font_sizes/font_size = 24
 text = "Créditos"
 underline = 2

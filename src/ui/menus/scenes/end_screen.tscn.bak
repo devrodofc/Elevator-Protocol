@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/ui/menus/scripts/end_screen.gd" id="1_script"]
+[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://fonts/resources/dynapuff_regular.tres" id="2_fonte"]
+[ext_resource type="FontFile" path="res://fonts/PixeloidSans-Bold.ttf" id="3_negrito"]
+
+[node name="EndScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Fundo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.05, 0.045, 0.06, 1)
+
+[node name="Narracao" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 90.0
+offset_top = 120.0
+offset_right = 550.0
+offset_bottom = 240.0
+theme_override_colors/font_color = Color(0.91, 0.89, 0.86, 1)
+theme_override_constants/line_spacing = 2
+theme_override_fonts/font = ExtResource("2_fonte")
+theme_override_font_sizes/font_size = 14
+text = "Epílogo"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Fim" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 120.0
+offset_top = 140.0
+offset_right = 520.0
+offset_bottom = 220.0
+theme_override_colors/font_color = Color(0.94, 0.5, 0.5, 1)
+theme_override_fonts/font = ExtResource("3_negrito")
+theme_override_font_sizes/font_size = 40
+text = "Fim."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Creditos" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 120.0
+offset_top = 360.0
+offset_right = 520.0
+offset_bottom = 360.0
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="Dica" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 420.0
+offset_top = 336.0
+offset_right = 630.0
+offset_bottom = 352.0
+theme_override_colors/font_color = Color(0.6, 0.57, 0.53, 1)
+theme_override_fonts/font = ExtResource("2_fonte")
+theme_override_font_sizes/font_size = 9
+horizontal_alignment = 2
+
+[node name="Voltar" type="LinkButton" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 250.0
+offset_top = 290.0
+offset_right = 390.0
+offset_bottom = 312.0
+theme_override_colors/font_color = Color(0.91, 0.89, 0.86, 1)
+theme_override_colors/font_hover_color = Color(1, 0.82, 0.4, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_fonte")
+theme_override_font_sizes/font_size = 16
+text = "Voltar ao menu"
+underline = 2
