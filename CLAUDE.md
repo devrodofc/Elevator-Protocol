@@ -44,8 +44,8 @@ O subsolo é um "pavimento não atribuído" que oficialmente não existe.
 
 ```
 menu.tscn ──Jogar──▶ tutorial.tscn ──fim ou "Pular tutorial [Esc]"──▶ (SceneTransition: "Dia 1") ──▶ reception.tscn
-    │                                                         (dia 1 → dia 2 → dia 3, mesma cena)
-    └─Opções──▶ options.tscn ──Créditos──▶ credits.tscn
+	│                                                         (dia 1 → dia 2 → dia 3, mesma cena)
+	└─Opções──▶ options.tscn ──Créditos──▶ credits.tscn
 ```
 Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu principal, Sair do jogo).
 
@@ -91,30 +91,30 @@ autoload/
   audio/               audio.gd (autoload Audio: música do gameplay + efeitos sonoros, ver 6.9)
 sounds/
   music/               musica_menu.wav, musica_gameplay.mp3, musica_errada.mp3
-    menu/              music_menu.tscn/.gd (autoload MusicMenu: toca musica_menu.wav no bus Music)
+	menu/              music_menu.tscn/.gd (autoload MusicMenu: toca musica_menu.wav no bus Music)
   sfx/                 BotãoPressionado.mp3, chegou_elevador.mp3, digitando.mp3, erro.mp3,
-                       sucess.mp3, passando_pagina.mp3, MartaSubsoloKetchup.mp3
+					   sucess.mp3, passando_pagina.mp3, MartaSubsoloKetchup.mp3
 default_bus_layout.tres  buses Music e SFX
 src/
   levels/
-    assets/            Arte da HUD (4x): main_hud, badge, buttons, company_book, rules, Elevador, fonts
-    resources/         company_directory.tres (livro de andares)
-    scenes/            reception.tscn
-    schedules/         day1.tres, day2.tres, day3.tres (agendas dos dias)
-    scripts/           reception_manager, day_schedule, day_interaction, marta_rule,
-                       company_data/directory
-    tutorial/          tutorial.tscn, tutorial.gd, tutorial_step.gd, tutorial_script.gd, tutorial_intro.tres (roteiro)
+	assets/            Arte da HUD (4x): main_hud, badge, buttons, company_book, rules, Elevador, fonts
+	resources/         company_directory.tres (livro de andares)
+	scenes/            reception.tscn
+	schedules/         day1.tres, day2.tres, day3.tres (agendas dos dias)
+	scripts/           reception_manager, day_schedule, day_interaction, marta_rule,
+					   company_data/directory
+	tutorial/          tutorial.tscn, tutorial.gd, tutorial_step.gd, tutorial_script.gd, tutorial_intro.tres (roteiro)
   npcs/
-    assets/            Sprites 256x256 dos NPCs (jose, marta, lucas, tiao, manfredo, ...)
-    dialogue/          npc_dialogue.gd + dialoguesCommon/ (dia 1), dialoguesDia2/, dialoguesDia3/ (<N> andar/*.tres)
-    resources/         visitor_data.gd, Day1/, Day2/, Day3/ (tiao.tres), name_list.gd, male_names.tres, ...
-    scenes/            visitor.tscn, marta.tscn, characters/ (cenas visuais dos NPCs)
-    scripts/           visitor.gd
+	assets/            Sprites 256x256 dos NPCs (jose, marta, lucas, tiao, manfredo, ...)
+	dialogue/          npc_dialogue.gd + dialoguesCommon/ (dia 1), dialoguesDia2/, dialoguesDia3/ (<N> andar/*.tres)
+	resources/         visitor_data.gd, Day1/, Day2/, Day3/ (tiao.tres), name_list.gd, male_names.tres, ...
+	scenes/            visitor.tscn, marta.tscn, characters/ (cenas visuais dos NPCs)
+	scripts/           visitor.gd
   shared/              rule_validator.gd
   ui/
-    hud/               reception_hud, elevator_panel/button, company_book, rules_board,
-                       badge_details, shift_summary
-    menus/             scenes/ (cenas), scripts/ (menu, options, credits, pause, options_pause); assets/ (tela inicial *.jpg, buttons/)
+	hud/               reception_hud, elevator_panel/button, company_book, rules_board,
+					   badge_details, shift_summary
+	menus/             scenes/ (cenas), scripts/ (menu, options, credits, pause, options_pause); assets/ (tela inicial *.jpg, buttons/)
 docs/                  decisions/, game-design/, references/, team/ (vazias no repo)
 tools/createscene.gd   EditorScript antigo (desatualizado, ver seção 9)
 ```
@@ -278,17 +278,17 @@ Códigos: andares 1–6, subsolo **-1**, negar **999** (`RuleValidator.DENY_ACTI
   (`visitante`, `sprite`, `dialogo` forçados), com `repeticoes`. Entradas de FIXO recebem `"fixo": true`.
 - `montar_dia()`:
   - os visitantes **aleatórios** cobrem todos os `andares_do_dia` (padrão 1–6), cada um ao menos uma
-    vez, em **ordem sorteada**; a fala de cada um é sorteada entre as falas daquele andar (do próprio
-    visitante + `falas_comuns`), **sem repetir texto no dia**. Visitantes FIXOS mantêm a fala deles;
+	vez, em **ordem sorteada**; a fala de cada um é sorteada entre as falas daquele andar (do próprio
+	visitante + `falas_comuns`), **sem repetir texto no dia**. Visitantes FIXOS mantêm a fala deles;
   - escolhe `regras_por_dia` regras em **ordem fixa**: a 1ª aparição da Marta (depois do 2º visitante)
-    dita uma **regra de andar** (com efeito); as seguintes só **regras de lore** (sem efeito, não limitam
-    andar). `regras_obrigatorias` entram no grupo delas (as de lore vêm antes das sorteadas: nos dias 2 e 3
-    a 2ª regra é sempre o aviso da entrega/do Tião). Regras de andar que mudariam o destino de um
-    visitante FIXO ficam de fora naquele dia;
+	dita uma **regra de andar** (com efeito); as seguintes só **regras de lore** (sem efeito, não limitam
+	andar). `regras_obrigatorias` entram no grupo delas (as de lore vêm antes das sorteadas: nos dias 2 e 3
+	a 2ª regra é sempre o aviso da entrega/do Tião). Regras de andar que mudariam o destino de um
+	visitante FIXO ficam de fora naquele dia;
   - **garante 1 caso de regra**: um visitante aleatório depois da regra de andar pede o andar dela
-    (marcado com `"caso_regra": true`); a ordem das regras não muda.
-    O caso **nunca é o visitante logo depois da regra** (vem pelo menos um depois), e o visitante
-    logo depois de qualquer regra com efeito não pede o andar dela (`_evitar_caso_no_proximo`).
+	(marcado com `"caso_regra": true`); a ordem das regras não muda.
+	O caso **nunca é o visitante logo depois da regra** (vem pelo menos um depois), e o visitante
+	logo depois de qualquer regra com efeito não pede o andar dela (`_evitar_caso_no_proximo`).
 - Entrada da fila: `{visitor, dialogue, nome, sprite, cracha, fixo, caso_regra?}`.
 
 ### 6.4 Regras da Marta (`marta_rule.gd`)
@@ -468,24 +468,24 @@ Para tirar da build final: remover a linha `CheatMenu` de `[autoload]` no `proje
 9. **`Array.filter()` devolve Array sem tipo.** Atribuir a `Array[Tipo]` dá erro em runtime; use laço.
 
 10. **Arte de NPC com offsets diferentes.** `joseNPC.tscn` tem sprite com escala 0,289 e offset; a Marta
-    tem Sprite2D 256 px sem offset. Por isso Marta e visitantes usam alturas de ponto diferentes.
+	tem Sprite2D 256 px sem offset. Por isso Marta e visitantes usam alturas de ponto diferentes.
 
 11. **`visitor.gd` tem efeito de profundidade** (0,2 → 3,0 ao andar). Na janela isso foi desligado
-    igualando `queue_scale` e `desk_scale` antes de adicionar o nó.
+	igualando `queue_scale` e `desk_scale` antes de adicionar o nó.
 
 12. **Painel antigo do elevador** só conectava os botões 1, 2, 3 e Negar; 4, 5, 6 e Subsolo nunca
-    travavam. Corrigido no painel com sprites (todos os botões são iterados).
+	travavam. Corrigido no painel com sprites (todos os botões são iterados).
 
 13. **Fontes pixel em tamanho errado ficam ilegíveis** (VCR em 8 px quebrava). Hoje as fontes não são
-    pixel e o stretch é `canvas_items`, então texto pequeno (8–10 px) ainda é legível.
+	pixel e o stretch é `canvas_items`, então texto pequeno (8–10 px) ainda é legível.
 
 14. **Corrotinas e troca de cena.** Esperas pendentes (`wait_for_advance`) continuavam rodando após
-    trocar de cena; `clear_dialogue()` agora encerra a espera e o tutorial aguarda frames antes de trocar.
+	trocar de cena; `clear_dialogue()` agora encerra a espera e o tutorial aguarda frames antes de trocar.
 
 15. **O editor apaga as falas do `day1.tres`** (já aconteceu 2 vezes: PR #36 e PR #39). Abrir/salvar o
-    `day1.tres` com o projeto desatualizado regrava o arquivo sem a lista `falas_comuns` (PR #36) ou sem os
-    20 `ext_resource` das falas, deixando a lista apontando para ids inexistentes (PR #39:
-    `Can't load cached ext-resource id: fc_common1a`). Aí o `day1.tres` não carrega, a **recepção não abre**
+	`day1.tres` com o projeto desatualizado regrava o arquivo sem a lista `falas_comuns` (PR #36) ou sem os
+	20 `ext_resource` das falas, deixando a lista apontando para ids inexistentes (PR #39:
+	`Can't load cached ext-resource id: fc_common1a`). Aí o `day1.tres` não carrega, a **recepção não abre**
     e o jogo para no tutorial. Antes de commitar o `day1.tres`: `grep -c fc_common day1.tres` deve dar 21
     (20 `ext_resource` + a lista) e a recepção tem de abrir. Recarregue o projeto antes de editar dias.
 
