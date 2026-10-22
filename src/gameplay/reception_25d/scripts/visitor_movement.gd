@@ -1,5 +1,9 @@
 extends Node
 
+signal movement_reset
+signal route_started
+signal arrived
+
 @export var visitor: Node3D
 @export var floor_reference: Marker3D
 @export_range(0.1, 10.0, 0.1, "or_greater") var movement_speed: float = 3
@@ -20,14 +24,24 @@ func reset_at(entrance: Marker3D) -> void:
 	_point_index = 0
 	set_process(false)
 	visitor.global_position = _sprite_position(entrance)
+	movement_reset.emit()
 
 
 func start_from(entrance: Marker3D, waypoints: Array[Marker3D]) -> void:
 	# Replace the previous run; no timers, duplicate visitors or queued movements.
 	reset_at(entrance)
+	follow_route(waypoints)
+
+
+func follow_route(waypoints: Array[Marker3D]) -> void:
+	# Continue from the current position, also usable for future return/exit routes.
+	_path.clear()
+	_point_index = 0
 	for waypoint in waypoints:
 		_path.append(_sprite_position(waypoint))
 	set_process(not _path.is_empty())
+	if not _path.is_empty():
+		route_started.emit()
 
 
 func _process(delta: float) -> void:
@@ -44,6 +58,7 @@ func _process(delta: float) -> void:
 			remaining_distance = 0.0
 	if _point_index == _path.size():
 		set_process(false)
+		arrived.emit()
 
 
 func _sprite_position(marker: Marker3D) -> Vector3:

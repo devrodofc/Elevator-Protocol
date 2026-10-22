@@ -8,6 +8,9 @@
 [ext_resource type="PackedScene" path="res://src/gameplay/reception_25d/scenes/waiting_chair.tscn" id="6_chair"]
 [ext_resource type="Script" uid="uid://8m7rioaxw0ch" path="res://src/gameplay/reception_25d/scripts/visitor_movement.gd" id="7_movement"]
 [ext_resource type="Script" uid="uid://dfkyi1jf3tdui" path="res://src/gameplay/reception_25d/scripts/visitor_movement_test.gd" id="8_movement_test"]
+[ext_resource type="Script" uid="uid://c5xgo8bade26h" path="res://src/gameplay/reception_25d/scripts/visitor_orientation.gd" id="9_orientation"]
+[ext_resource type="Script" uid="uid://ptgce8xk8oid" path="res://src/gameplay/reception_25d/scripts/elevator_selection.gd" id="10_selection"]
+[ext_resource type="Script" uid="uid://bplmrbmketnx8" path="res://src/gameplay/reception_25d/scripts/elevator_selection_ui.gd" id="11_selection_ui"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_room"]
 viewport_path = NodePath("RoomViewport")
@@ -417,15 +420,106 @@ light_color = Color(0.78, 0.88, 1, 1)
 light_energy = 1.6
 omni_range = 13.0
 
+[node name="ElevatorRoutes" type="Node3D" parent="RoomViewport/Room" unique_id=63281318]
+
+[node name="RetreatPoint" type="Marker3D" parent="RoomViewport/Room/ElevatorRoutes" unique_id=31055420]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="CorridorEntry" type="Marker3D" parent="RoomViewport/Room/ElevatorRoutes" unique_id=1179170907]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 0, -2.4)
+
+[node name="Elevator01TurnPoint" type="Marker3D" parent="RoomViewport/Room/ElevatorRoutes" unique_id=388236756]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 0, -1.8)
+
+[node name="Elevator02TurnPoint" type="Marker3D" parent="RoomViewport/Room/ElevatorRoutes" unique_id=619674943]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 0, -5.2)
+
+[node name="Elevator03TurnPoint" type="Marker3D" parent="RoomViewport/Room/ElevatorRoutes" unique_id=1105226653]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 0, -8.6)
+
 [node name="VisitorMovement" type="Node" parent="." unique_id=768934271 node_paths=PackedStringArray("visitor", "floor_reference")]
 script = ExtResource("7_movement")
 visitor = NodePath("../RoomViewport/Room/VisitorGround")
 floor_reference = NodePath("../RoomViewport/Room/VisitorPositions/ServicePoint")
 
-[node name="VisitorMovementTest" type="Node" parent="." unique_id=1110715786 node_paths=PackedStringArray("movement", "entrance_left", "entrance_right", "join_point", "service_point")]
+[node name="VisitorMovementTest" type="Node" parent="." unique_id=1110715786 node_paths=PackedStringArray("movement", "entrance_left", "entrance_right", "door_left", "door_right", "join_point", "service_point")]
 script = ExtResource("8_movement_test")
 movement = NodePath("../VisitorMovement")
 entrance_left = NodePath("../RoomViewport/Room/VisitorPositions/EntranceLeft")
 entrance_right = NodePath("../RoomViewport/Room/VisitorPositions/EntranceRight")
+door_left = NodePath("../RoomViewport/Room/Entrances/EntranceLeft")
+door_right = NodePath("../RoomViewport/Room/Entrances/EntranceRight")
 join_point = NodePath("../RoomViewport/Room/VisitorPositions/QueueJoinPoint")
 service_point = NodePath("../RoomViewport/Room/VisitorPositions/ServicePoint")
+
+[node name="VisitorOrientation" type="Node" parent="." unique_id=563959599 node_paths=PackedStringArray("sprite", "movement", "service_point", "camera")]
+script = ExtResource("9_orientation")
+sprite = NodePath("../RoomViewport/Room/VisitorGround/TestVisitor")
+movement = NodePath("../VisitorMovement")
+service_point = NodePath("../RoomViewport/Room/VisitorPositions/ServicePoint")
+camera = NodePath("../RoomViewport/Room/ReceptionCamera")
+
+[node name="ElevatorSelection" type="Node" parent="." unique_id=1764697406 node_paths=PackedStringArray("movement", "orientation", "service_point", "retreat_point", "corridor_entry", "turn_points", "wait_points")]
+script = ExtResource("10_selection")
+movement = NodePath("../VisitorMovement")
+orientation = NodePath("../VisitorOrientation")
+service_point = NodePath("../RoomViewport/Room/VisitorPositions/ServicePoint")
+retreat_point = NodePath("../RoomViewport/Room/ElevatorRoutes/RetreatPoint")
+corridor_entry = NodePath("../RoomViewport/Room/ElevatorRoutes/CorridorEntry")
+turn_points = [NodePath("../RoomViewport/Room/ElevatorRoutes/Elevator01TurnPoint"), NodePath("../RoomViewport/Room/ElevatorRoutes/Elevator02TurnPoint"), NodePath("../RoomViewport/Room/ElevatorRoutes/Elevator03TurnPoint")]
+wait_points = [NodePath("../RoomViewport/Room/Elevators/Elevator01/ApproachPoint"), NodePath("../RoomViewport/Room/Elevators/Elevator02/ApproachPoint"), NodePath("../RoomViewport/Room/Elevators/Elevator03/ApproachPoint")]
+
+[node name="ElevatorUI" type="CanvasLayer" parent="." unique_id=309299696]
+layer = 5
+
+[node name="Selection" type="Control" parent="ElevatorUI" unique_id=1533034167 node_paths=PackedStringArray("selection", "camera", "buttons")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_selection_ui")
+selection = NodePath("../../ElevatorSelection")
+camera = NodePath("../../RoomViewport/Room/ReceptionCamera")
+buttons = [NodePath("Elevator1"), NodePath("Elevator2"), NodePath("Elevator3")]
+
+[node name="Elevator1" type="Button" parent="ElevatorUI/Selection" unique_id=1438213525]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -178.0
+offset_top = 8.0
+offset_right = -66.0
+offset_bottom = 38.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 14
+disabled = true
+text = "Elevador 1"
+
+[node name="Elevator2" type="Button" parent="ElevatorUI/Selection" unique_id=1475670407]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -56.0
+offset_top = 8.0
+offset_right = 56.0
+offset_bottom = 38.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 14
+disabled = true
+text = "Elevador 2"
+
+[node name="Elevator3" type="Button" parent="ElevatorUI/Selection" unique_id=898528741]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 66.0
+offset_top = 8.0
+offset_right = 178.0
+offset_bottom = 38.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 14
+disabled = true
+text = "Elevador 3"

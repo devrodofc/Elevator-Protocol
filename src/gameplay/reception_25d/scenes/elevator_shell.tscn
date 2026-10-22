@@ -1,5 +1,7 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://src/gameplay/reception_25d/scripts/elevator_door.gd" id="1_door"]
+
 [sub_resource type="StandardMaterial3D" id="Metal"]
 albedo_color = Color(0.45, 0.52, 0.56, 1)
 roughness = 1.0
@@ -51,12 +53,29 @@ size = Vector3(2.6, 0.05, 0.95)
 material = SubResource("Indicator")
 size = Vector3(0.55, 0.09, 0.03)
 
+[sub_resource type="StandardMaterial3D" id="CabinWall"]
+albedo_color = Color(0.33, 0.4, 0.42, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_cabin_floor"]
+material = SubResource("Threshold")
+size = Vector3(2.5, 0.1, 3.4)
+
+[sub_resource type="BoxMesh" id="Mesh_cabin_side"]
+material = SubResource("CabinWall")
+size = Vector3(0.12, 2.6, 2.62)
+
+[sub_resource type="BoxMesh" id="Mesh_cabin_ceiling"]
+material = SubResource("CabinWall")
+size = Vector3(2.5, 0.1, 3.4)
+
 [node name="Elevator" type="Node3D"]
+script = ExtResource("1_door")
 
 [node name="DoorAssembly" type="Node3D" parent="."]
 
 [node name="RecessBack" type="MeshInstance3D" parent="DoorAssembly"]
-position = Vector3(0, 1.3, -0.55)
+position = Vector3(0, 1.3, -3.3)
 mesh = SubResource("Mesh_0")
 
 [node name="FrameLeft" type="MeshInstance3D" parent="."]
@@ -80,15 +99,15 @@ position = Vector3(0, 2.7, 0)
 mesh = SubResource("Mesh_3")
 
 [node name="LeftPanel" type="MeshInstance3D" parent="DoorAssembly"]
-position = Vector3(-0.553, 1.3, -0.38)
+position = Vector3(-0.545, 1.3, -0.64)
 mesh = SubResource("Mesh_4")
 
 [node name="RightPanel" type="MeshInstance3D" parent="DoorAssembly"]
-position = Vector3(0.553, 1.3, -0.38)
+position = Vector3(0.545, 1.3, -0.64)
 mesh = SubResource("Mesh_4")
 
 [node name="Threshold" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.025, 0.05)
+position = Vector3(0, -0.023, 0.05)
 mesh = SubResource("Mesh_5")
 
 [node name="Indicator" type="MeshInstance3D" parent="."]
@@ -97,3 +116,33 @@ mesh = SubResource("Mesh_6")
 
 [node name="ApproachPoint" type="Marker3D" parent="."]
 position = Vector3(0, 0, 1.3)
+
+[node name="EntryPoint" type="Marker3D" parent="."]
+position = Vector3(0, 0, -0.64)
+
+[node name="CabinStopPoint" type="Marker3D" parent="."]
+position = Vector3(0, 0, -2.1)
+
+[node name="Cabin" type="Node3D" parent="."]
+
+[node name="Floor" type="MeshInstance3D" parent="Cabin"]
+position = Vector3(0, -0.05, -1.75)
+mesh = SubResource("Mesh_cabin_floor")
+
+[node name="WallLeft" type="MeshInstance3D" parent="Cabin"]
+position = Vector3(-1.2, 1.3, -2.05)
+mesh = SubResource("Mesh_cabin_side")
+
+[node name="WallRight" type="MeshInstance3D" parent="Cabin"]
+position = Vector3(1.2, 1.3, -2.05)
+mesh = SubResource("Mesh_cabin_side")
+
+[node name="Ceiling" type="MeshInstance3D" parent="Cabin"]
+position = Vector3(0, 2.65, -1.75)
+mesh = SubResource("Mesh_cabin_ceiling")
+
+[node name="Light" type="OmniLight3D" parent="Cabin"]
+position = Vector3(0, 2.3, -1.7)
+light_color = Color(0.8, 0.87, 0.95, 1)
+light_energy = 0.7
+omni_range = 3.0
