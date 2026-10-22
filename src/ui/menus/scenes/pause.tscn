@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://btagpc2oh1ho6"]
+
+[ext_resource type="Script" uid="uid://de8j7peduudhd" path="res://src/ui/menus/scripts/pause.gd" id="1_r8232"]
+[ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://fonts/PixeloidSans-Bold.ttf" id="2_60hwv"]
+[ext_resource type="PackedScene" uid="uid://bfmon6s3y20l" path="res://src/ui/menus/scenes/options_pause.tscn" id="2_options"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="3_uiw7h"]
+
+[node name="Pause" type="CanvasLayer" unique_id=1030095812]
+process_mode = 3
+layer = 10
+script = ExtResource("1_r8232")
+
+[node name="Overlay" type="Control" parent="." unique_id=582790712]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="Overlay" unique_id=888754225]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.78431374)
+
+[node name="Title" type="Label" parent="Overlay" unique_id=175373196]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 55.0
+offset_right = 470.0
+offset_bottom = 105.0
+theme_override_fonts/font = ExtResource("2_60hwv")
+theme_override_font_sizes/font_size = 28
+text = "PAUSADO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Continue" type="LinkButton" parent="Overlay" unique_id=504400095]
+layout_mode = 0
+offset_left = 273.0
+offset_top = 130.0
+offset_right = 368.0
+offset_bottom = 153.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.38549894, 0.34039617, 1)
+theme_override_colors/font_pressed_color = Color(0.4353201, 0, 0.021210885, 1)
+theme_override_colors/font_hover_color = Color(1, 0.1764706, 0.1764706, 1)
+theme_override_fonts/font = ExtResource("3_uiw7h")
+text = "CONTINUAR"
+underline = 2
+
+[node name="Options" type="LinkButton" parent="Overlay" unique_id=331188739]
+layout_mode = 0
+offset_left = 289.0
+offset_top = 170.0
+offset_right = 352.0
+offset_bottom = 193.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.38549894, 0.34039617, 1)
+theme_override_colors/font_pressed_color = Color(0.4353201, 0, 0.021210885, 1)
+theme_override_colors/font_hover_color = Color(1, 0.1764706, 0.1764706, 1)
+theme_override_fonts/font = ExtResource("3_uiw7h")
+text = "OPÇÕES"
+underline = 2
+
+[node name="MainMenu" type="LinkButton" parent="Overlay" unique_id=1555506315]
+layout_mode = 0
+offset_left = 253.0
+offset_top = 210.0
+offset_right = 387.0
+offset_bottom = 233.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.38549894, 0.34039617, 1)
+theme_override_colors/font_pressed_color = Color(0.4353201, 0, 0.021210885, 1)
+theme_override_colors/font_hover_color = Color(1, 0.1764706, 0.1764706, 1)
+theme_override_fonts/font = ExtResource("3_uiw7h")
+text = "MENU PRINCIPAL"
+underline = 2
+
+[node name="Quit" type="LinkButton" parent="Overlay" unique_id=697528288]
+layout_mode = 0
+offset_left = 266.0
+offset_top = 250.0
+offset_right = 375.0
+offset_bottom = 273.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.38549894, 0.34039617, 1)
+theme_override_colors/font_pressed_color = Color(0.4353201, 0, 0.021210885, 1)
+theme_override_colors/font_hover_color = Color(1, 0.1764706, 0.1764706, 1)
+theme_override_fonts/font = ExtResource("3_uiw7h")
+text = "SAIR DO JOGO"
+underline = 2
+
+[node name="OptionsPause" parent="." unique_id=784306356 instance=ExtResource("2_options")]
+visible = false

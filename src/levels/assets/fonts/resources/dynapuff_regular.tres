@@ -1,6 +1,0 @@
-[gd_resource type="FontVariation" format=3 uid="uid://dffcisljywyok"]
-
-[ext_resource type="FontFile" uid="uid://bc3sbfcfbrh64" path="res://src/levels/assets/fonts/DynaPuff-VariableFont_wdth,wght.ttf" id="1_qpnl8"]
-
-[resource]
-base_font = ExtResource("1_qpnl8")

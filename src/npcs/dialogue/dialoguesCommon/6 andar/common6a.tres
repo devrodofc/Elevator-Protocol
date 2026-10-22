@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="NPCDialogue" format=3]
+
+[ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_dlg"]
+
+[resource]
+script = ExtResource("1_dlg")
+texto = "Sexto andar, por favor. Vou apresentar o orçamento para a diretoria e ensaiei o discurso no espelho a semana inteira."
+andar_desejado = 6

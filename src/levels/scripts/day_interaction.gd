@@ -26,14 +26,18 @@ enum Modo { ALEATORIO, FIXO }
 
 
 ## Gera as entradas da fila para esta interação.
-func build_entries(pool_padrao: Array[VisitorData]) -> Array[Dictionary]:
+## textos_usados: falas já sorteadas no dia, compartilhado entre as interações para não repetir.
+func build_entries(pool_padrao: Array[VisitorData], textos_usados: Dictionary = {}) -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
 	for i in range(repeticoes):
 		var v: VisitorData = _escolher_visitante(pool_padrao)
 		if v == null:
 			push_warning("DayInteraction sem visitante: defina 'visitante' (Fixo) ou um pool (Aleatório).")
 			continue
-		entries.append(v.pick_visit(dialogo, sprite if modo == Modo.FIXO else null))
+		var entry: Dictionary = v.pick_visit(dialogo, sprite if modo == Modo.FIXO else null, textos_usados)
+		# Visitantes fixos (ex.: entregador) mantêm a fala definida no dia
+		entry["fixo"] = modo == Modo.FIXO
+		entries.append(entry)
 	return entries
 
 

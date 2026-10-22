@@ -1,0 +1,174 @@
+[gd_scene format=3 uid="uid://b83dyvlp1c64y"]
+
+[ext_resource type="Script" uid="uid://wp8qgvlkyc8i" path="res://src/levels/tutorial/tutorial.gd" id="1_tutorial"]
+[ext_resource type="Resource" uid="uid://d02lrjb830jbu" path="res://src/levels/tutorial/tutorial_intro.tres" id="2_roteiro"]
+[ext_resource type="PackedScene" uid="uid://v3xk2s47amoh" path="res://src/npcs/scenes/marta.tscn" id="3_marta"]
+[ext_resource type="PackedScene" uid="uid://drkdyxoqm4uv5" path="res://src/ui/hud/reception_hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" uid="uid://3ehfranwnf7p" path="res://src/ui/hud/elevator_panel.tscn" id="5_elevator"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="6_text"]
+[ext_resource type="PackedScene" uid="uid://cos1f6nb23ivp" path="res://src/levels/scenes/elevator.tscn" id="7_elevator_scene"]
+[ext_resource type="Texture2D" uid="uid://decmd1y1x72a6" path="res://src/levels/assets/main_hud/cadeiras.png" id="10_cadeiras"]
+[ext_resource type="Texture2D" path="res://src/levels/assets/main_hud/piso e parede.png" id="11_piso"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_highlight"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.94, 0.33, 0.25, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_skip"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0.13, 0.12, 0.11, 0.75)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_skip_hover"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0.4, 0.25, 0.15, 0.9)
+
+[node name="Tutorial" type="Node2D" unique_id=233944271]
+script = ExtResource("1_tutorial")
+roteiro = ExtResource("2_roteiro")
+marta_scene = ExtResource("3_marta")
+
+[node name="Wall" type="ColorRect" parent="." unique_id=382066291]
+offset_right = 640.0
+offset_bottom = 201.0
+mouse_filter = 2
+color = Color(0.96862745, 0.96862745, 0.96862745, 1)
+
+[node name="PisoParede" type="TextureRect" parent="."]
+texture_repeat = 2
+offset_right = 640.0
+offset_bottom = 201.0
+mouse_filter = 2
+texture = ExtResource("11_piso")
+stretch_mode = 1
+
+[node name="Chairs" type="Sprite2D" parent="." unique_id=865671077]
+position = Vector2(17, 20)
+texture = ExtResource("10_cadeiras")
+centered = false
+
+[node name="Elevator" parent="." unique_id=726342851 instance=ExtResource("7_elevator_scene")]
+position = Vector2(282, -38)
+scale = Vector2(1.4, 1.4)
+
+[node name="WindowClip" type="ColorRect" parent="." unique_id=477386548]
+clip_children = 1
+offset_right = 465.0
+offset_bottom = 201.0
+mouse_filter = 2
+color = Color(0.96862745, 0.96862745, 0.96862745, 1)
+
+[node name="Actors" type="Node2D" parent="WindowClip" unique_id=1174867501]
+unique_name_in_owner = true
+
+[node name="MartaSpawnPoint" type="Marker2D" parent="WindowClip/Actors" unique_id=1185917956]
+unique_name_in_owner = true
+position = Vector2(-150, 140)
+
+[node name="MartaPoint" type="Marker2D" parent="WindowClip/Actors" unique_id=2002002351]
+unique_name_in_owner = true
+position = Vector2(141, 140)
+
+[node name="UI_CanvasLayer" type="CanvasLayer" parent="." unique_id=1580769350]
+
+[node name="ReceptionHUD" parent="UI_CanvasLayer" unique_id=1754358221 instance=ExtResource("4_hud")]
+unique_name_in_owner = true
+
+[node name="ElevatorPanel" parent="UI_CanvasLayer" unique_id=1449782921 instance=ExtResource("5_elevator")]
+unique_name_in_owner = true
+offset_left = 495.0
+offset_top = 203.0
+offset_right = 879.0
+offset_bottom = 827.0
+
+[node name="Highlight" type="Panel" parent="UI_CanvasLayer" unique_id=1730893412]
+unique_name_in_owner = true
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBox_highlight")
+
+[node name="NarrationLayer" type="CanvasLayer" parent="." unique_id=1269435136]
+layer = 5
+
+[node name="Narration" type="ColorRect" parent="NarrationLayer" unique_id=8095531]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07, 0.06, 0.06, 1)
+
+[node name="NarrationLabel" type="Label" parent="NarrationLayer/Narration" unique_id=1304491591]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.93, 0.9, 0.84, 1)
+theme_override_constants/line_spacing = 2
+theme_override_fonts/font = ExtResource("6_text")
+theme_override_font_sizes/font_size = 16
+text = "Narração"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="NarrationHint" type="Label" parent="NarrationLayer/Narration" unique_id=1327304016]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -40.0
+offset_right = 100.0
+offset_bottom = -28.0
+theme_override_colors/font_color = Color(0.6, 0.55, 0.5, 1)
+theme_override_fonts/font = ExtResource("6_text")
+theme_override_font_sizes/font_size = 10
+text = "[Espaço] continuar"
+horizontal_alignment = 1
+
+[node name="SkipLayer" type="CanvasLayer" parent="." unique_id=295654798]
+layer = 20
+
+[node name="SkipButton" type="Button" parent="SkipLayer" unique_id=1023581630]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -134.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 18.0
+grow_horizontal = 0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93, 0.9, 0.84, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_text")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBox_skip")
+theme_override_styles/pressed = SubResource("StyleBox_skip_hover")
+theme_override_styles/hover = SubResource("StyleBox_skip_hover")
+text = "Pular tutorial [Esc]"

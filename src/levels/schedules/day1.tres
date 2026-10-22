@@ -8,10 +8,42 @@
 [ext_resource type="Texture2D" uid="uid://brwssu6vo4wn4" path="res://src/npcs/assets/lucas/lucas_entregrador.png" id="4_1mxdf"]
 [ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/Day1/common_npc_male1.tres" id="4_3djo4"]
 [ext_resource type="Resource" uid="uid://ylajsyngiss5" path="res://src/npcs/resources/Day1/common_npc_female1.tres" id="5_3djo4"]
+[ext_resource type="Script" uid="uid://dvpyfvnwc78bh" path="res://src/levels/scripts/marta_rule.gd" id="9_rule"]
+[ext_resource type="Resource" path="res://src/levels/schedules/day2.tres" id="10_dia2"]
+[ext_resource type="Resource" uid="uid://b5qa6blw8wptq" path="res://src/npcs/dialogue/dialoguesCommon/4 andar/common4a.tres" id="d4a"]
+[ext_resource type="Resource" uid="uid://cruf2n81kiwg0" path="res://src/npcs/dialogue/dialoguesCommon/4 andar/common4b.tres" id="d4b"]
+[ext_resource type="Resource" uid="uid://g184fibsps7x" path="res://src/npcs/dialogue/dialoguesCommon/5 andar/common5a.tres" id="d5a"]
+[ext_resource type="Resource" uid="uid://daexj4ac2b52e" path="res://src/npcs/dialogue/dialoguesCommon/5 andar/common5b.tres" id="d5b"]
+[ext_resource type="Resource" uid="uid://bsnwfhgg8a3ta" path="res://src/npcs/dialogue/dialoguesCommon/1 andar/common1a.tres" id="fc_common1a"]
+[ext_resource type="Resource" uid="uid://un6ed3n6rug6" path="res://src/npcs/dialogue/dialoguesCommon/1 andar/common1b.tres" id="fc_common1b"]
+[ext_resource type="Resource" uid="uid://cm12lr1uaarn1" path="res://src/npcs/dialogue/dialoguesCommon/1 andar/common1c.tres" id="fc_common1c"]
+[ext_resource type="Resource" uid="uid://blwwdvjuaj2u5" path="res://src/npcs/dialogue/dialoguesCommon/1 andar/common1d.tres" id="fc_common1d"]
+[ext_resource type="Resource" uid="uid://d08fhsp3l45pm" path="res://src/npcs/dialogue/dialoguesCommon/2 andar/common2a.tres" id="fc_common2a"]
+[ext_resource type="Resource" uid="uid://bkxaschsiredw" path="res://src/npcs/dialogue/dialoguesCommon/2 andar/common2b.tres" id="fc_common2b"]
+[ext_resource type="Resource" uid="uid://u6dd5hxe7b6w" path="res://src/npcs/dialogue/dialoguesCommon/2 andar/common2c.tres" id="fc_common2c"]
+[ext_resource type="Resource" uid="uid://c1kx18xbhdnwf" path="res://src/npcs/dialogue/dialoguesCommon/2 andar/common2d.tres" id="fc_common2d"]
+[ext_resource type="Resource" uid="uid://c73a14xpcxu3y" path="res://src/npcs/dialogue/dialoguesCommon/3 andar/common3a.tres" id="fc_common3a"]
+[ext_resource type="Resource" uid="uid://c5xldf8nx3yb4" path="res://src/npcs/dialogue/dialoguesCommon/3 andar/common3b.tres" id="fc_common3b"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesCommon/3 andar/common3c.tres" id="fc_common3c"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesCommon/3 andar/common3d.tres" id="fc_common3d"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesCommon/4 andar/common4c.tres" id="fc_common4c"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesCommon/4 andar/common4d.tres" id="fc_common4d"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesCommon/5 andar/common5c.tres" id="fc_common5c"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesCommon/5 andar/common5d.tres" id="fc_common5d"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesCommon/6 andar/common6a.tres" id="fc_common6a"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesCommon/6 andar/common6b.tres" id="fc_common6b"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesCommon/6 andar/common6c.tres" id="fc_common6c"]
+[ext_resource type="Resource" path="res://src/npcs/dialogue/dialoguesCommon/6 andar/common6d.tres" id="fc_common6d"]
 
 [sub_resource type="Resource" id="Interaction_aleatorios"]
 script = ExtResource("3_inter")
 repeticoes = 4
+
+[sub_resource type="Resource" id="Resource_df8m6"]
+script = ExtResource("3_inter")
+repeticoes = 2
+pool = Array[ExtResource("1_ha2se")]([ExtResource("5_3djo4"), ExtResource("4_3djo4")])
+metadata/_custom_type_script = "uid://brn4guv252f6e"
 
 [sub_resource type="Resource" id="Resource_6es8l"]
 script = ExtResource("1_7wgci")
@@ -26,20 +58,57 @@ visitante = ExtResource("2_00xs8")
 sprite = ExtResource("4_1mxdf")
 dialogo = SubResource("Resource_6es8l")
 
-[sub_resource type="Resource" id="Resource_df8m6"]
-script = ExtResource("3_inter")
-repeticoes = 2
-pool = Array[ExtResource("1_ha2se")]([ExtResource("5_3djo4"), ExtResource("4_3djo4")])
-metadata/_custom_type_script = "uid://brn4guv252f6e"
+[sub_resource type="Resource" id="Regra_subsolo"]
+script = ExtResource("9_rule")
+fala = "Ah, antes que eu me esqueça: quem pedir o 5º andar hoje... mande para o subsolo. Não precisa explicar nada. Eles vão entender quando chegarem lá."
+texto_prancheta = "Pediu o 5º andar? Mande para o subsolo."
+andar_pedido = 5
+andar_destino = -1
+falas_caso = Array[ExtResource("1_7wgci")]([ExtResource("d5a"), ExtResource("d5b")])
 
-[sub_resource type="Resource" id="Resource_nkgg7"]
-script = ExtResource("3_inter")
-modo = 1
-metadata/_custom_type_script = "uid://brn4guv252f6e"
+[sub_resource type="Resource" id="Regra_rogerio"]
+script = ExtResource("9_rule")
+fala = "Se alguém perguntar por um tal de Rogério, diga que ninguém com esse nome trabalha aqui. Nunca trabalhou. Entendido? Ótimo."
+texto_prancheta = "Ninguém chamado Rogério trabalha aqui. Nunca trabalhou."
+
+[sub_resource type="Resource" id="Regra_quarto"]
+script = ExtResource("9_rule")
+fala = "O 4º andar está... indisponível. Negue o acesso a quem pedir. E se ouvir barulho vindo do elevador, finja que não ouviu."
+texto_prancheta = "4º andar: negar acesso. Ignore os barulhos."
+andar_pedido = 4
+falas_caso = Array[ExtResource("1_7wgci")]([ExtResource("d4a"), ExtResource("d4b")])
+
+[sub_resource type="Resource" id="Regra_presidencia"]
+script = ExtResource("9_rule")
+fala = "Ninguém sobe para a Presidência hoje. O diretor está... ocupado. Quem pedir o 6º andar, mande para o subsolo. Ele vai descer para encontrá-los."
+texto_prancheta = "6º andar? Mande para o subsolo."
+andar_pedido = 6
+andar_destino = -1
+
+[sub_resource type="Resource" id="Regra_rh"]
+script = ExtResource("9_rule")
+fala = "Quem vier ao RH hoje... mande direto para o 5º andar. A Pesquisa Avançada está precisando de voluntários. Eles não precisam saber disso."
+texto_prancheta = "Pediu o 2º andar? Mande para o 5º."
+andar_pedido = 2
+andar_destino = 5
+
+[sub_resource type="Resource" id="Regra_batidas"]
+script = ExtResource("9_rule")
+fala = "Se ouvir alguém batendo de dentro do poço do elevador, não chame a manutenção. Isso é normal. Totalmente normal."
+texto_prancheta = "Batidas no poço do elevador são normais."
+
+[sub_resource type="Resource" id="Regra_cameras"]
+script = ExtResource("9_rule")
+fala = "Sorria sempre. As câmeras gostam quando você sorri. E eu sempre vejo as câmeras."
+texto_prancheta = "Sorria. As câmeras estão vendo."
 
 [resource]
 script = ExtResource("2_1agin")
+proximo_dia = ExtResource("10_dia2")
 mensagem_fim = "Excelente trabalho por hoje! ... Mas... você deixou aquele entregador ir para o terceiro andar, certo?... Tudo bem... você não sabia!"
+regras_marta = Array[ExtResource("9_rule")]([SubResource("Regra_subsolo"), SubResource("Regra_rogerio"), SubResource("Regra_quarto"), SubResource("Regra_presidencia"), SubResource("Regra_rh"), SubResource("Regra_batidas"), SubResource("Regra_cameras")])
 pool_padrao = Array[ExtResource("1_ha2se")]([ExtResource("4_3djo4"), ExtResource("5_3djo4")])
-interacoes = Array[ExtResource("3_inter")]([SubResource("Interaction_aleatorios"), SubResource("Interaction_entregador"), SubResource("Resource_df8m6"), SubResource("Resource_nkgg7")])
+interacoes = Array[ExtResource("3_inter")]([SubResource("Interaction_aleatorios"), SubResource("Resource_df8m6"), SubResource("Interaction_entregador")])
+andares_do_dia = PackedInt32Array(1, 2, 4, 5, 6)
+falas_comuns = Array[ExtResource("1_7wgci")]([ExtResource("fc_common1a"), ExtResource("fc_common1b"), ExtResource("fc_common1c"), ExtResource("fc_common1d"), ExtResource("fc_common2a"), ExtResource("fc_common2b"), ExtResource("fc_common2c"), ExtResource("fc_common2d"), ExtResource("fc_common3a"), ExtResource("fc_common3b"), ExtResource("fc_common3c"), ExtResource("fc_common3d"), ExtResource("d4a"), ExtResource("d4b"), ExtResource("fc_common4c"), ExtResource("fc_common4d"), ExtResource("d5a"), ExtResource("d5b"), ExtResource("fc_common5c"), ExtResource("fc_common6a"), ExtResource("fc_common6b"), ExtResource("fc_common6c"), ExtResource("fc_common5d"), ExtResource("fc_common6d")])
 metadata/_custom_type_script = "uid://dw560omsfs2go"

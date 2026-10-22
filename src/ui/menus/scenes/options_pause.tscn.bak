@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://bfmon6s3y20l"]
+
+[ext_resource type="Script" uid="uid://bm5rjsblsmu7u" path="res://src/ui/menus/scripts/options_pause.gd" id="1_ngfjj"]
+[ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://fonts/PixeloidSans-Bold.ttf" id="2_wj4tm"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="3_7n0b6"]
+[ext_resource type="FontVariation" uid="uid://dffcisljywyok" path="res://fonts/resources/dynapuff_regular.tres" id="4_7n0b6"]
+
+[node name="OptionsPause" type="Control" unique_id=1171505832]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ngfjj")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1509569264]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.78431374)
+
+[node name="Title" type="Label" parent="." unique_id=2004073900]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 55.0
+offset_right = 470.0
+offset_bottom = 105.0
+theme_override_fonts/font = ExtResource("2_wj4tm")
+theme_override_font_sizes/font_size = 28
+text = "PAUSADO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Fullscreen" type="LinkButton" parent="." unique_id=80030593]
+layout_mode = 0
+offset_left = 270.0
+offset_top = 143.0
+offset_right = 368.0
+offset_bottom = 163.0
+focus_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.38431373, 0.34117648, 1)
+theme_override_colors/font_pressed_color = Color(0.43529412, 0, 0.019607844, 1)
+theme_override_colors/font_hover_color = Color(1, 0.1764706, 0.1764706, 1)
+theme_override_fonts/font = ExtResource("3_7n0b6")
+theme_override_font_sizes/font_size = 16
+text = "TELA CHEIA"
+underline = 2
+
+[node name="MasterText" type="Label" parent="." unique_id=1456692595]
+layout_mode = 0
+offset_left = 187.0
+offset_top = 182.0
+offset_right = 297.0
+offset_bottom = 205.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_7n0b6")
+text = "Volume Geral"
+
+[node name="MasterVolume" type="HSlider" parent="." unique_id=1292147177]
+layout_mode = 0
+offset_left = 318.0
+offset_top = 187.0
+offset_right = 463.0
+offset_bottom = 203.0
+
+[node name="MusicText" type="Label" parent="." unique_id=711766367]
+layout_mode = 0
+offset_left = 177.0
+offset_top = 210.0
+offset_right = 303.0
+offset_bottom = 233.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_7n0b6")
+text = "Volume Música"
+
+[node name="MusicVolume" type="HSlider" parent="." unique_id=492216733]
+layout_mode = 0
+offset_left = 318.0
+offset_top = 213.0
+offset_right = 462.0
+offset_bottom = 229.0
+
+[node name="SFXText" type="Label" parent="." unique_id=1014098105]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 232.0
+offset_right = 310.0
+offset_bottom = 255.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_7n0b6")
+text = "Efeitos sonoros"
+
+[node name="SFXVolume" type="HSlider" parent="." unique_id=1819719651]
+layout_mode = 0
+offset_left = 318.0
+offset_top = 236.0
+offset_right = 463.0
+offset_bottom = 252.0
+
+[node name="Back" type="LinkButton" parent="." unique_id=1357704994]
+layout_mode = 0
+offset_left = 285.0
+offset_top = 289.0
+offset_right = 349.0
+offset_bottom = 312.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.38431373, 0.34117648, 1)
+theme_override_colors/font_pressed_color = Color(0.43529412, 0, 0.019607844, 1)
+theme_override_colors/font_hover_color = Color(1, 0.1764706, 0.1764706, 1)
+theme_override_fonts/font = ExtResource("3_7n0b6")
+text = "VOLTAR"
+underline = 2
