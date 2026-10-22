@@ -14,8 +14,8 @@ const DIGITANDO := preload("res://sounds/sfx/digitando.mp3")
 const ERRO := preload("res://sounds/sfx/erro.mp3")
 const SUCESSO := preload("res://sounds/sfx/sucess.mp3")
 const PASSANDO_PAGINA := preload("res://sounds/sfx/passando_pagina.mp3")
-const MUSICA_GAMEPLAY := preload("res://sounds/music/musica_gameplay.mp3")
-const MUSICA_ERRADA := preload("res://sounds/music/musica_errada.mp3")
+const MUSICA_GAMEPLAY := preload("res://sounds/music/music_gameplay.mp3")
+const MUSICA_ERRADA := preload("res://sounds/music/music_reverse.mp3")
 
 ## Volume inicial de cada bus, em % (0 a 100), igual aos sliders das opções. 50% = -6 dB.
 const DEFAULT_BUS_PERCENT := {&"Master": 100.0, &"Music": 50.0, &"SFX": 100.0}

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://c6u578611k2mr"]
 
-[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_5i0pw"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/scripts/visitor_data.gd" id="1_5i0pw"]
 [ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="2_c01o2"]
 
 [resource]

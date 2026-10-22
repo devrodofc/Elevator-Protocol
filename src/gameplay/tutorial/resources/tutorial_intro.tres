@@ -1,0 +1,70 @@
+[gd_resource type="Resource" script_class="TutorialScript" format=3 uid="uid://d02lrjb830jbu"]
+
+[ext_resource type="Script" uid="uid://u8jaq0wy3usc" path="res://src/gameplay/tutorial/scripts/tutorial_script.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://mtxl0oytijyg" path="res://src/gameplay/tutorial/scripts/tutorial_step.gd" id="2_step"]
+
+[sub_resource type="Resource" id="Resource_passo01"]
+script = ExtResource("2_step")
+texto = "Seis meses sem emprego. As contas não esperam, e o dinheiro guardado acabou na semana passada."
+
+[sub_resource type="Resource" id="Resource_passo02"]
+script = ExtResource("2_step")
+texto = "Então chegou o e-mail: \"Vaga de recepcionista. Início imediato. Não é necessária experiência.\""
+
+[sub_resource type="Resource" id="Resource_passo03"]
+script = ExtResource("2_step")
+texto = "Um prédio comercial comum no centro da cidade. Seis andares. Salário acima da média."
+
+[sub_resource type="Resource" id="Resource_passo04"]
+script = ExtResource("2_step")
+texto = "Bom demais para ser verdade. Mas você não estava em posição de fazer perguntas."
+
+[sub_resource type="Resource" id="Resource_passo05"]
+script = ExtResource("2_step")
+falante = "Marta"
+texto = "Bom dia! Você deve ser a nova recepcionista. Eu sou a Marta, supervisora do prédio. Que alegria ter você aqui!"
+
+[sub_resource type="Resource" id="Resource_passo06"]
+script = ExtResource("2_step")
+falante = "Marta"
+texto = "O trabalho é simples: cada visitante chega ao balcão e diz para onde quer ir. A fala dele aparece aqui."
+destaque = 1
+
+[sub_resource type="Resource" id="Resource_passo07"]
+script = ExtResource("2_step")
+falante = "Marta"
+texto = "Na dúvida, consulte o livro. Ele mostra o que funciona em cada andar. Use a seta para virar a página."
+destaque = 2
+
+[sub_resource type="Resource" id="Resource_passo08"]
+script = ExtResource("2_step")
+falante = "Marta"
+texto = "As regras do dia ficam nesta prancheta. Elas mudam de um dia para o outro, então leia sempre."
+destaque = 3
+
+[sub_resource type="Resource" id="Resource_passo09"]
+script = ExtResource("2_step")
+falante = "Marta"
+texto = "E repare no crachá de quem está na sua frente. As pessoas nem sempre são quem dizem ser."
+destaque = 4
+
+[sub_resource type="Resource" id="Resource_passo10"]
+script = ExtResource("2_step")
+falante = "Marta"
+texto = "Depois é só escolher o andar no painel do elevador, ou negar o acesso."
+destaque = 5
+
+[sub_resource type="Resource" id="Resource_passo11"]
+script = ExtResource("2_step")
+falante = "Marta"
+texto = "Ah, e o subsolo... ninguém desce lá. A não ser que eu peça, é claro."
+destaque = 5
+
+[sub_resource type="Resource" id="Resource_passo12"]
+script = ExtResource("2_step")
+falante = "Marta"
+texto = "Vou estar sempre de olho em você. Bom trabalho!"
+
+[resource]
+script = ExtResource("1_script")
+passos = Array[ExtResource("2_step")]([SubResource("Resource_passo01"), SubResource("Resource_passo02"), SubResource("Resource_passo03"), SubResource("Resource_passo04"), SubResource("Resource_passo05"), SubResource("Resource_passo06"), SubResource("Resource_passo07"), SubResource("Resource_passo08"), SubResource("Resource_passo09"), SubResource("Resource_passo10"), SubResource("Resource_passo11"), SubResource("Resource_passo12")])

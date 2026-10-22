@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="NameList" format=3 uid="uid://bv0ek7v8hadwd"]
+
+[ext_resource type="Script" uid="uid://dqqkx48suhb5s" path="res://src/npcs/resources/scripts/name_list.gd" id="1_0ukee"]
+
+[resource]
+script = ExtResource("1_0ukee")
+names = PackedStringArray("Carlos", "João", "Pedro", "Lucas", "Rafael", "Marcos", "Paulo", "André", "Bruno", "Felipe", "Gabriel", "Thiago", "Rodrigo", "Daniel", "Gustavo", "Eduardo", "Fernando", "Ricardo", "Roberto", "Sérgio", "Antônio", "José", "Luiz", "Márcio", "Renato", "Vinícius", "Leonardo", "Diego", "Fábio", "Henrique")

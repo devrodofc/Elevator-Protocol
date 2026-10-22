@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://df1283w4ylxq2"]
 
 [ext_resource type="Script" uid="uid://m0qsose35kot" path="res://src/ui/menus/scripts/end_screen.gd" id="1_script"]
-[ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://fonts/PixeloidSans-Bold.ttf" id="3_negrito"]
+[ext_resource type="FontFile" uid="uid://diu3d6k46wgvo" path="res://assets/fonts/pixeloid_sans_bold.ttf" id="3_negrito"]
 
 [node name="EndScreen" type="Control" unique_id=1575856282]
 layout_mode = 3

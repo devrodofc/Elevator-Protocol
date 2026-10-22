@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://0s2adho6lhr3"]
 
 [ext_resource type="Script" uid="uid://dycu3xihjorki" path="res://src/ui/menus/scripts/options.gd" id="1_jqr15"]
-[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://fonts/PixeloidSans.ttf" id="3_jfahk"]
-[ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/background/tela inicial do game 1 frame.jpg" id="3_quti6"]
-[ext_resource type="Texture2D" uid="uid://410knbpyr5xn" path="res://src/ui/menus/assets/buttons/return/botão voltar(1).png" id="4_jfahk"]
-[ext_resource type="Texture2D" uid="uid://bmejs05qhamrh" path="res://src/ui/menus/assets/buttons/return/botão voltar pressionado(1).png" id="5_3uegq"]
-[ext_resource type="Texture2D" uid="uid://dpure34tj7c4l" path="res://src/ui/menus/assets/buttons/return/botão voltar hover(1).png" id="6_rm8dy"]
-[ext_resource type="Texture2D" uid="uid://c3aqthjkwwge1" path="res://src/ui/menus/assets/background/tela inicial do game 2 frame..jpg" id="7_5vnku"]
-[ext_resource type="Texture2D" uid="uid://bh61au3d0p3ne" path="res://src/ui/menus/assets/background/tela inicial do game 3 frame..jpg" id="8_he1fu"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://assets/fonts/pixeloid_sans.ttf" id="3_jfahk"]
+[ext_resource type="Texture2D" uid="uid://b0mp8o0wqthyq" path="res://src/ui/menus/assets/background/initial_background_1_frame.jpg" id="3_quti6"]
+[ext_resource type="Texture2D" uid="uid://410knbpyr5xn" path="res://src/ui/menus/assets/buttons/return/btn_return_normal.png" id="4_jfahk"]
+[ext_resource type="Texture2D" uid="uid://bmejs05qhamrh" path="res://src/ui/menus/assets/buttons/return/btn_return_pressed.png" id="5_3uegq"]
+[ext_resource type="Texture2D" uid="uid://dpure34tj7c4l" path="res://src/ui/menus/assets/buttons/return/btn_return_hover.png" id="6_rm8dy"]
+[ext_resource type="Texture2D" uid="uid://c3aqthjkwwge1" path="res://src/ui/menus/assets/background/initial_background_2_frame.jpg" id="7_5vnku"]
+[ext_resource type="Texture2D" uid="uid://bh61au3d0p3ne" path="res://src/ui/menus/assets/background/initial_background_3_frame.jpg" id="8_he1fu"]
 
 [sub_resource type="Animation" id="Animation_cfvon"]
 length = 1.5

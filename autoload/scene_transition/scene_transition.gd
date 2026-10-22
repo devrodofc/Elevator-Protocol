@@ -1,7 +1,7 @@
 extends CanvasLayer
 ## Transição de cena global (autoload "SceneTransition"):
 ## escurece a tela, mostra um título opcional (ex.: "Dia 1"), troca a cena e clareia de novo.
-##   SceneTransition.transition_to("res://src/levels/scenes/reception.tscn", "Dia 1")
+##   SceneTransition.transition_to("res://src/gameplay/reception/scenes/reception.tscn", "Dia 1")
 
 ## Emitido quando a nova cena já está totalmente visível.
 signal finished

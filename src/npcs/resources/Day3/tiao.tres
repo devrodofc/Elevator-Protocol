@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="VisitorData" format=3]
 
-[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_visitor"]
-[ext_resource type="Texture2D" path="res://src/npcs/assets/tiao/tiao_jardineiro.png" id="2_tiao"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/scripts/visitor_data.gd" id="1_visitor"]
+[ext_resource type="Texture2D" uid="uid://jryqva1w2poh" path="res://src/npcs/assets/tiao/tiao_jardineiro.png" id="2_tiao"]
 
 [resource]
 script = ExtResource("1_visitor")
