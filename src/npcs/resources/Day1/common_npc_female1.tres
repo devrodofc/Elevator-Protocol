@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://ylajsyngiss5"]
 
 [ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_ku75k"]
-[ext_resource type="Script" uid="uid://dqqkx48suhb5s" path="res://src/npcs/resources/name_list.gd" id="2_dperg"]
-[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="3_fik82"]
-[ext_resource type="Texture2D" uid="uid://ictwd4yy5kpx" path="res://src/npcs/assets/mulher1/npc mulher 1.png" id="4_iqb70"]
-[ext_resource type="Texture2D" uid="uid://cs26gm0bsysvi" path="res://src/npcs/assets/mulher2/npc mulher 2.png" id="5_vclc3"]
+[ext_resource type="Script" uid="uid://dqqkx48suhb5s" path="res://src/npcs/resources/scripts/name_list.gd" id="2_dperg"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/scripts/visitor_data.gd" id="3_fik82"]
+[ext_resource type="Texture2D" uid="uid://ictwd4yy5kpx" path="res://src/npcs/assets/npc_woman_1/npc mulher 1.png" id="4_iqb70"]
+[ext_resource type="Texture2D" uid="uid://cs26gm0bsysvi" path="res://src/npcs/assets/npc_woman_2/npc_woman_2.png" id="5_vclc3"]
 
 [sub_resource type="Resource" id="Resource_4b4sj"]
 script = ExtResource("1_ku75k")

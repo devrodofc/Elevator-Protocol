@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dkr07sdxnwmoo"]
 
-[ext_resource type="Texture2D" uid="uid://2pn5jqcktxsw" path="res://src/npcs/assets/jose/npc.png" id="1_3hfjv"]
-[ext_resource type="Texture2D" uid="uid://cgdcoisvlittj" path="res://src/npcs/assets/jose/npc_1_frame_2.png" id="2_f3j2m"]
-[ext_resource type="Texture2D" uid="uid://tkelhqjxmmhk" path="res://src/npcs/assets/jose/npc_1_frame_3.png" id="3_dariy"]
+[ext_resource type="Texture2D" uid="uid://2pn5jqcktxsw" path="res://src/npcs/assets/npc_male_1/npc_male_1_frame_1.png" id="1_3hfjv"]
+[ext_resource type="Texture2D" uid="uid://cgdcoisvlittj" path="res://src/npcs/assets/npc_male_1/npc_male_1_frame_2.png" id="2_f3j2m"]
+[ext_resource type="Texture2D" uid="uid://tkelhqjxmmhk" path="res://src/npcs/assets/npc_male_1/npc_male_1_frame_3.png" id="3_dariy"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_15u54"]
 animations = [{

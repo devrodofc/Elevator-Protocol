@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5r8pk445syrc"
-path="res://.godot/imported/marta_raiva.png-4dbaa5398f653cd83dbb3f5685a453e9.ctex"
+uid="uid://b5jq3p1dxdjnf"
+path="res://.godot/imported/marta_2_frame.png-52ed0a54f8c4f7a1b7c5740cc95879c0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/npcs/assets/marta/marta_raiva.png"
-dest_files=["res://.godot/imported/marta_raiva.png-4dbaa5398f653cd83dbb3f5685a453e9.ctex"]
+source_file="res://src/npcs/assets/marta/marta_2_frame.png"
+dest_files=["res://.godot/imported/marta_2_frame.png-52ed0a54f8c4f7a1b7c5740cc95879c0.ctex"]
 
 [params]
 

@@ -2,7 +2,7 @@
 class_name VisitorData
 extends Resource
 
-const NOMES_PADRAO_PATH := "res://src/npcs/resources/male_names.tres"
+const NOMES_PADRAO_PATH := "res://src/npcs/resources/visitors/male_names.tres"
 
 @export var id: String = ""
 @export var nome: String = ""

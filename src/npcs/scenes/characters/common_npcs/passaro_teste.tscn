@@ -1,20 +1,20 @@
 [gd_scene format=3 uid="uid://ck5iujkbuh1g0"]
 
-[ext_resource type="Texture2D" uid="uid://3qvngixk3klc" path="res://src/npcs/assets/passaroteste/passaro_1.png" id="1_fmeb5"]
-[ext_resource type="Texture2D" uid="uid://nndjb2amryix" path="res://src/npcs/assets/passaroteste/passaro_2.png" id="2_5r58d"]
-[ext_resource type="Texture2D" uid="uid://c3pdqgkb0omg6" path="res://src/npcs/assets/passaroteste/passaro_3.png" id="3_7xtpv"]
+[ext_resource type="Texture2D" uid="uid://3qvngixk3klc" path="res://src/npcs/assets/passaroteste/passaro_1.png" id="1_t503b"]
+[ext_resource type="Texture2D" uid="uid://nndjb2amryix" path="res://src/npcs/assets/passaroteste/passaro_2.png" id="2_gunhf"]
+[ext_resource type="Texture2D" uid="uid://c3pdqgkb0omg6" path="res://src/npcs/assets/passaroteste/passaro_3.png" id="3_eclv8"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_15u54"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_fmeb5")
+"texture": ExtResource("1_t503b")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_5r58d")
+"texture": ExtResource("2_gunhf")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_7xtpv")
+"texture": ExtResource("3_eclv8")
 }],
 "loop": 1,
 "name": &"default",

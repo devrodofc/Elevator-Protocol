@@ -261,7 +261,7 @@ func fail() -> void:
 		
 	# 4. Marta sai do elevador e assume a posição
 	if marta_scene != null:
-		var sprite_raiva: Texture2D = preload("res://src/npcs/assets/marta/marta_raiva.png") if schedule_config == null or schedule_config.dia_numero == 1 else null
+		var sprite_raiva: Texture2D = preload("res://src/npcs/assets/marta/marta_anger.png") if schedule_config == null or schedule_config.dia_numero == 1 else null
 		await _marta_arrive(true, null, sprite_raiva) # troca o sprite somente ao chegar
 	if not is_inside_tree():
 		return

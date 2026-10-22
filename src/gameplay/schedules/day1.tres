@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="DayScheduleConfig" format=3 uid="uid://crs2g0lcexipn"]
 
 [ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_7wgci"]
-[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_ha2se"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/scripts/visitor_data.gd" id="1_ha2se"]
 [ext_resource type="Resource" uid="uid://c6u578611k2mr" path="res://src/npcs/resources/birdTest.tres" id="2_00xs8"]
 [ext_resource type="Script" uid="uid://dw560omsfs2go" path="res://src/gameplay/scripts/day_schedule.gd" id="2_1agin"]
 [ext_resource type="Script" uid="uid://brn4guv252f6e" path="res://src/gameplay/scripts/day_interaction.gd" id="3_inter"]

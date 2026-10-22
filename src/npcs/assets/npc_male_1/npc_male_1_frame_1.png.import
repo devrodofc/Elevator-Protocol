@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ictwd4yy5kpx"
-path="res://.godot/imported/npc mulher 1.png-7c8a837ada7b1f43fcc6ddedb8739ae4.ctex"
+uid="uid://2pn5jqcktxsw"
+path="res://.godot/imported/npc_male_1_frame_1.png-62f9ee0011d2ae021c023ae7e53c7831.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/npcs/assets/mulher1/npc mulher 1.png"
-dest_files=["res://.godot/imported/npc mulher 1.png-7c8a837ada7b1f43fcc6ddedb8739ae4.ctex"]
+source_file="res://src/npcs/assets/npc_male_1/npc_male_1_frame_1.png"
+dest_files=["res://.godot/imported/npc_male_1_frame_1.png-62f9ee0011d2ae021c023ae7e53c7831.ctex"]
 
 [params]
 

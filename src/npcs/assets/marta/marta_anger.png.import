@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6gilgvuk57kg"
-path="res://.godot/imported/Marta sangrenta.png-8bd8a97cc4feee7a055bcdaf6de585ed.ctex"
+uid="uid://c5r8pk445syrc"
+path="res://.godot/imported/marta_anger.png-f8761eacb7ef56b8e3607b2897e843d1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/npcs/assets/marta/Marta sangrenta.png"
-dest_files=["res://.godot/imported/Marta sangrenta.png-8bd8a97cc4feee7a055bcdaf6de585ed.ctex"]
+source_file="res://src/npcs/assets/marta/marta_anger.png"
+dest_files=["res://.godot/imported/marta_anger.png-f8761eacb7ef56b8e3607b2897e843d1.ctex"]
 
 [params]
 

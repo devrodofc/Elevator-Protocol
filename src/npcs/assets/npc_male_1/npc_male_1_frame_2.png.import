@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tkelhqjxmmhk"
-path="res://.godot/imported/npc_1_frame_3.png-90bde69356cc32f10d0f36df2e3fd0ec.ctex"
+uid="uid://cgdcoisvlittj"
+path="res://.godot/imported/npc_male_1_frame_2.png-d9c2a6ae95b593d56adf76e33f9f2072.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/npcs/assets/jose/npc_1_frame_3.png"
-dest_files=["res://.godot/imported/npc_1_frame_3.png-90bde69356cc32f10d0f36df2e3fd0ec.ctex"]
+source_file="res://src/npcs/assets/npc_male_1/npc_male_1_frame_2.png"
+dest_files=["res://.godot/imported/npc_male_1_frame_2.png-d9c2a6ae95b593d56adf76e33f9f2072.ctex"]
 
 [params]
 

@@ -11,9 +11,9 @@
 [ext_resource type="Resource" uid="uid://c1kx18xbhdnwf" path="res://src/npcs/dialogue/dialoguesCommon/2 andar/common2d.tres" id="9_piqpc"]
 [ext_resource type="Resource" uid="uid://c73a14xpcxu3y" path="res://src/npcs/dialogue/dialoguesCommon/3 andar/common3a.tres" id="10_7un1w"]
 [ext_resource type="Resource" uid="uid://c5xldf8nx3yb4" path="res://src/npcs/dialogue/dialoguesCommon/3 andar/common3b.tres" id="11_xlqvn"]
-[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="12_xyq2x"]
-[ext_resource type="Texture2D" uid="uid://2pn5jqcktxsw" path="res://src/npcs/assets/jose/npc.png" id="13_5asm4"]
-[ext_resource type="Texture2D" uid="uid://5kg5bi67f3rc" path="res://src/npcs/assets/homem2/npc homem 2 .png" id="14_iv1oq"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/scripts/visitor_data.gd" id="12_xyq2x"]
+[ext_resource type="Texture2D" uid="uid://2pn5jqcktxsw" path="res://src/npcs/assets/npc_male_1/npc_male_1_frame_1.png" id="13_5asm4"]
+[ext_resource type="Texture2D" uid="uid://5kg5bi67f3rc" path="res://src/npcs/assets/npc_male_2/npc_male_2 .png" id="14_iv1oq"]
 
 [sub_resource type="Resource" id="Resource_oni5j"]
 script = ExtResource("1_odqj8")

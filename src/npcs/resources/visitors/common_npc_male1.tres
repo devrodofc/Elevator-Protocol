@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="VisitorData" format=3 uid="uid://bisjqw4jlnmn2"]
 
-[ext_resource type="PackedScene" uid="uid://dkr07sdxnwmoo" path="res://src/npcs/scenes/characters/CommonNPCs/npc1_male.tscn" id="1_0ndgi"]
-[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/visitor_data.gd" id="1_n2dn3"]
+[ext_resource type="PackedScene" uid="uid://dkr07sdxnwmoo" path="res://src/npcs/scenes/characters/common_npcs/npc_male_1.tscn" id="1_0ndgi"]
 [ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="2_hfhpi"]
 [ext_resource type="Resource" uid="uid://bsnwfhgg8a3ta" path="res://src/npcs/dialogue/dialoguesCommon/1 andar/common1a.tres" id="3_oxr1i"]
 [ext_resource type="Resource" uid="uid://un6ed3n6rug6" path="res://src/npcs/dialogue/dialoguesCommon/1 andar/common1b.tres" id="4_7lpjs"]
@@ -13,13 +12,16 @@
 [ext_resource type="Resource" uid="uid://c1kx18xbhdnwf" path="res://src/npcs/dialogue/dialoguesCommon/2 andar/common2d.tres" id="10_hgkql"]
 [ext_resource type="Resource" uid="uid://c73a14xpcxu3y" path="res://src/npcs/dialogue/dialoguesCommon/3 andar/common3a.tres" id="11_ofk2d"]
 [ext_resource type="Resource" uid="uid://c5xldf8nx3yb4" path="res://src/npcs/dialogue/dialoguesCommon/3 andar/common3b.tres" id="12_1ejof"]
+[ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/scripts/visitor_data.gd" id="13_l2oge"]
 
 [resource]
-script = ExtResource("1_n2dn3")
+script = ExtResource("13_l2oge")
 id = "001"
 nome = "MaleNPC1"
 nome_aleatorio = true
 cena = ExtResource("1_0ndgi")
 tags = Array[String](["Common"])
 dialogos = Array[ExtResource("2_hfhpi")]([ExtResource("3_oxr1i"), ExtResource("4_7lpjs"), ExtResource("5_kdm6g"), ExtResource("6_mkliu"), ExtResource("7_wedsh"), ExtResource("8_4jo7d"), ExtResource("9_4fjkk"), ExtResource("10_hgkql"), ExtResource("11_ofk2d"), ExtResource("12_1ejof")])
+opcoes_sexo = PackedStringArray("Masculino", "Feminino")
+opcoes_ocupacao = PackedStringArray()
 metadata/_custom_type_script = "uid://c8k1xw7vuahns"

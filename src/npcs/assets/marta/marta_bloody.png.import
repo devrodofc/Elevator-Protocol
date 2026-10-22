@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crgrrrsma23pr"
-path="res://.godot/imported/Npc2 frame 3.png-fe0b7fa8d54fca3429dc3985a952a7ee.ctex"
+uid="uid://c6gilgvuk57kg"
+path="res://.godot/imported/marta_bloody.png-73bfacaca6e4acb9d335acf4423c78a5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/npcs/assets/marta/Npc2 frame 3.png"
-dest_files=["res://.godot/imported/Npc2 frame 3.png-fe0b7fa8d54fca3429dc3985a952a7ee.ctex"]
+source_file="res://src/npcs/assets/marta/marta_bloody.png"
+dest_files=["res://.godot/imported/marta_bloody.png-73bfacaca6e4acb9d335acf4423c78a5.ctex"]
 
 [params]
 

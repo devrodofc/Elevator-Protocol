@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://v3xk2s47amoh"]
 
 [ext_resource type="Script" uid="uid://b4j5bkpoawhvf" path="res://src/npcs/scripts/visitor.gd" id="1_pmryl"]
-[ext_resource type="Texture2D" uid="uid://cf6fdhph148i3" path="res://src/npcs/assets/marta/Npc2 frame 1.png" id="2_p5fo0"]
+[ext_resource type="Texture2D" uid="uid://cf6fdhph148i3" path="res://src/npcs/assets/marta/marta_1_frame.png" id="2_p5fo0"]
 
 [node name="Marta" type="Node2D" unique_id=2036592750]
 script = ExtResource("1_pmryl")
