@@ -4,16 +4,16 @@ extends CanvasLayer
 ## Enquanto está aberta o jogo fica pausado; P ou Esc fecham e devolvem o estado anterior.
 ## A interface é montada em código (sem .tscn) para não depender de uid.
 
-const RECEPTION_SCENE := "res://src/levels/scenes/reception.tscn"
+const RECEPTION_SCENE := "res://src/gameplay/reception/scenes/reception.tscn"
 const MENU_SCENE := "res://src/ui/menus/scenes/menu.tscn"
-const RECEPTION_SCRIPT := "res://src/levels/scripts/reception_manager.gd"
+const RECEPTION_SCRIPT := "res://src/gameplay/reception/scripts/reception_manager.gd"
 const DIAS: Array[String] = [
-	"res://src/levels/schedules/day1.tres",
-	"res://src/levels/schedules/day2.tres",
-	"res://src/levels/schedules/day3.tres",
+	"res://src/gameplay/schedules/day1.tres",
+	"res://src/gameplay/schedules/day2.tres",
+	"res://src/gameplay/schedules/day3.tres",
 ]
-const FONTE := preload("res://fonts/PixeloidSans.ttf")
-const FONTE_BOLD := preload("res://fonts/PixeloidSans-Bold.ttf")
+const FONTE := preload("res://assets/fonts/pixeloid_sans.ttf")
+const FONTE_BOLD := preload("res://assets/fonts/pixeloid_sans_bold.ttf")
 
 var _root: Control
 var _first_button: Button

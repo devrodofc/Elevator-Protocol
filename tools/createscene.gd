@@ -2,7 +2,7 @@
 extends EditorScript
 
 ## Caminho onde a cena final será salva
-const SCENE_SAVE_PATH: String = "res://src/levels/reception.tscn"
+const SCENE_SAVE_PATH: String = "res://src/gameplay/reception/scenes/reception.tscn"
 
 ## Caminhos esperados para as cenas filhas
 const VISITOR_SCENE_PATH: String = "res://src/npcs/scenes/visitor.tscn"
@@ -10,7 +10,7 @@ const DIALOGUE_UI_PATH: String = "res://src/ui/dialogue_ui.tscn"
 const ELEVATOR_PANEL_PATH: String = "res://src/ui/elevator_panel.tscn"
 const MANUAL_PANEL_PATH: String = "res://src/ui/manual_panel.tscn"
 const SHIFT_SUMMARY_PATH: String = "res://src/ui/shift_summary.tscn"
-const RECEPTION_MANAGER_SCRIPT_PATH: String = "res://src/levels/reception_manager.gd"
+const RECEPTION_MANAGER_SCRIPT_PATH: String = "res://src/gameplay/reception/scripts/reception_manager.gd"
 
 
 ## Helper que instancia a cena se ela existir, ou cria um placeholder tipado

@@ -1,6 +1,6 @@
 extends Control
 
-const GAME_SCENE := "res://src/levels/tutorial/tutorial.tscn" # o tutorial leva para a recepção no fim (ou ao pular)
+const GAME_SCENE := "res://src/gameplay/tutorial/scenes/tutorial.tscn"
 const OPTIONS_SCENE := "res://src/ui/menus/scenes/options.tscn"
 
 @onready var play_button: TextureButton = $Play

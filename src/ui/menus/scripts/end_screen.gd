@@ -200,8 +200,8 @@ func _voltar_ao_menu() -> void:
 
 
 func _montar_creditos() -> void:
-	var fonte: Font = load("res://fonts/PixeloidSans.ttf")
-	var negrito: Font = load("res://fonts/PixeloidSans-Bold.ttf")
+	var fonte: Font = load("res://assets/fonts/pixeloid_sans.ttf")
+	var negrito: Font = load("res://assets/fonts/pixeloid_sans_bold.ttf")
 	for item in CREDITOS:
 		var estilo: String = item[0]
 		var label := Label.new()
