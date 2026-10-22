@@ -1,0 +1,431 @@
+[gd_scene format=3 uid="uid://g33k8dvq7w1h"]
+
+[ext_resource type="Script" uid="uid://dqki0wyi1ymwu" path="res://src/gameplay/reception_25d/scripts/reception_camera.gd" id="1_camera"]
+[ext_resource type="Texture2D" uid="uid://2pn5jqcktxsw" path="res://src/npcs/assets/npc_male_1/npc_male_1_frame_1.png" id="2_visitor"]
+[ext_resource type="Script" uid="uid://b2yh2kdexnnxo" path="res://src/gameplay/reception_25d/scripts/test_sprite.gd" id="3_sprite"]
+[ext_resource type="PackedScene" path="res://src/gameplay/reception_25d/scenes/elevator_shell.tscn" id="4_elevator"]
+[ext_resource type="PackedScene" path="res://src/gameplay/reception_25d/scenes/entrance_shell.tscn" id="5_entrance"]
+[ext_resource type="PackedScene" path="res://src/gameplay/reception_25d/scenes/waiting_chair.tscn" id="6_chair"]
+[ext_resource type="Script" uid="uid://8m7rioaxw0ch" path="res://src/gameplay/reception_25d/scripts/visitor_movement.gd" id="7_movement"]
+[ext_resource type="Script" uid="uid://dfkyi1jf3tdui" path="res://src/gameplay/reception_25d/scripts/visitor_movement_test.gd" id="8_movement_test"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_room"]
+viewport_path = NodePath("RoomViewport")
+
+[sub_resource type="Environment" id="Environment_room"]
+background_mode = 1
+background_color = Color(0.055, 0.065, 0.08, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.75, 0.8, 0.9, 1)
+ambient_light_energy = 0.65
+reflected_light_source = 2
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.16, 0.19, 0.22, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+material = SubResource("Material_floor")
+size = Vector3(15, 0.2, 17)
+
+[sub_resource type="StandardMaterial3D" id="Material_wall"]
+albedo_color = Color(0.33, 0.4, 0.37, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_back_header"]
+material = SubResource("Material_wall")
+size = Vector3(15, 0.6, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_wall"]
+material = SubResource("Material_wall")
+size = Vector3(15, 3.6, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_side_wall"]
+material = SubResource("Material_wall")
+size = Vector3(0.2, 3.6, 17)
+
+[sub_resource type="BoxMesh" id="Mesh_right_header"]
+material = SubResource("Material_wall")
+size = Vector3(0.2, 0.8, 17)
+
+[sub_resource type="BoxMesh" id="Mesh_0"]
+material = SubResource("Material_wall")
+size = Vector3(2.6, 3, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_1"]
+material = SubResource("Material_wall")
+size = Vector3(4.8, 3, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_2"]
+material = SubResource("Material_wall")
+size = Vector3(0.2, 2.8, 1.1)
+
+[sub_resource type="BoxMesh" id="Mesh_3"]
+material = SubResource("Material_wall")
+size = Vector3(0.2, 2.8, 0.8)
+
+[sub_resource type="BoxMesh" id="Mesh_4"]
+material = SubResource("Material_wall")
+size = Vector3(0.2, 2.8, 6.5)
+
+[sub_resource type="StandardMaterial3D" id="Material_ceiling"]
+albedo_color = Color(0.29, 0.33, 0.33, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_5"]
+material = SubResource("Material_ceiling")
+size = Vector3(15, 0.2, 17)
+
+[sub_resource type="StandardMaterial3D" id="Material_desk"]
+albedo_color = Color(0.28, 0.16, 0.11, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_desk"]
+material = SubResource("Material_desk")
+size = Vector3(4.2, 1, 0.9)
+
+[sub_resource type="StandardMaterial3D" id="Material_counter"]
+albedo_color = Color(0.52, 0.34, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_counter"]
+material = SubResource("Material_counter")
+size = Vector3(4.4, 0.15, 1.1)
+
+[sub_resource type="StandardMaterial3D" id="Material_contact_shadow"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.015, 0.02, 0.025, 0.32)
+
+[sub_resource type="CylinderMesh" id="Mesh_contact_shadow"]
+material = SubResource("Material_contact_shadow")
+top_radius = 0.46
+bottom_radius = 0.46
+height = 0.002
+radial_segments = 12
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="Material_window"]
+albedo_color = Color(0.25, 0.46, 0.57, 1)
+emission_enabled = true
+emission = Color(0.25, 0.46, 0.57, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="BoxMesh" id="Mesh_6"]
+material = SubResource("Material_window")
+size = Vector3(0.08, 1.8, 2.7)
+
+[sub_resource type="StandardMaterial3D" id="Material_trim"]
+albedo_color = Color(0.43, 0.5, 0.51, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_7"]
+material = SubResource("Material_trim")
+size = Vector3(0.22, 0.12, 2.9)
+
+[sub_resource type="BoxMesh" id="Mesh_8"]
+material = SubResource("Material_trim")
+size = Vector3(0.16, 1.9, 0.09)
+
+[node name="Reception25d" type="Node2D" unique_id=343465998]
+
+[node name="RoomView" type="Sprite2D" parent="." unique_id=20399849]
+texture_filter = 1
+texture = SubResource("ViewportTexture_room")
+centered = false
+
+[node name="RoomViewport" type="SubViewport" parent="." unique_id=818468267]
+own_world_3d = true
+handle_input_locally = false
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="Room" type="Node3D" parent="RoomViewport" unique_id=703589149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00074243546, 0.84453654, -0.08342028)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="RoomViewport/Room" unique_id=819604041]
+environment = SubResource("Environment_room")
+
+[node name="CeilingLight" type="OmniLight3D" parent="RoomViewport/Room" unique_id=931179711]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, -1)
+light_color = Color(1, 0.86, 0.68, 1)
+light_energy = 1.8
+omni_range = 12.0
+
+[node name="Structure" type="Node3D" parent="RoomViewport/Room" unique_id=2075883191]
+
+[node name="Floor" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=1196664738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -2.5)
+mesh = SubResource("Mesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=668791608]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, -11)
+mesh = SubResource("Mesh_back_header")
+
+[node name="FrontWall" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=1665086542]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 6)
+mesh = SubResource("Mesh_wall")
+
+[node name="LeftWall" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=1018588858]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 1.8, -2.5)
+mesh = SubResource("Mesh_side_wall")
+
+[node name="RightWall" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=2110661324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 3.2, -2.5)
+mesh = SubResource("Mesh_right_header")
+
+[node name="BackPierLeft" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=1350364427]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 1.5, -11)
+mesh = SubResource("Mesh_0")
+
+[node name="BackPierCenter" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=580745687]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -11)
+mesh = SubResource("Mesh_1")
+
+[node name="BackPierRight" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=1489071826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 1.5, -11)
+mesh = SubResource("Mesh_0")
+
+[node name="RightPierRear" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=1152914623]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 1.4, -10.45)
+mesh = SubResource("Mesh_2")
+
+[node name="RightPierMiddleRear" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=1680154039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 1.4, -6.9)
+mesh = SubResource("Mesh_3")
+
+[node name="RightPierMiddleFront" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=1408359207]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 1.4, -3.5)
+mesh = SubResource("Mesh_3")
+
+[node name="RightPierFront" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=1165725065]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 1.4, 2.75)
+mesh = SubResource("Mesh_4")
+
+[node name="Ceiling" type="MeshInstance3D" parent="RoomViewport/Room/Structure" unique_id=169513109]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7, -2.5)
+mesh = SubResource("Mesh_5")
+
+[node name="ReceptionDesk" type="Node3D" parent="RoomViewport/Room" unique_id=1271229008]
+
+[node name="Desk" type="MeshInstance3D" parent="RoomViewport/Room/ReceptionDesk" unique_id=1828239945]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.6)
+mesh = SubResource("Mesh_desk")
+
+[node name="Countertop" type="MeshInstance3D" parent="RoomViewport/Room/ReceptionDesk" unique_id=1307425069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.075, 0.6)
+mesh = SubResource("Mesh_counter")
+
+[node name="VisitorGround" type="Node3D" parent="RoomViewport/Room" unique_id=655563280]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="TestVisitor" type="Sprite3D" parent="RoomViewport/Room/VisitorGround" unique_id=1751512308]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04, 0)
+billboard = 2
+alpha_cut = 1
+texture_filter = 0
+script = ExtResource("3_sprite")
+source_texture = ExtResource("2_visitor")
+
+[node name="ContactShadow" type="MeshInstance3D" parent="RoomViewport/Room/VisitorGround" unique_id=1352518233]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.55, 0, 0.004, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_contact_shadow")
+
+[node name="ReceptionCamera" type="Camera3D" parent="RoomViewport/Room" unique_id=637382328]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 2.4)
+current = true
+fov = 70.0
+script = ExtResource("1_camera")
+
+[node name="Entrances" type="Node3D" parent="RoomViewport/Room" unique_id=2042267680]
+
+[node name="EntranceLeft" parent="RoomViewport/Room/Entrances" unique_id=569841167 instance=ExtResource("5_entrance")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -11)
+
+[node name="EntranceRight" parent="RoomViewport/Room/Entrances" unique_id=1257864273 instance=ExtResource("5_entrance")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -11)
+
+[node name="Elevators" type="Node3D" parent="RoomViewport/Room" unique_id=2034721913]
+
+[node name="Elevator01" parent="RoomViewport/Room/Elevators" unique_id=1620262857 instance=ExtResource("4_elevator")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.5, 0, -1.8)
+
+[node name="Identification" type="Label3D" parent="RoomViewport/Room/Elevators/Elevator01" unique_id=970985036]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.05, 0.35)
+pixel_size = 0.008
+text = "01"
+font_size = 48
+outline_size = 4
+
+[node name="Elevator02" parent="RoomViewport/Room/Elevators" unique_id=2022258703 instance=ExtResource("4_elevator")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.5, 0, -5.2)
+
+[node name="Identification" type="Label3D" parent="RoomViewport/Room/Elevators/Elevator02" unique_id=1511246652]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.05, 0.35)
+pixel_size = 0.008
+text = "02"
+font_size = 48
+outline_size = 4
+
+[node name="Elevator03" parent="RoomViewport/Room/Elevators" unique_id=1167092752 instance=ExtResource("4_elevator")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.5, 0, -8.6)
+
+[node name="Identification" type="Label3D" parent="RoomViewport/Room/Elevators/Elevator03" unique_id=494847619]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.05, 0.35)
+pixel_size = 0.008
+text = "03"
+font_size = 48
+outline_size = 4
+
+[node name="WaitingArea" type="Node3D" parent="RoomViewport/Room" unique_id=395163120]
+
+[node name="Chairs" type="Node3D" parent="RoomViewport/Room/WaitingArea" unique_id=283386598]
+
+[node name="Chair01" parent="RoomViewport/Room/WaitingArea/Chairs" unique_id=195508959 instance=ExtResource("6_chair")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.6, 0, -1.8)
+
+[node name="Chair02" parent="RoomViewport/Room/WaitingArea/Chairs" unique_id=414084464 instance=ExtResource("6_chair")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.6, 0, -4)
+
+[node name="Chair03" parent="RoomViewport/Room/WaitingArea/Chairs" unique_id=810934159 instance=ExtResource("6_chair")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.6, 0, -6.2)
+
+[node name="Chair04" parent="RoomViewport/Room/WaitingArea/Chairs" unique_id=2018297675 instance=ExtResource("6_chair")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.6, 0, -8.4)
+
+[node name="Windows" type="Node3D" parent="RoomViewport/Room/WaitingArea" unique_id=1896830244]
+
+[node name="Window01" type="Node3D" parent="RoomViewport/Room/WaitingArea/Windows" unique_id=70146668]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.34, 0, -2)
+
+[node name="Pane" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window01" unique_id=257927279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, 0)
+mesh = SubResource("Mesh_6")
+
+[node name="Sill" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window01" unique_id=1333279587]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 1.1, 0)
+mesh = SubResource("Mesh_7")
+
+[node name="Lintel" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window01" unique_id=1609293704]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 3, 0)
+mesh = SubResource("Mesh_7")
+
+[node name="Front" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window01" unique_id=403465190]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 2.05, 1.4)
+mesh = SubResource("Mesh_8")
+
+[node name="Rear" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window01" unique_id=1057656563]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 2.05, -1.4)
+mesh = SubResource("Mesh_8")
+
+[node name="Mullion" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window01" unique_id=2086129134]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 2.05, 0)
+mesh = SubResource("Mesh_8")
+
+[node name="Window02" type="Node3D" parent="RoomViewport/Room/WaitingArea/Windows" unique_id=2016560621]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.34, 0, -5.3)
+
+[node name="Pane" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window02" unique_id=981169610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, 0)
+mesh = SubResource("Mesh_6")
+
+[node name="Sill" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window02" unique_id=953864280]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 1.1, 0)
+mesh = SubResource("Mesh_7")
+
+[node name="Lintel" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window02" unique_id=977551828]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 3, 0)
+mesh = SubResource("Mesh_7")
+
+[node name="Front" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window02" unique_id=2049749088]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 2.05, 1.4)
+mesh = SubResource("Mesh_8")
+
+[node name="Rear" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window02" unique_id=1700981281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 2.05, -1.4)
+mesh = SubResource("Mesh_8")
+
+[node name="Mullion" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window02" unique_id=2090154114]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 2.05, 0)
+mesh = SubResource("Mesh_8")
+
+[node name="Window03" type="Node3D" parent="RoomViewport/Room/WaitingArea/Windows" unique_id=193360605]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.34, 0, -8.6)
+
+[node name="Pane" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window03" unique_id=19287300]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, 0)
+mesh = SubResource("Mesh_6")
+
+[node name="Sill" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window03" unique_id=1255535750]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 1.1, 0)
+mesh = SubResource("Mesh_7")
+
+[node name="Lintel" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window03" unique_id=106321573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 3, 0)
+mesh = SubResource("Mesh_7")
+
+[node name="Front" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window03" unique_id=314658502]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 2.05, 1.4)
+mesh = SubResource("Mesh_8")
+
+[node name="Rear" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window03" unique_id=590973279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 2.05, -1.4)
+mesh = SubResource("Mesh_8")
+
+[node name="Mullion" type="MeshInstance3D" parent="RoomViewport/Room/WaitingArea/Windows/Window03" unique_id=2055925692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 2.05, 0)
+mesh = SubResource("Mesh_8")
+
+[node name="SittingPositions" type="Node3D" parent="RoomViewport/Room/WaitingArea" unique_id=1352782116]
+
+[node name="SittingPoint01" type="Marker3D" parent="RoomViewport/Room/WaitingArea/SittingPositions" unique_id=218202626]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.6, 0.56, -1.8)
+
+[node name="SittingPoint02" type="Marker3D" parent="RoomViewport/Room/WaitingArea/SittingPositions" unique_id=1388106356]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.6, 0.56, -4)
+
+[node name="SittingPoint03" type="Marker3D" parent="RoomViewport/Room/WaitingArea/SittingPositions" unique_id=422435835]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.6, 0.56, -6.2)
+
+[node name="SittingPoint04" type="Marker3D" parent="RoomViewport/Room/WaitingArea/SittingPositions" unique_id=730388789]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.6, 0.56, -8.4)
+
+[node name="VisitorPositions" type="Node3D" parent="RoomViewport/Room" unique_id=756397016]
+
+[node name="EntranceLeft" type="Marker3D" parent="RoomViewport/Room/VisitorPositions" unique_id=147423908]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -9.8)
+
+[node name="EntranceRight" type="Marker3D" parent="RoomViewport/Room/VisitorPositions" unique_id=1948931289]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -9.8)
+
+[node name="ServicePoint" type="Marker3D" parent="RoomViewport/Room/VisitorPositions" unique_id=1277194810]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="QueuePoint01" type="Marker3D" parent="RoomViewport/Room/VisitorPositions" unique_id=595972627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="QueuePoint02" type="Marker3D" parent="RoomViewport/Room/VisitorPositions" unique_id=1470249458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.6)
+
+[node name="QueuePoint03" type="Marker3D" parent="RoomViewport/Room/VisitorPositions" unique_id=652670812]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.2)
+
+[node name="QueuePoint04" type="Marker3D" parent="RoomViewport/Room/VisitorPositions" unique_id=1780497070]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.8)
+
+[node name="QueueJoinPoint" type="Marker3D" parent="RoomViewport/Room/VisitorPositions" unique_id=1690418342]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.3)
+
+[node name="RearLight" type="OmniLight3D" parent="RoomViewport/Room" unique_id=295785955]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -7)
+light_color = Color(0.78, 0.88, 1, 1)
+light_energy = 1.6
+omni_range = 13.0
+
+[node name="VisitorMovement" type="Node" parent="." unique_id=768934271 node_paths=PackedStringArray("visitor", "floor_reference")]
+script = ExtResource("7_movement")
+visitor = NodePath("../RoomViewport/Room/VisitorGround")
+floor_reference = NodePath("../RoomViewport/Room/VisitorPositions/ServicePoint")
+
+[node name="VisitorMovementTest" type="Node" parent="." unique_id=1110715786 node_paths=PackedStringArray("movement", "entrance_left", "entrance_right", "join_point", "service_point")]
+script = ExtResource("8_movement_test")
+movement = NodePath("../VisitorMovement")
+entrance_left = NodePath("../RoomViewport/Room/VisitorPositions/EntranceLeft")
+entrance_right = NodePath("../RoomViewport/Room/VisitorPositions/EntranceRight")
+join_point = NodePath("../RoomViewport/Room/VisitorPositions/QueueJoinPoint")
+service_point = NodePath("../RoomViewport/Room/VisitorPositions/ServicePoint")

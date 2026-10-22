@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Metal"]
+albedo_color = Color(0.45, 0.52, 0.56, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Door"]
+albedo_color = Color(0.26, 0.33, 0.38, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Recess"]
+albedo_color = Color(0.075, 0.1, 0.12, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Threshold"]
+albedo_color = Color(0.35, 0.39, 0.4, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Indicator"]
+albedo_color = Color(0.3, 0.75, 0.68, 1)
+roughness = 1.0
+emission_enabled = true
+emission = Color(0.3, 0.75, 0.68, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="BoxMesh" id="Mesh_0"]
+material = SubResource("Recess")
+size = Vector3(2.5, 2.6, 0.12)
+
+[sub_resource type="BoxMesh" id="Mesh_1"]
+material = SubResource("Metal")
+size = Vector3(0.2, 2.7, 0.65)
+
+[sub_resource type="BoxMesh" id="Mesh_2"]
+material = SubResource("Recess")
+size = Vector3(0.12, 2.6, 0.55)
+
+[sub_resource type="BoxMesh" id="Mesh_3"]
+material = SubResource("Metal")
+size = Vector3(2.6, 0.2, 0.65)
+
+[sub_resource type="BoxMesh" id="Mesh_4"]
+material = SubResource("Door")
+size = Vector3(1.09, 2.6, 0.12)
+
+[sub_resource type="BoxMesh" id="Mesh_5"]
+material = SubResource("Threshold")
+size = Vector3(2.6, 0.05, 0.95)
+
+[sub_resource type="BoxMesh" id="Mesh_6"]
+material = SubResource("Indicator")
+size = Vector3(0.55, 0.09, 0.03)
+
+[node name="Elevator" type="Node3D"]
+
+[node name="DoorAssembly" type="Node3D" parent="."]
+
+[node name="RecessBack" type="MeshInstance3D" parent="DoorAssembly"]
+position = Vector3(0, 1.3, -0.55)
+mesh = SubResource("Mesh_0")
+
+[node name="FrameLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.2, 1.35, 0)
+mesh = SubResource("Mesh_1")
+
+[node name="RevealLeft" type="MeshInstance3D" parent="DoorAssembly"]
+position = Vector3(-1.2, 1.3, -0.28)
+mesh = SubResource("Mesh_2")
+
+[node name="FrameRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.2, 1.35, 0)
+mesh = SubResource("Mesh_1")
+
+[node name="RevealRight" type="MeshInstance3D" parent="DoorAssembly"]
+position = Vector3(1.2, 1.3, -0.28)
+mesh = SubResource("Mesh_2")
+
+[node name="Lintel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.7, 0)
+mesh = SubResource("Mesh_3")
+
+[node name="LeftPanel" type="MeshInstance3D" parent="DoorAssembly"]
+position = Vector3(-0.553, 1.3, -0.38)
+mesh = SubResource("Mesh_4")
+
+[node name="RightPanel" type="MeshInstance3D" parent="DoorAssembly"]
+position = Vector3(0.553, 1.3, -0.38)
+mesh = SubResource("Mesh_4")
+
+[node name="Threshold" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.025, 0.05)
+mesh = SubResource("Mesh_5")
+
+[node name="Indicator" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.7, 0.34)
+mesh = SubResource("Mesh_6")
+
+[node name="ApproachPoint" type="Marker3D" parent="."]
+position = Vector3(0, 0, 1.3)

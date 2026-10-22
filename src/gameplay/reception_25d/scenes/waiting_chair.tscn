@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Upholstery"]
+albedo_color = Color(0.12, 0.28, 0.31, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Metal"]
+albedo_color = Color(0.32, 0.38, 0.4, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_0"]
+material = SubResource("Upholstery")
+size = Vector3(0.65, 0.12, 0.62)
+
+[sub_resource type="BoxMesh" id="Mesh_1"]
+material = SubResource("Upholstery")
+size = Vector3(0.65, 0.72, 0.1)
+
+[sub_resource type="BoxMesh" id="Mesh_2"]
+material = SubResource("Metal")
+size = Vector3(0.06, 0.44, 0.06)
+
+[node name="Chair" type="Node3D"]
+
+[node name="Seat" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.48, 0)
+mesh = SubResource("Mesh_0")
+
+[node name="Backrest" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.88, -0.28)
+mesh = SubResource("Mesh_1")
+
+[node name="LegFrontLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.25, 0.22, 0.23)
+mesh = SubResource("Mesh_2")
+
+[node name="LegFrontRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.25, 0.22, 0.23)
+mesh = SubResource("Mesh_2")
+
+[node name="LegBackLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.25, 0.22, -0.23)
+mesh = SubResource("Mesh_2")
+
+[node name="LegBackRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.25, 0.22, -0.23)
+mesh = SubResource("Mesh_2")
