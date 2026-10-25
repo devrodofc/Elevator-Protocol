@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://c5xgo8bade26h" path="res://src/gameplay/reception_25d/scripts/visitor_orientation.gd" id="9_orientation"]
 [ext_resource type="Script" uid="uid://ptgce8xk8oid" path="res://src/gameplay/reception_25d/scripts/elevator_selection.gd" id="10_selection"]
 [ext_resource type="Script" uid="uid://bplmrbmketnx8" path="res://src/gameplay/reception_25d/scripts/elevator_selection_ui.gd" id="11_selection_ui"]
+[ext_resource type="PackedScene" path="res://src/gameplay/reception_25d/scenes/elevator_01_visual.tscn" id="12_elevator_visual"]
+[ext_resource type="Script" uid="uid://cb1eplgcyy0rn" path="res://src/gameplay/reception_25d/scripts/debug_free_camera.gd" id="13_free_camera"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_room"]
 viewport_path = NodePath("RoomViewport")
@@ -245,7 +247,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -11)
 
 [node name="Elevators" type="Node3D" parent="RoomViewport/Room" unique_id=2034721913]
 
-[node name="Elevator01" parent="RoomViewport/Room/Elevators" unique_id=1620262857 instance=ExtResource("4_elevator")]
+[node name="Elevator01" parent="RoomViewport/Room/Elevators" unique_id=1620262857 instance=ExtResource("12_elevator_visual")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.5, 0, -1.8)
 
 [node name="Identification" type="Label3D" parent="RoomViewport/Room/Elevators/Elevator01" unique_id=970985036]
@@ -469,8 +471,29 @@ corridor_entry = NodePath("../RoomViewport/Room/ElevatorRoutes/CorridorEntry")
 turn_points = [NodePath("../RoomViewport/Room/ElevatorRoutes/Elevator01TurnPoint"), NodePath("../RoomViewport/Room/ElevatorRoutes/Elevator02TurnPoint"), NodePath("../RoomViewport/Room/ElevatorRoutes/Elevator03TurnPoint")]
 wait_points = [NodePath("../RoomViewport/Room/Elevators/Elevator01/ApproachPoint"), NodePath("../RoomViewport/Room/Elevators/Elevator02/ApproachPoint"), NodePath("../RoomViewport/Room/Elevators/Elevator03/ApproachPoint")]
 
+[node name="DebugFreeCamera" type="Node" parent="." unique_id=1450524104 node_paths=PackedStringArray("camera", "floor_reference", "indicator")]
+script = ExtResource("13_free_camera")
+enable_debug_exploration = true
+camera = NodePath("../RoomViewport/Room/ReceptionCamera")
+floor_reference = NodePath("../RoomViewport/Room/VisitorPositions/ServicePoint")
+indicator = NodePath("../ElevatorUI/ExplorationIndicator")
+
 [node name="ElevatorUI" type="CanvasLayer" parent="." unique_id=309299696]
 layer = 5
+
+[node name="ExplorationIndicator" type="Label" parent="ElevatorUI" unique_id=1307676688]
+visible = false
+offset_left = 8.0
+offset_top = 319.0
+offset_right = 632.0
+offset_bottom = 355.0
+theme_override_colors/font_color = Color(0.85, 0.9, 0.95, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "EXPLORAÇÃO LIVRE — F para voltar
+WASD mover · Q/E altura · Shift acelerar · Botão direito + mouse olhar"
 
 [node name="Selection" type="Control" parent="ElevatorUI" unique_id=1533034167 node_paths=PackedStringArray("selection", "camera", "buttons")]
 layout_mode = 3

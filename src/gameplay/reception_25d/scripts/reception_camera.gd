@@ -7,6 +7,7 @@ extends Camera3D
 
 var _initial_yaw: float
 var _target_yaw: float = 0.0
+var debug_exploration_active: bool = false
 
 
 func _ready() -> void:
@@ -14,6 +15,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if debug_exploration_active:
+		return
 	# Use the window viewport: the 3D view renders at a fixed 640x360.
 	var window := get_tree().root
 	var screen := window.get_visible_rect()
@@ -30,3 +33,8 @@ func _process(delta: float) -> void:
 	_target_yaw = clampf(_target_yaw + direction * deg_to_rad(rotation_speed) * delta, -limit, limit)
 	var weight := 1.0 if smoothing <= 0.0 else 1.0 - exp(-smoothing * delta)
 	rotation.y = _initial_yaw + clampf(lerpf(rotation.y - _initial_yaw, _target_yaw, weight), -limit, limit)
+
+
+func reset_debug_exploration() -> void:
+	_target_yaw = 0.0
+	debug_exploration_active = false

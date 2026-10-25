@@ -1,0 +1,413 @@
+{
+  "engine": "4.7.2",
+  "sessions": [
+    {
+      "seed": 4201,
+      "snapshot": {
+        "day": 1,
+        "rules": [
+          {
+            "destino": 5,
+            "fala": "Quem vier ao RH hoje... mande direto para o 5º andar. A Pesquisa Avançada está precisando de voluntários. Eles não precisam saber disso.",
+            "path": "res://src/gameplay/schedules/day1.tres::Regra_rh",
+            "pedido": 2,
+            "texto_prancheta": "Pediu o 2º andar? Mande para o 5º."
+          },
+          {
+            "destino": 999,
+            "fala": "Se ouvir alguém batendo de dentro do poço do elevador, não chame a manutenção. Isso é normal. Totalmente normal.",
+            "path": "res://src/gameplay/schedules/day1.tres::Regra_batidas",
+            "pedido": 0,
+            "texto_prancheta": "Batidas no poço do elevador são normais."
+          }
+        ],
+        "visits": [
+          {
+            "andar": 1,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 24,
+              "ocupacao": "Contador",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesCommon/1 andar/common1c.tres",
+            "fixo": false,
+            "nome": "Renato",
+            "sprite": "res://src/npcs/assets/npc_male_2/npc_male_2 .png",
+            "texto": "Vou lá no refeitório tomar um cafezinho rápido, por favor.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_male1.tres",
+            "visitor_id": "001"
+          },
+          {
+            "andar": 5,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 25,
+              "ocupacao": "Contador",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesCommon/5 andar/common5b.tres",
+            "fixo": false,
+            "nome": "Leonardo",
+            "sprite": "res://src/npcs/assets/npc_male_1/npc_male_1_frame_1.png",
+            "texto": "Vou para a Pesquisa Avançada. O experimento de hoje é descobrir por que a impressora só funciona quando ninguém precisa dela.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_male1.tres",
+            "visitor_id": "001"
+          },
+          {
+            "andar": 6,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 27,
+              "ocupacao": "Contador",
+              "sexo": "Feminino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesCommon/6 andar/common6b.tres",
+            "fixo": false,
+            "nome": "Beatriz",
+            "sprite": "res://src/npcs/assets/npc_woman_1/npc mulher 1.png",
+            "texto": "Vou para a Presidência. Trouxe os relatórios trimestrais que ninguém leu, mas todo mundo assinou.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_female1.tres",
+            "visitor_id": "002"
+          },
+          {
+            "andar": 4,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 26,
+              "ocupacao": "Analista",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesCommon/4 andar/common4a.tres",
+            "fixo": false,
+            "nome": "Paulo",
+            "sprite": "res://src/npcs/assets/npc_male_1/npc_male_1_frame_1.png",
+            "texto": "Quarto andar, por favor! A reunião com a agência de publicidade já vai começar.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_male1.tres",
+            "visitor_id": "001"
+          },
+          {
+            "andar": 2,
+            "caso_regra": true,
+            "cracha": {
+              "idade": 28,
+              "ocupacao": "Contador",
+              "sexo": "Feminino"
+            },
+            "dialogue": "res://src/npcs/resources/Day1/common_npc_female1.tres::Resource_u5flw",
+            "fixo": false,
+            "nome": "Joana",
+            "sprite": "res://src/npcs/assets/npc_woman_2/npc_woman_2.png",
+            "texto": "Segundo andar... acho que vão me demitir...",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_female1.tres",
+            "visitor_id": "002"
+          },
+          {
+            "andar": 1,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 23,
+              "ocupacao": "Analista",
+              "sexo": "Feminino"
+            },
+            "dialogue": "res://src/npcs/resources/Day1/common_npc_female1.tres::Resource_uogxw",
+            "fixo": false,
+            "nome": "Raquel",
+            "sprite": "res://src/npcs/assets/npc_woman_1/npc mulher 1.png",
+            "texto": "Com licença, vim para o horário de almoço no refeitório.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_female1.tres",
+            "visitor_id": "002"
+          },
+          {
+            "andar": 3,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 0,
+              "ocupacao": "",
+              "sexo": ""
+            },
+            "dialogue": "res://src/gameplay/schedules/day1.tres::Resource_6es8l",
+            "fixo": true,
+            "nome": "Entregador Lucas ",
+            "sprite": "res://src/npcs/assets/lucas/lucas_entregrador.png",
+            "texto": "Opa, entrega para o andar... 3... beleza? Me joga lá!",
+            "visitor": "res://src/npcs/resources/birdTest.tres",
+            "visitor_id": "001ESPECIAL"
+          }
+        ]
+      }
+    },
+    {
+      "seed": 4202,
+      "snapshot": {
+        "day": 2,
+        "rules": [
+          {
+            "destino": 6,
+            "fala": "Quem pedir o 5º andar hoje sobe direto para o 6º. O diretor quer conhecer pessoalmente quem anda mexendo no arquivo.",
+            "path": "res://src/gameplay/schedules/day2.tres::Regra_arquivo",
+            "pedido": 5,
+            "texto_prancheta": "Pediu o 5º andar? Mande para o 6º."
+          },
+          {
+            "destino": 999,
+            "fala": "Ah, quase me esqueço! Hoje chega uma entrega para mim. Quando o entregador perguntar pela Marta, mande ele direto para o subsolo. Eu vou estar esperando lá embaixo... estou morrendo de fome.",
+            "path": "res://src/gameplay/schedules/day2.tres::Regra_entrega_marta",
+            "pedido": 0,
+            "texto_prancheta": "Entrega para a Marta? Mande para o subsolo."
+          }
+        ],
+        "visits": [
+          {
+            "andar": 4,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 47,
+              "ocupacao": "Analista",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia2/4 andar/dia2_4a.tres",
+            "fixo": false,
+            "nome": "Thiago",
+            "sprite": "res://src/npcs/assets/npc_male_2/npc_male_2 .png",
+            "texto": "Quarto andar. Tenho uma reunião de 'alinhamento estratégico'. Ninguém sabe o que é, mas tem pão de queijo.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_male1.tres",
+            "visitor_id": "001"
+          },
+          {
+            "andar": 1,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 23,
+              "ocupacao": "Contador",
+              "sexo": "Feminino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia2/1 andar/dia2_1a.tres",
+            "fixo": false,
+            "nome": "Beatriz",
+            "sprite": "res://src/npcs/assets/npc_woman_2/npc_woman_2.png",
+            "texto": "Primeiro andar! Disseram que tem bolo de aniversário no refeitório. Não sei de quem é o aniversário, mas isso é detalhe.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_female1.tres",
+            "visitor_id": "002"
+          },
+          {
+            "andar": 3,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 41,
+              "ocupacao": "Contador",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia2/3 andar/dia2_3c.tres",
+            "fixo": false,
+            "nome": "Eduardo",
+            "sprite": "res://src/npcs/assets/npc_male_2/npc_male_2 .png",
+            "texto": "Terceiro andar. Trouxe café para o pessoal dos servidores. É o único jeito de eles atenderem rápido.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_male1.tres",
+            "visitor_id": "001"
+          },
+          {
+            "andar": 2,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 23,
+              "ocupacao": "Analista",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia2/2 andar/dia2_2a.tres",
+            "fixo": false,
+            "nome": "Rodrigo",
+            "sprite": "res://src/npcs/assets/npc_male_2/npc_male_2 .png",
+            "texto": "RH, por favor. Vim entregar o atestado... da semana passada. Antes tarde do que nunca, né?",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_male1.tres",
+            "visitor_id": "001"
+          },
+          {
+            "andar": 5,
+            "caso_regra": true,
+            "cracha": {
+              "idade": 22,
+              "ocupacao": "Analista",
+              "sexo": "Feminino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia2/5 andar/dia2_5c.tres",
+            "fixo": false,
+            "nome": "Márcia",
+            "sprite": "res://src/npcs/assets/npc_woman_2/npc_woman_2.png",
+            "texto": "Quinto andar. Vim devolver um processo que peguei emprestado... há três anos.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_female1.tres",
+            "visitor_id": "002"
+          },
+          {
+            "andar": 6,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 27,
+              "ocupacao": "Contador",
+              "sexo": "Feminino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia2/6 andar/dia2_6b.tres",
+            "fixo": false,
+            "nome": "Moranga",
+            "sprite": "res://src/npcs/assets/npc_woman_1/npc mulher 1.png",
+            "texto": "Presidência, por favor. Ensaiei a apresentação para o diretor no espelho a manhã inteira.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_female1.tres",
+            "visitor_id": "002"
+          },
+          {
+            "andar": -1,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 0,
+              "ocupacao": "",
+              "sexo": ""
+            },
+            "dialogue": "res://src/gameplay/schedules/day2.tres::Fala_entregador",
+            "fixo": true,
+            "nome": "Entregador Lucas ",
+            "sprite": "res://src/npcs/assets/lucas/lucas_entregrador.png",
+            "texto": "Opa! Tenho uma entrega para a dona Marta. Ela disse que ia receber pessoalmente... onde eu deixo?",
+            "visitor": "res://src/npcs/resources/birdTest.tres",
+            "visitor_id": "001ESPECIAL"
+          }
+        ]
+      }
+    },
+    {
+      "seed": 4203,
+      "snapshot": {
+        "day": 3,
+        "rules": [
+          {
+            "destino": 999,
+            "fala": "O refeitório está interditado hoje. Negue quem pedir o 1º andar. E não pergunte qual é o cardápio.",
+            "path": "res://src/gameplay/schedules/day3.tres::Regra_refeitorio",
+            "pedido": 1,
+            "texto_prancheta": "1º andar: negar acesso."
+          },
+          {
+            "destino": 999,
+            "fala": "Ah, o Seu Tião, nosso faxineiro, vai passar aqui hoje. Não importa o andar que ele pedir: mande para o subsolo. Tem uma sujeira enorme lá embaixo, e ele é o único que limpa sem fazer perguntas.",
+            "path": "res://src/gameplay/schedules/day3.tres::Regra_tiao",
+            "pedido": 0,
+            "texto_prancheta": "Seu Tião (faxineiro)? Sempre para o subsolo."
+          }
+        ],
+        "visits": [
+          {
+            "andar": 6,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 22,
+              "ocupacao": "Contador",
+              "sexo": "Feminino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia3/6 andar/dia3_6c.tres",
+            "fixo": false,
+            "nome": "Panqueca",
+            "sprite": "res://src/npcs/assets/npc_woman_2/npc_woman_2.png",
+            "texto": "Diretoria. Me chamaram para uma 'conversa rápida'. Nenhuma conversa com o diretor é rápida.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_female1.tres",
+            "visitor_id": "002"
+          },
+          {
+            "andar": 4,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 23,
+              "ocupacao": "Analista",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia3/4 andar/dia3_4c.tres",
+            "fixo": false,
+            "nome": "Pedro",
+            "sprite": "res://src/npcs/assets/npc_male_2/npc_male_2 .png",
+            "texto": "Quarto andar. Reunião de brainstorm. Eu sou o 'storm', pelo visto.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_male1.tres",
+            "visitor_id": "001"
+          },
+          {
+            "andar": 5,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 39,
+              "ocupacao": "Contador",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia3/5 andar/dia3_5c.tres",
+            "fixo": false,
+            "nome": "José",
+            "sprite": "res://src/npcs/assets/npc_male_2/npc_male_2 .png",
+            "texto": "Quinto andar. O arquivo morto pediu mais pastas. Pelo jeito ele está bem vivo.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_male1.tres",
+            "visitor_id": "001"
+          },
+          {
+            "andar": 2,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 48,
+              "ocupacao": "Contador",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia3/2 andar/dia3_2c.tres",
+            "fixo": false,
+            "nome": "Gustavo",
+            "sprite": "res://src/npcs/assets/npc_male_1/npc_male_1_frame_1.png",
+            "texto": "Recursos Humanos. Fui escalado para a palestra de 'bem-estar no trabalho'. Às sete da manhã.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_male1.tres",
+            "visitor_id": "001"
+          },
+          {
+            "andar": 1,
+            "caso_regra": true,
+            "cracha": {
+              "idade": 26,
+              "ocupacao": "Analista",
+              "sexo": "Feminino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia3/1 andar/dia3_1a.tres",
+            "fixo": false,
+            "nome": "Marianne",
+            "sprite": "res://src/npcs/assets/npc_woman_2/npc_woman_2.png",
+            "texto": "Primeiro andar. Alguém deixou um pote de feijoada na geladeira desde segunda. Vim negociar a paz.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_female1.tres",
+            "visitor_id": "002"
+          },
+          {
+            "andar": 3,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 41,
+              "ocupacao": "Analista",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/npcs/dialogue/dialoguesDia3/3 andar/dia3_3b.tres",
+            "fixo": false,
+            "nome": "João",
+            "sprite": "res://src/npcs/assets/npc_male_1/npc_male_1_frame_1.png",
+            "texto": "TI, por favor. Meu mouse está andando sozinho. Ou é vírus ou é o estagiário pelo acesso remoto.",
+            "visitor": "res://src/npcs/resources/Day1/common_npc_male1.tres",
+            "visitor_id": "001"
+          },
+          {
+            "andar": 6,
+            "caso_regra": false,
+            "cracha": {
+              "idade": 67,
+              "ocupacao": "Faxineiro",
+              "sexo": "Masculino"
+            },
+            "dialogue": "res://src/gameplay/schedules/day3.tres::Fala_tiao",
+            "fixo": true,
+            "nome": "Seu Tião",
+            "sprite": "res://src/npcs/assets/tiao/tiao_jardineiro.png",
+            "texto": "Bom dia, meu filho! Sou o Tião, da limpeza. Me pediram para dar um trato na sala do diretor, lá no 6º. Me leva lá?",
+            "visitor": "res://src/npcs/resources/Day3/tiao.tres",
+            "visitor_id": "003ESPECIAL"
+          }
+        ]
+      }
+    }
+  ]
+}
