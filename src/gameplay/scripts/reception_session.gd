@@ -17,6 +17,8 @@ var _state: State = State.IDLE
 var _generation: int = 0
 var _visit_serial: int = 0
 var _visit_id: String = ""
+var _arrival_preview: bool = false
+var _service_preview: bool = false
 
 var schedule_config: DayScheduleConfig:
 	get: return _schedule
@@ -54,11 +56,15 @@ var next_rule_index: int:
 	get: return _next_rule
 var is_processing_decision: bool:
 	get: return _state in [State.RESOLVED, State.FAILED]
+var is_arrival_preview: bool:
+	get: return _arrival_preview
 
 
 ## Uma chamada a montar_dia por início/reinício; nenhum sorteio durante o atendimento.
 func start_day(config: DayScheduleConfig) -> void:
 	_generation += 1
+	_arrival_preview = false
+	_service_preview = false
 	_schedule = config
 	_queue.clear()
 	_entry = {}
@@ -83,6 +89,21 @@ func start_day(config: DayScheduleConfig) -> void:
 	_state = State.INTRO
 
 
+## Somente o teste de chegada I2: não representa uma introdução narrativa concluída.
+## Usa a agenda real, permite uma ocorrência e bloqueia decisões nesta prévia.
+func start_arrival_preview(config: DayScheduleConfig) -> void:
+	start_day(config)
+	_arrival_preview = true
+	_state = State.READY
+
+
+## I3: one real decision without inventing Marta's introduction or completing a visit.
+func start_service_preview(config: DayScheduleConfig) -> void:
+	start_day(config)
+	_service_preview = true
+	_state = State.READY
+
+
 func finish_intro(expected_generation: int) -> bool:
 	if expected_generation != _generation or _state != State.INTRO:
 		return false
@@ -93,6 +114,8 @@ func finish_intro(expected_generation: int) -> bool:
 ## Só READY consome a fila. INTERVAL preserva a cadência original, independente da saída física.
 func request_next_visit(expected_generation: int) -> Dictionary:
 	if expected_generation != _generation or _state != State.READY:
+		return {}
+	if (_arrival_preview or _service_preview) and not _visit_id.is_empty():
 		return {}
 	if _queue.is_empty():
 		_state = State.CONCLUDING
@@ -113,7 +136,7 @@ func service_reached(visit_id: String) -> bool:
 
 ## {} significa comando rejeitado, distinto de uma decisão aceita e incorreta.
 func submit_decision(visit_id: String, floor_code: int) -> Dictionary:
-	if not _matches(visit_id, State.SERVING) or floor_code not in [1, 2, 3, 4, 5, 6, -1, RuleValidator.DENY_ACTION]:
+	if _arrival_preview or not _matches(visit_id, State.SERVING) or floor_code not in [1, 2, 3, 4, 5, 6, -1, RuleValidator.DENY_ACTION]:
 		return {}
 	var visitor: VisitorData = _entry["visitor"]
 	var dialogue: NPCDialogue = _entry.get("dialogue")
@@ -124,7 +147,7 @@ func submit_decision(visit_id: String, floor_code: int) -> Dictionary:
 
 ## Contabiliza uma vez, no mesmo marco em que o manager original liberava o atendimento.
 func complete_visit(visit_id: String) -> bool:
-	if not _matches(visit_id, State.RESOLVED):
+	if _service_preview or not _matches(visit_id, State.RESOLVED):
 		return false
 	_entry = {}
 	_entry.make_read_only()

@@ -8,6 +8,7 @@ signal availability_changed(available: bool)
 
 enum Stage { IDLE, ARRIVING, AT_SERVICE, TO_ELEVATOR, WAITING_FOR_DOOR, ENTERING_CABIN, IN_CABIN }
 
+@export var enabled: bool = true
 @export var movement: VisitorMovement
 @export var orientation: VisitorOrientation
 @export var service_point: Marker3D
@@ -24,16 +25,18 @@ var _active_elevator: ElevatorDoor
 
 
 func _ready() -> void:
+	set_process(false)
+	if not enabled:
+		return
 	for point in wait_points:
 		_elevators.append(point.get_parent() as ElevatorDoor)
 	movement.movement_reset.connect(_on_movement_reset)
 	movement.route_started.connect(_on_route_started)
 	movement.arrived.connect(_on_arrived)
-	set_process(false)
 
 
 func select_elevator(index: int) -> void:
-	if not can_select or index < 0 or index >= wait_points.size():
+	if not enabled or not can_select or index < 0 or index >= wait_points.size():
 		return
 	selected_elevator = index
 	_active_elevator = _elevators[index]

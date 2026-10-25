@@ -11,6 +11,11 @@ var _camera_was_processing: bool
 
 
 func _ready() -> void:
+	if not selection.enabled:
+		_set_available(false)
+		set_process(false)
+		set_process_input(false)
+		return
 	for index in buttons.size():
 		buttons[index].pressed.connect(selection.select_elevator.bind(index))
 	selection.availability_changed.connect(_set_available)

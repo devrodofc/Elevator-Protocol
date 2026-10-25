@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://l3hkgqv5woir"]
+
+[ext_resource type="PackedScene" uid="uid://g33k8dvq7w1h" path="res://src/gameplay/reception_25d/scenes/reception.tscn" id="1_reception"]
+[ext_resource type="Script" uid="uid://cymta17trsjej" path="res://src/gameplay/reception_25d/scripts/reception_presentation.gd" id="2_presentation"]
+[ext_resource type="Script" uid="uid://c441c63n1hito" path="res://src/gameplay/scripts/reception_session.gd" id="3_session"]
+
+[node name="ReceptionGameplayTest" instance=ExtResource("1_reception")]
+script = ExtResource("2_presentation")
+enable_service = true
+
+[node name="TestVisitor" parent="RoomViewport/Room/VisitorGround" index="0"]
+source_texture = null
+
+[node name="VisitorMovementTest" parent="." index="3"]
+enabled = false
+
+[node name="ElevatorSelection" parent="." index="5"]
+enabled = false
+
+[node name="ReceptionSession" type="Node" parent="." index="8"]
+script = ExtResource("3_session")
+
+[node name="ServiceObjects" type="Node3D" parent="RoomViewport/Room/ReceptionDesk"]
+
+[node name="BadgeRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects"]
+position = Vector3(-0.2, 1.17, 0.64)
+
+[node name="BookRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects"]
+position = Vector3(-0.83, 1.19, 0.62)
+
+[node name="ClipboardRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects"]
+position = Vector3(-1.53, 1.17, 0.64)
+
+[node name="PanelRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects"]
+position = Vector3(0.8, 1.42, 0.62)
+rotation = Vector3(-0.959931, 0, 0)

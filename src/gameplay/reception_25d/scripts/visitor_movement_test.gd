@@ -3,6 +3,7 @@ extends Node
 const VisitorMovement = preload("res://src/gameplay/reception_25d/scripts/visitor_movement.gd")
 const AutomaticDoor = preload("res://src/gameplay/reception_25d/scripts/automatic_door.gd")
 
+@export var enabled: bool = true
 @export var movement: VisitorMovement
 @export var entrance_left: Marker3D
 @export var entrance_right: Marker3D
@@ -19,12 +20,18 @@ var _waiting_for_open: bool = false
 
 
 func _ready() -> void:
+	if not enabled:
+		set_process(false)
+		set_process_unhandled_key_input(false)
+		return
 	_selected_entrance = entrance_left if initial_entrance == 0 else entrance_right
 	_selected_door = door_left if initial_entrance == 0 else door_right
 	_reset_test()
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if not enabled:
+		return
 	var key_event := event as InputEventKey
 	if key_event == null or not key_event.pressed or key_event.echo:
 		return
@@ -42,6 +49,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func _start_from(entrance: Marker3D) -> void:
+	if not enabled:
+		return
 	_selected_entrance = entrance
 	_selected_door = door_left if entrance == entrance_left else door_right
 	_reset_test()
@@ -52,6 +61,8 @@ func _start_from(entrance: Marker3D) -> void:
 
 
 func _reset_test() -> void:
+	if not enabled:
+		return
 	set_process(false)
 	_active_door = null
 	_waiting_for_open = false
@@ -63,6 +74,8 @@ func _reset_test() -> void:
 
 
 func _process(_delta: float) -> void:
+	if not enabled:
+		return
 	if _waiting_for_open:
 		if _active_door.state != AutomaticDoor.State.OPEN:
 			return
