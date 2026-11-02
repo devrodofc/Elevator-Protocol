@@ -19,6 +19,7 @@ var _visit_serial: int = 0
 var _visit_id: String = ""
 var _arrival_preview: bool = false
 var _service_preview: bool = false
+var _dispatch_preview: bool = false
 
 var schedule_config: DayScheduleConfig:
 	get: return _schedule
@@ -65,6 +66,7 @@ func start_day(config: DayScheduleConfig) -> void:
 	_generation += 1
 	_arrival_preview = false
 	_service_preview = false
+	_dispatch_preview = false
 	_schedule = config
 	_queue.clear()
 	_entry = {}
@@ -101,6 +103,13 @@ func start_arrival_preview(config: DayScheduleConfig) -> void:
 func start_service_preview(config: DayScheduleConfig) -> void:
 	start_day(config)
 	_service_preview = true
+	_state = State.READY
+
+
+## I4: visitas em série com saída física, ainda sem Marta: nenhuma regra é anunciada ou ativada.
+func start_dispatch_preview(config: DayScheduleConfig) -> void:
+	start_day(config)
+	_dispatch_preview = true
 	_state = State.READY
 
 
@@ -157,7 +166,7 @@ func complete_visit(visit_id: String) -> bool:
 
 
 func take_due_rule(visit_id: String) -> MartaRule:
-	if not _matches(visit_id, State.INTERVAL) or _schedule == null or _queue.is_empty():
+	if _dispatch_preview or not _matches(visit_id, State.INTERVAL) or _schedule == null or _queue.is_empty():
 		return null
 	var interval: int = _schedule.intervalo_regras
 	if interval <= 0 or _served % interval != 0 or _next_rule >= _rules.size():

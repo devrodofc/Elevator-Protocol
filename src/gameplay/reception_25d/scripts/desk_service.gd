@@ -1,5 +1,5 @@
 extends Node
-## I3 presentation: physical consultation + one logical result, never a departure.
+## I3 presentation: physical consultation + one logical result. The departure belongs to the presentation (I4).
 signal decision_processed(result: Dictionary)
 const Models = preload("res://src/gameplay/reception_25d/scripts/desk_models.gd")
 const Picker = preload("res://src/gameplay/reception_25d/scripts/desk_picker.gd")
@@ -28,6 +28,9 @@ var _debug_mode: int
 var _mouse_mode: Input.MouseMode
 var _modal_locked: bool = false
 var _cancelled: bool = false
+var _marta_present: bool = false
+## Bumped on every modal open/close, so an automatic flash only closes its own opening.
+var _modal_serial: int = 0
 var status: Label3D
 
 
@@ -104,7 +107,7 @@ func _valid() -> bool:
 
 func _can_choose() -> bool:
 	return _valid() and presentation.session.state == Session.State.SERVING \
-		and modal.kind.is_empty() and not _confirming and result.is_empty()
+		and modal.kind.is_empty() and not _confirming and result.is_empty() and not _marta_present
 
 
 func select_floor(code: int) -> void:
@@ -152,6 +155,46 @@ func _resolve(id: String, generation: int, code: int) -> void:
 	decision_processed.emit(result)
 
 
+## I4: the next visit inherits no selection, speech, badge or result from the previous one.
+func prepare_next_visit() -> void:
+	if _cancelled:
+		return
+	if _confirmation:
+		_confirmation.kill()
+	_confirming = false
+	if modal.kind == "badge":
+		modal.close()
+	paper.clear()
+	transfer.cancel()
+	_visit_id = ""
+	result = {}
+	selected_floor = 0
+	status.text = "Aguarde o visitante"
+	_refresh_panel()
+
+
+## I5/I6: while Marta is in the room the floor panel stays locked; book and clipboard remain consultable.
+func set_marta_present(present: bool) -> void:
+	_marta_present = present
+	if present:
+		status.text = "Marta está falando"
+	elif result.is_empty() and _visit_id.is_empty():
+		status.text = "Aguarde o visitante"
+	_refresh_panel()
+
+
+## I5: shows the new rule for a moment, as the 2D clipboard does. Never replaces an open consultation.
+func flash_rules(seconds: float) -> void:
+	if _cancelled or not modal.kind.is_empty():
+		return
+	if not modal.open("rules", {}, presentation.session.active_rules):
+		return
+	var serial := _modal_serial
+	await get_tree().create_timer(seconds).timeout
+	if not _cancelled and is_inside_tree() and serial == _modal_serial:
+		modal.close()
+
+
 func _open(which: String) -> void:
 	if _cancelled or SceneTransition.is_busy() or _confirming:
 		return
@@ -161,6 +204,7 @@ func _open(which: String) -> void:
 
 
 func _modal_changed(opened: bool) -> void:
+	_modal_serial += 1
 	var camera: Node = picker.camera
 	var debug: Node = presentation.get_node("DebugFreeCamera")
 	if opened and not _modal_locked:

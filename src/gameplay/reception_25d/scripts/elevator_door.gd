@@ -46,6 +46,11 @@ func has_cleared_passage(world_position: Vector3) -> bool:
 	return to_local(world_position).z <= _closed_positions[0].z - passage_clearance
 
 
+func has_exited_passage(world_position: Vector3) -> bool:
+	# Someone leaving the cabin is clear once beyond the same clearance on the room side (local +Z).
+	return to_local(world_position).z >= _closed_positions[0].z + passage_clearance
+
+
 func _animate_to(target: float, moving_state: State, final_state: State, duration: float) -> void:
 	_cancel_tween()
 	state = moving_state
