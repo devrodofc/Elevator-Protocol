@@ -9,7 +9,7 @@
 [ext_resource type="Resource" uid="uid://cqu76s68bvugf" path="res://src/npcs/resources/Day1/common_npc_male1.tres" id="4_3djo4"]
 [ext_resource type="Resource" uid="uid://ylajsyngiss5" path="res://src/npcs/resources/Day1/common_npc_female1.tres" id="5_3djo4"]
 [ext_resource type="Script" uid="uid://dvpyfvnwc78bh" path="res://src/gameplay/scripts/marta_rule.gd" id="9_rule"]
-[ext_resource type="Resource" path="res://src/gameplay/schedules/day2.tres" id="10_dia2"]
+[ext_resource type="Resource" uid="uid://bkwd20mk80sii" path="res://src/gameplay/schedules/day2.tres" id="10_dia2"]
 [ext_resource type="Resource" uid="uid://b5qa6blw8wptq" path="res://src/npcs/dialogue/dialoguesCommon/4 andar/common4a.tres" id="d4a"]
 [ext_resource type="Resource" uid="uid://cruf2n81kiwg0" path="res://src/npcs/dialogue/dialoguesCommon/4 andar/common4b.tres" id="d4b"]
 [ext_resource type="Resource" uid="uid://g184fibsps7x" path="res://src/npcs/dialogue/dialoguesCommon/5 andar/common5a.tres" id="d5a"]
