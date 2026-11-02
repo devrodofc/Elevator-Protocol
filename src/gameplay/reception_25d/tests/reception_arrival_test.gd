@@ -162,7 +162,7 @@ func _arrival(number: int, side: int) -> void:
 	_check(visual.texture.get_image().get_data() == expected.fila[0].sprite.get_image().get_data(), "Scene's visible pixels match the snapshot")
 	_check(visual.texture_filter == BaseMaterial3D.TEXTURE_FILTER_NEAREST and visual.alpha_cut == SpriteBase3D.ALPHA_CUT_DISCARD, "Nearest and transparency settings preserved")
 	_check(orientation.orientation_mode == 1 and visual.billboard == BaseMaterial3D.BILLBOARD_DISABLED, "PAPER remains the initial orientation")
-	_check(movement.movement_speed == 3.0 and actor.global_position.is_equal_approx(door.spawn_point.global_position), "Actor starts at selected spawn with speed 3")
+	_check(is_equal_approx(movement.movement_speed, 3.6) and actor.global_position.is_equal_approx(door.spawn_point.global_position), "Actor starts at selected spawn with speed 3.6")
 	_check(actor.visible and not movement.is_processing() and door.state == Door.State.OPENING, "Visitor waits at spawn while door opens")
 	_check(_foot_at_anchor(visual, actor) and shadow.transform == initial_shadow, "Initial floor contact and shadow preserved")
 	_check(not scene.get_node("VisitorMovementTest").enabled and not scene.get_node("ElevatorSelection").enabled, "Legacy owners disabled only in inherited scene")
@@ -189,7 +189,7 @@ func _arrival(number: int, side: int) -> void:
 		seen_states[door.state] = true
 		var distance: float = actor.global_position.distance_to(previous)
 		walked += distance
-		bounded_speed = bounded_speed and distance <= 3.0 / 60.0 + 0.0001
+		bounded_speed = bounded_speed and distance <= movement.movement_speed / 60.0 + 0.0001
 		var turn: float = absf(angle_difference(previous_yaw, visual.global_rotation.y))
 		bounded_rotation = bounded_rotation and turn <= deg_to_rad(orientation.rotation_speed) / 60.0 + 0.0001
 		saw_rotation = saw_rotation or turn > 0.001
@@ -209,7 +209,7 @@ func _arrival(number: int, side: int) -> void:
 	_check(scene.stage == Presenter.Stage.AT_SERVICE and session.state == Session.State.SERVING, "Real movement reaches shared service state")
 	_check(actor.global_position.is_equal_approx(scene.service_point.global_position) and not movement.is_processing(), "Visitor stops exactly at ServicePoint")
 	_check(notifications == [visit_id], "Exactly one notification contains the real visit identity")
-	_check(bounded_speed and walked > 10.0 and route_checked, "Entire route walked at original speed without teleport")
+	_check(bounded_speed and walked > 10.0 and route_checked, "Entire route walked at the configured speed without teleport")
 	_check(bounded_rotation and saw_rotation, "PAPER rotates smoothly along the actual route")
 	_check(stayed_grounded and shadow.transform == initial_shadow, "Feet and shadow stay at floor throughout movement")
 	_check(free_camera_checked and camera.position == initial_camera.origin, "Debug camera restore does not change session or camera position")

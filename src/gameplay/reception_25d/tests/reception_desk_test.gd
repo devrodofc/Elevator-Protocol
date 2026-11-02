@@ -79,6 +79,7 @@ func _run() -> void:
 	for day in [1, 2, 3]:
 		seed(4200 + day)
 		var scene = load(SCENE).instantiate()
+		scene.enable_departure = false
 		scene.test_day = day
 		scene.initial_entrance = day % 2
 		root.add_child(scene)
@@ -262,6 +263,7 @@ func _interaction_checks(scene, desk, entry: Dictionary) -> void:
 
 func _cancel_checks() -> void:
 	var scene = load(SCENE).instantiate()
+	scene.enable_departure = false
 	root.add_child(scene)
 	var desk = scene.get_node("DeskService")
 	await until(func(): return desk.badge.available)
@@ -275,6 +277,7 @@ func _cancel_checks() -> void:
 	await frames(3)
 
 	var replacement = load(SCENE).instantiate()
+	replacement.enable_departure = false
 	root.add_child(replacement)
 	var next_desk = replacement.get_node("DeskService")
 	await until(func(): return next_desk.badge.available)

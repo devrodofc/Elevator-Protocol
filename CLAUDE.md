@@ -13,7 +13,7 @@ lista armadilhas reais que já quebraram o projeto.
 | Jam | GameJamPlus 2026/27 — 16 a 18/10/2026, build até 18/10 às 23h59 |
 | Tema | *Something's Off* ("alguma coisa está errada") |
 | Gênero | Dedução / inspeção / suspense psicológico (refs.: Papers, Please; That's Not My Neighbor) |
-| Engine | **Godot 4.7.2**, GDScript, sem plugins |
+| Engine | **Godot 4.7.2**, GDScript; único plugin: GUT (`addons/gut`, só testes) |
 | Equipe | Rodrigo (game design), Mari (HUD), Clara (sprites), Gustavo e Daniel (programação) |
 
 **Premissa.** O protagonista está desempregado há seis meses e aceita uma vaga de recepcionista
@@ -26,7 +26,7 @@ a cada 2 atendimentos para ditar **regras suspeitas** (ex.: "quem pedir o 5º an
 subsolo... eles vão entender quando chegarem lá"), quando o jogador erra e no fim do dia.
 O subsolo é um "pavimento não atribuído" que oficialmente não existe.
 
-**Andares do prédio** (fonte: tabela do game designer, em `src/levels/resources/company_directory.tres`):
+**Andares do prédio** (fonte: tabela do game designer, em `src/gameplay/resources/company_directory.tres`):
 
 | Andar | Setor | O que é |
 |---|---|---|
@@ -57,6 +57,8 @@ Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu pri
   (static); o tutorial zera para o dia 1. Dia 1 → `day1.tres`, Dia 2 → `day2.tres`, Dia 3 → `day3.tres` (último por enquanto).
 - **Fim de jogo**: depois da fala de fim do dia 3 (Espaço), transição para `src/ui/menus/scenes/end_screen.tscn`
   (campo `cena_final` do `day3.tres`): epílogo narrado, "Fim.", créditos subindo e "Voltar ao menu".
+- **Recepção 2.5D (experimento, fora do fluxo):** `src/gameplay/reception_25d/` não é aberta pelo menu, pelo
+  tutorial nem pelo cheat. Só roda com **F6** na própria cena. O fluxo acima continua 100% 2D. Ver seção 13.
 
 ---
 
@@ -73,11 +75,12 @@ Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu pri
 | Áudio | `default_bus_layout.tres` | Buses `Master`, `Music`, `SFX` (os sliders das opções usam esses nomes) |
 | Input | `hack_level1`, `hack_level2` | Declarados, **não usados** em nenhum script. O hack de pular dia usa **F9** direto no código (`TECLA_PULAR_DIA`) |
 
-Fontes em uso (`src/levels/assets/fonts/`, desde o PR #36): **PixeloidSans** e **PixeloidSans-Bold**
-(texto e títulos), além de PixeloidMono e Jersey10. Os recursos `fonts/resources/dynapuff_*.tres` mantêm o nome
-antigo, mas hoje apontam para a PixeloidSans. Chewy e DynaPuff foram apagadas.
-Algumas cenas (`company_book`, `badge_details`, `rules_board`) referenciam `fonts/Pixeloid_Font_1_0/...`,
-caminho que não existe: elas carregam pelo `uid`. Se o uid se perder, corrija o caminho para `fonts/`.
+Fontes em uso (`assets/fonts/`, desde a reorganização do PR #52): `pixeloid_sans.ttf`,
+`pixeloid_sans_bold.ttf` e `pixeloid_mono.ttf`. As cenas da HUD e o `dialogue.tscn` já apontam para esse caminho.
+Jersey10, Chewy, DynaPuff e os recursos `dynapuff_*.tres` não existem mais (`fonts/resources/` está vazia).
+
+Versão da Godot para o GodotHub: `.godothub/.godotrc` (`4.7.2-stable no-dotnet`). `.godothub/project.json` é
+gerado pelo GodotHub; não editar.
 
 ---
 
@@ -89,41 +92,52 @@ autoload/
   scene_transition/    Fade + título entre cenas
   cheat_menu/          cheat_menu.gd (autoload CheatMenu: tecla P, ver 6.10)
   audio/               audio.gd (autoload Audio: música do gameplay + efeitos sonoros, ver 6.9)
+assets/fonts/          pixeloid_sans.ttf, pixeloid_sans_bold.ttf, pixeloid_mono.ttf
 sounds/
-  music/               musica_menu.wav, musica_gameplay.mp3, musica_errada.mp3
-	menu/              music_menu.tscn/.gd (autoload MusicMenu: toca musica_menu.wav no bus Music)
+  music/               music_menu.wav, music_gameplay.mp3, music_reverse.mp3 (a "errada", dia 3)
+	menu/              music_menu.tscn/.gd (autoload MusicMenu: toca music_menu.wav no bus Music)
   sfx/                 BotãoPressionado.mp3, chegou_elevador.mp3, digitando.mp3, erro.mp3,
 					   sucess.mp3, passando_pagina.mp3, MartaSubsoloKetchup.mp3
 default_bus_layout.tres  buses Music e SFX
 src/
-  levels/
-	assets/            Arte da HUD (4x): main_hud, badge, buttons, company_book, rules, Elevador, fonts
+  gameplay/
+	reception/         scenes/reception.tscn + scripts/reception_manager.gd (recepção 2D, a do jogo)
+	reception_25d/     Recepção 2.5D experimental (fora do fluxo; ver seção 13)
+	hud/               scenes/ + scripts/: reception_hud, elevator_panel/button, company_book, rules_board,
+					   badge_details, shift_summary; assets/ (arte da HUD 4x: main_hud, badge, buttons,
+					   company_book, rules, Elevador)
 	resources/         company_directory.tres (livro de andares)
-	scenes/            reception.tscn
+	scenes/            elevator.tscn (elevador 2D da parede)
 	schedules/         day1.tres, day2.tres, day3.tres (agendas dos dias)
-	scripts/           reception_manager, day_schedule, day_interaction, marta_rule,
-					   company_data/directory
-	tutorial/          tutorial.tscn, tutorial.gd, tutorial_step.gd, tutorial_script.gd, tutorial_intro.tres (roteiro)
+	scripts/           reception_session (estado do atendimento, 6.1b), day_schedule, day_interaction,
+					   marta_rule, elevator, company_data/directory
+	tutorial/          scenes/tutorial.tscn, scripts/ (tutorial, tutorial_step, tutorial_script),
+					   resources/tutorial_intro.tres (roteiro)
   npcs/
 	assets/            Sprites 256x256 dos NPCs (jose, marta, lucas, tiao, manfredo, ...)
 	dialogue/          npc_dialogue.gd + dialoguesCommon/ (dia 1), dialoguesDia2/, dialoguesDia3/ (<N> andar/*.tres)
-	resources/         visitor_data.gd, Day1/, Day2/, Day3/ (tiao.tres), name_list.gd, male_names.tres, ...
+	resources/         Day1/, Day2/, Day3/ (tiao.tres), birdTest.tres (entregador), scripts/ (visitor_data,
+					   name_list, phrase_set), visitors/ (male_names.tres, standard_phrases.tres, ...)
 	scenes/            visitor.tscn, marta.tscn, characters/ (cenas visuais dos NPCs)
 	scripts/           visitor.gd
-  shared/              rule_validator.gd
-  ui/
-	hud/               reception_hud, elevator_panel/button, company_book, rules_board,
-					   badge_details, shift_summary
-	menus/             scenes/ (cenas), scripts/ (menu, options, credits, pause, options_pause); assets/ (tela inicial *.jpg, buttons/)
-docs/                  decisions/, game-design/, references/, team/ (vazias no repo)
+  shared/scripts/      rule_validator.gd
+  ui/menus/            scenes/ (cenas), scripts/ (menu, options, credits, pause, options_pause, end_screen,
+					   display_mode); assets/ (tela inicial *.jpg, buttons/)
+test/unit/             testes GUT (test_rule_validator.gd)
+tests/gameplay_regression/  testes SceneTree da I0/I1 (fluxo 2D, sessão, agendas) + fixtures/
+addons/gut/            plugin GUT
+docs/                  decisions/ (2026-10-18-audios-e-cutscene-ketchup.md); game-design/, references/, team/ vazias
 tools/createscene.gd   EditorScript antigo (desatualizado, ver seção 9)
 ```
+Pastas como `src/levels/`, `src/player/`, `src/run/`, `src/enemies/`, `exemple/` e `data/` estão vazias (sobras da
+reorganização, não vão para o git). Há arquivos `.bak` versionados em `src/ui/menus/` e `autoload/cheat_menu/`:
+são cópias antigas, nenhuma cena os usa.
 
 ---
 
 ## 5. Cenas existentes
 
-### 5.1 `src/levels/scenes/reception.tscn` — a recepção (gameplay)
+### 5.1 `src/gameplay/reception/scenes/reception.tscn` — a recepção (gameplay)
 ```
 Reception (Node2D) ─ reception_manager.gd
 ├── Wall (ColorRect 640x201, branco)           parede atrás da janela
@@ -146,7 +160,7 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
 `visitor_scale = 3.4594595` (arte 256 px em tamanho real), `visitor_move_speed = 220`,
 `marta_start_scale = marta_focus_scale = (1, 1)`.
 
-### 5.2 `src/ui/hud/reception_hud.tscn` — HUD da recepção (posições na base 640x360)
+### 5.2 `src/gameplay/hud/scenes/reception_hud.tscn` — HUD da recepção (posições na base 640x360)
 | Nó | Posição / tamanho | Função |
 |---|---|---|
 | Desk | (0, 201) 678x181 | Mesa |
@@ -155,7 +169,7 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
 | RulesBoard | (78, 314) 116x151 | Prancheta de regras: só 46 px visíveis; clique sobe/desce; Esc fecha |
 | BadgeOverlay/BadgeDetails | CanvasLayer 10 | Crachá aberto (nome, idade, sexo, ocupação, foto) |
 
-### 5.2b `src/levels/scenes/elevator.tscn` — elevador na parede
+### 5.2b `src/gameplay/scenes/elevator.tscn` — elevador na parede (`src/gameplay/scripts/elevator.gd`)
 - `AnimatedSprite2D` (`Sprite`) com os quadros `Elevador  (1).png`, `frame 2`, `frame 3` (animações `abrir`/`fechar`).
   O `Sprite` fica na **origem (0, 0)** da cena, alinhado com o `DoorPoint` (102, 182) e com `PORTA_ARTE`:
   mover o sprite tira o elevador da tela e a porta fica invisível (aconteceu no PR #39, ver seção 9).
@@ -175,8 +189,8 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
   volta para o elevador (`_marta_arrive(from_elevator)`, `_marta_leave()` em `reception_manager.gd`).
 
 
-### 5.3 `src/ui/hud/elevator_panel.tscn` — painel do elevador
-- Arte em 4x (`src/levels/assets/Elevador/`), painel 384x624 com `scale = 0.25`.
+### 5.3 `src/gameplay/hud/scenes/elevator_panel.tscn` — painel do elevador
+- Arte em 4x (`src/gameplay/hud/assets/Elevador/`), painel 384x624 com `scale = 0.25`.
 - Botões: 5,6 / 3,4 / 1,2 / S (subsolo, código -1), X (negar, código 999), Confirmar.
 - Mecânica: clicar seleciona (botão afunda), clicar de novo desmarca; **Confirmar** só libera com
   seleção e emite `floor_selected(código)`. `set_panel_locked(bool)` trava/escurece tudo.
@@ -185,14 +199,14 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
   `painel elevador botões.png`. Os sprites "sem contorno" foram gerados a partir dos originais
   trocando os pixels amarelos pela cor da face.
 
-### 5.4 `src/levels/tutorial/tutorial.tscn` — tutorial
+### 5.4 `src/gameplay/tutorial/scenes/tutorial.tscn` — tutorial
 - Mesmo cenário da recepção (`PisoParede`, cadeiras, elevador, HUD; painel travado). O `WindowClip` tem de ser
   igual ao da recepção (`clip_children = 1`, largura 465): com `clip_children = 2` ele desenha um retângulo
   branco por cima do fundo e das cadeiras.
 - `NarrationLayer` (layer 5): tela escura com texto (narração da história do protagonista).
 - `SkipLayer` (layer 20): botão "Pular tutorial [Esc]".
-- Scripts: `src/levels/tutorial/tutorial.gd`, `src/levels/tutorial/tutorial_script.gd` e `src/levels/tutorial/tutorial_step.gd`.
-- Roteiro: `src/levels/tutorial/tutorial_intro.tres` (12 passos: 4 narrações + 8 falas da Marta).
+- Scripts: `src/gameplay/tutorial/scripts/tutorial.gd`, `tutorial_script.gd` e `tutorial_step.gd`.
+- Roteiro: `src/gameplay/tutorial/resources/tutorial_intro.tres` (12 passos: 4 narrações + 8 falas da Marta).
   Cada `TutorialStep` tem `falante` (vazio = narração), `texto`, `destaque`
   (NENHUM, FALA, LIVRO, REGRAS, CRACHA, PAINEL). O destaque é um contorno vermelho piscando que
   **lê a posição real** do elemento a cada quadro (`_update_highlight_rect`); em REGRAS a prancheta sobe.
@@ -207,7 +221,8 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
   Visitantes (não aceleráveis) também passam página com Espaço. Não diminuir a letra para caber:
   com `line_spacing = -2` as linhas se encostam.
 - `autoload/scene_transition/scene_transition.tscn`: CanvasLayer 50, `Fade` + `Title` (PixeloidSans).
-- `src/ui/hud/company_book.tscn`, `rules_board.tscn`, `badge_details.tscn`: componentes da HUD.
+- `src/gameplay/hud/scenes/company_book.tscn`, `rules_board.tscn`, `badge_details.tscn`: componentes da HUD
+  (também reaproveitados pelas consultas do balcão 2.5D).
 - `src/npcs/scenes/visitor.tscn`: nó base do visitante (script `visitor.gd`).
 - `src/npcs/scenes/marta.tscn`: Marta = `visitor.gd` + Sprite2D 256 px.
 - `src/npcs/scenes/characters/*`: cenas visuais dos NPCs (jose, CommonNPCs, PassaroTeste).
@@ -229,7 +244,7 @@ Exports relevantes no nó `Reception`: `schedule_config = day1.tres`, `delay_bet
 
 ## 6. Sistemas e scripts
 
-### 6.1 Fluxo da recepção (`reception_manager.gd`)
+### 6.1 Fluxo da recepção (`src/gameplay/reception/scripts/reception_manager.gd`)
 1. `_ready`: liga sinais do painel e do crachá, trava o painel, monta o dia
    (`schedule_config.montar_dia()` → `queue_data` + `_rules_today`) e chama a intro.
 2. **Intro**: Marta entra pela esquerda, fala `mensagem_inicio` e **espera o Espaço sem tempo limite**.
@@ -258,7 +273,22 @@ menu principal ou reload no meio de uma fala não geram erro.
 Helpers: `_spawn_marta` (escala fixa), `_add_actor` (põe em `%Actors`), `_wait_dialogue(s)`
 (s ≤ 0 = espera só o jogador), `_await_callback` (transforma callback em `await`).
 
-### 6.2 Validação (`src/shared/rule_validator.gd`)
+### 6.1b Sessão de atendimento (`src/gameplay/scripts/reception_session.gd`, `ReceptionSession`)
+Desde a etapa I1 do 2.5D, o **estado lógico** do dia saiu do manager e foi para um Node filho criado por
+`_create_session()`. **Não é autoload** e morre com a cena. Não conhece atores, coordenadas, HUD, áudio nem tweens.
+- Guarda fila, visita atual (`current_entry`, `current_visit_id`), regras sorteadas/ativas, contagem e estado
+  (`State`: INTRO, READY, ARRIVING, SERVING, RESOLVED, INTERVAL, RULE, CONCLUDING, FAILED, TRANSITION, CLOSED).
+- Chama `montar_dia()` **uma vez** em `start_day()`; os snapshots da fila são somente leitura.
+- Comandos com identidade: `request_next_visit(geração)`, `service_reached(id)`, `submit_decision(id, código)`
+  (única chamada ao `RuleValidator`; `{}` = comando rejeitado), `complete_visit(id)` (conta 1 acerto),
+  `take_due_rule`/`activate_pending_rule`/`finish_rule`, `finish_interval(id)`. Fora de ordem → ignorado.
+- `generation` muda em reinício/transição/fechamento: callbacks antigos comparam a geração e desistem.
+- O manager 2D continua sendo a fachada: `queue_data`, `active_rules`, `current_entry` etc. são consultas
+  delegadas à sessão. `ReceptionManager.dia_em_andamento` (static) continua no manager.
+- Modos de prévia, usados só pelo 2.5D: `start_arrival_preview` (I2), `start_service_preview` (I3) e
+  `start_dispatch_preview` (I4). `start_day` desliga todos.
+
+### 6.2 Validação (`src/shared/scripts/rule_validator.gd`)
 `andar_esperado(visitante, fala, dia, regras)` devolve o destino correto; `validar_decisao` compara.
 Ordem de aplicação:
 1. Tag `intruder` ou `deny_access` → **negar (999)**.
@@ -315,7 +345,7 @@ falas próprias em `src/npcs/dialogue/dialoguesDia2/<N> andar/` (3 por andar, `u
 - `regras_obrigatorias`: a Marta sempre avisa "Entrega para a Marta? Mande para o subsolo." (narrativa);
   a outra regra é sorteada do banco de 7: 3→negar, 1→subsolo, 4→2º, 5→6º + 3 narrativas.
 - O entregador pede "entrega para a dona Marta" (`andar_desejado = -1`): o certo é o subsolo.
-- `sprite_marta_fim` = `Marta sangrenta.png`: só na fala de fim ela aparece ensanguentada ("é katchup!").
+- `sprite_marta_fim` = `src/npcs/assets/marta/marta_bloody.png`: só na fala de fim ela aparece ensanguentada ("é katchup!").
   Durante o dia usa o sprite padrão. `suspense_antes_do_fim = 3.0` + `som_no_escuro = MartaSubsoloKetchup.mp3`:
   depois que o entregador entra no elevador a música some, as luzes piscam e a sala fica quase preta (0,9);
   1 s depois toca o `MartaSubsoloKetchup` com o cenário tremendo e um vermelho fraco no escuro; mais 3 s de
@@ -364,14 +394,14 @@ clareia; emite `finished`. Bloqueia cliques durante a troca.
 
 ### 6.9 Áudio (`Audio` + `MusicMenu`)
 As músicas ficam em `sounds/music/`; os efeitos, incluindo `MartaSubsoloKetchup.mp3`, em `sounds/sfx/`.
-`MusicMenu` (autoload) toca `sounds/music/musica_menu.wav` no menu; para ao apertar **Jogar** (`menu.gd`) e volta quando o
+`MusicMenu` (autoload) toca `sounds/music/music_menu.wav` no menu; para ao apertar **Jogar** (`menu.gd`) e volta quando o
 menu abre de novo (o menu também para a música do gameplay). `Audio` (`autoload/audio/audio.gd`, registrado pelo
 caminho) tem um player de música (bus Music), um de loop e 6 vozes de efeito (bus SFX):
 
 | Som | Quando | Onde |
 |---|---|---|
-| `musica_gameplay` | Recepção, dias 1 e 2 (em loop) | `reception_manager._ready` |
-| `musica_errada` | Recepção, a partir do dia 3 (em loop) | `reception_manager._ready` |
+| `music_gameplay` (`MUSICA_GAMEPLAY`) | Recepção, dias 1 e 2 (em loop) | `reception_manager._ready` |
+| `music_reverse` (`MUSICA_ERRADA`) | Recepção, a partir do dia 3 (em loop) | `reception_manager._ready` |
 | `BotãoPressionado` | Qualquer botão do painel do elevador (inclui X e Confirmar) | `elevator_button._gui_input` |
 | `chegou_elevador` | Porta do elevador abre estando fechada: -6 dB (50%); quando a Marta sai, volume normal e pitch 0,7 | `elevator._tocar_chegada` (`release(..., som_da_marta)`) |
 | `digitando` | Narração da intro (tutorial), enquanto o texto aparece | `tutorial._show_narration` |
@@ -416,17 +446,17 @@ Para tirar da build final: remover a linha `CheatMenu` de `[autoload]` no `proje
 
 | Quero mudar | Onde |
 |---|---|
-| Visitantes do dia, ordem, quantidade | `src/levels/schedules/dayN.tres` → `interacoes` |
+| Visitantes do dia, ordem, quantidade | `src/gameplay/schedules/dayN.tres` → `interacoes` |
 | Novo dia | copiar `day3.tres`, mudar `dia_numero`, apontar o `proximo_dia` do dia anterior para ele e mover o `cena_final` para o novo último dia |
 | Epílogo e créditos finais | `src/ui/menus/scripts/end_screen.gd` → consts `EPILOGO` e `CREDITOS` |
 | Suspense / sprite da Marta no fim | `dayN.tres` → `suspense_antes_do_fim`, `sprite_marta_fim` |
 | Regras da Marta e intervalo | `dayN.tres` → grupo "Regras da Marta" |
 | Falas/andar de um NPC | `.tres` em `src/npcs/resources/Day*/` ou `src/npcs/dialogue/` |
-| Livro de andares | `src/levels/resources/company_directory.tres` |
-| Roteiro do tutorial | `src/levels/tutorial/tutorial_intro.tres` |
-| Lista de nomes | `src/npcs/resources/male_names.tres` |
+| Livro de andares | `src/gameplay/resources/company_directory.tres` |
+| Roteiro do tutorial | `src/gameplay/tutorial/resources/tutorial_intro.tres` |
+| Lista de nomes | `src/npcs/resources/visitors/male_names.tres` |
 | Ritmo da recepção | nó `Reception`: `delay_between_visitors`, `visitor_move_speed` |
-| Título da transição | `src/levels/tutorial/tutorial.tscn` → `titulo_dia` |
+| Título da transição | `src/gameplay/tutorial/scenes/tutorial.tscn` → `titulo_dia` |
 
 ---
 
@@ -506,8 +536,10 @@ Para tirar da build final: remover a linha `CheatMenu` de `[autoload]` no `proje
 
 ## 10. Pendências e inconsistências conhecidas
 
-- **Tag do entregador:** `Day2/entregador.tres` usa a tag `entregador`, mas o validador procura
-  `delivery`/`generic_delivery` — a regra "entregador vai ao 1º andar no dia 2" não se aplica a ele.
+- **Entregador:** os dias 1 e 2 usam `src/npcs/resources/birdTest.tres` ("Entregador Lucas", sem tags, sprite e
+  fala definidos na interação FIXA do dia). `Day2/entregador.tres` (tag `entregador`) não é usado por nenhuma
+  agenda. O validador procura `delivery`/`generic_delivery`, então a regra "entregador vai ao 1º andar no
+  dia 2" não se aplica a ele.
 - `mensagem_fim` do dia 1 diz "você deixou aquele entregador ir para o terceiro andar... você não sabia!",
   embora mandá-lo ao 3º seja o certo pelo validador. Parece pista narrativa intencional; confirmar com o Rodrigo.
 - `DialogueUI`, `ManualPanel` e `ShiftSummary` em `reception.tscn` são `Control` vazios; `shift_summary.gd`
@@ -515,7 +547,10 @@ Para tirar da build final: remover a linha `CheatMenu` de `[autoload]` no `proje
 - `tools/createscene.gd` ainda aponta para caminhos antigos (`src/levels/reception.tscn`).
 - Código/recursos sem uso: `phrase_set.gd` + `standard_phrases.tres` (frases padrão antigas),
   `src/npcs/level_day_config/day_config.gd` (`DayConfig`, substituído por `DayScheduleConfig`),
-  `src/npcs/resources/common_npc_male1.tres` (o usado é o de `Day1/`), ações `hack_level1/2`.
+  `src/npcs/resources/visitors/common_npc_male1.tres` (o usado é o de `Day1/`), ações `hack_level1/2`,
+  arquivos `.bak` em `src/ui/menus/` e `autoload/cheat_menu/`.
+- `day2.tres` e `day3.tres` têm `andares_do_dia = null` (regravados pelo editor no commit 4c42c42). Funciona:
+  ao carregar, o campo fica com o padrão 1–6 (conferido com `montar_dia()`).
 - Ao criar um dia novo, preencher `falas_comuns` (senão andares sem fala ficam sem visitante).
 - O tutorial destaca o "painel" e diz "escolher o andar no painel do elevador, ou negar o acesso";
   se a mecânica mudar, atualizar `tutorial_intro.tres`.
@@ -554,7 +589,7 @@ G=".../Godot_v4.7.2-stable_win64_console.exe"
 ```
 - Em scripts `-s`, **não escreva `ReceptionManager` no código-fonte do teste**: isso compila o
   `reception_manager.gd` antes dos autoloads e dá "Identifier not found: Audio". Use
-  `var RM = load("res://src/levels/scripts/reception_manager.gd")` e `RM.dia_em_andamento = ...`.
+  `var RM = load("res://src/gameplay/reception/scripts/reception_manager.gd")` e `RM.dia_em_andamento = ...`.
 - Scripts de teste (`extends SceneTree`) podem: `change_scene_to_file`, simular teclas com
   `Input.parse_input_event(InputEventAction)`, emitir `pressed` nos botões do elevador e consultar
   `RuleValidator.andar_esperado(...)` para responder certo.
@@ -563,3 +598,123 @@ G=".../Godot_v4.7.2-stable_win64_console.exe"
 - O Movie Maker com stretch `canvas_items` grava em 1920x1080.
 - Para inspecionar o que **o editor** carrega (diferente do jogo), use uma cópia do projeto com um
   `EditorPlugin` temporário e `--headless -e` (foi assim que o problema 1 foi diagnosticado).
+
+### Suítes existentes
+| Suíte | Como rodar | Resultado esperado |
+|---|---|---|
+| GUT (validador) | `test/unit/test_rule_validator.gd`, pelo painel GUT do editor | sem falhas |
+| I0/I1 (2D, sessão, agendas) | `tests/gameplay_regression/*.gd` com `-s` | `failures=0` |
+| I2 chegada 2.5D | `src/gameplay/reception_25d/tests/reception_arrival_test.gd` | `I2_ARRIVAL_RESULT ... failures=0` |
+| I3 balcão 2.5D | `src/gameplay/reception_25d/tests/reception_desk_test.gd` | `I3_DESK_RESULT ... failures=0` |
+| I4 saída 2.5D | `src/gameplay/reception_25d/tests/reception_dispatch_test.gd` | `I4_DISPATCH_RESULT ... failures=0` |
+| I5/I6 Marta, erro, fim do dia | `src/gameplay/reception_25d/tests/reception_marta_test.gd` (~5 min) | `I5_MARTA_RESULT ... failures=0` |
+
+**Rode os testes 2.5D sempre com `--fixed-fps 60`**:
+`"$G" --headless --fixed-fps 60 --path . -s res://src/gameplay/reception_25d/tests/reception_desk_test.gd`.
+Eles esperam um número fixo de quadros por animação; sem `--fixed-fps` os quadros passam rápido demais e
+aparecem falhas falsas (prancheta "não volta", "Result available for I4" e um `SCRIPT ERROR` em `.correct`).
+O aviso `N resources still in use at exit` no fim é conhecido e não indica falha.
+
+`tests/gameplay_regression/validator_schedule_test.gd` compara o SHA-256 dos recursos com
+`fixtures/resource_integrity.json`. No Windows (`core.autocrlf=true`) os arquivos ficam com CRLF e o hash não
+bate (falha falsa). Além disso, `day1/2/3.tres` foram regravados pelo editor no commit `4c42c42`, depois do fixture
+(24/10). Resultado atual: 3055 verificações, 136 falhas, todas "Authored resource bytes preserved". Se as mudanças nas
+agendas forem aceitas, regenere o fixture.
+
+---
+
+## 13. Recepção 2.5D (experimento em andamento)
+
+Iniciado pelo Rodrigo na branch `feat/2.5d-experiment` (PR #54). Objetivo: trocar a recepção 2D por uma sala 3D
+renderizada em 640×360 e ampliada com filtro nearest (mantém o visual pixel art), com os NPCs como `Sprite3D`
+usando os mesmos PNGs. **Continua fora do fluxo do jogo**: menu, tutorial, cheat e F9 só conhecem a recepção 2D.
+Para testar, abra a cena e use **F6** (F5 roda o jogo normal).
+
+Documentação detalhada (leia antes de mexer): `src/gameplay/reception_25d/README.md` (etapas 1–10: sala,
+câmera, portas, cabines, arte do Elevador 1, câmera livre) e `src/gameplay/reception_25d/docs/`
+(`gameplay-integration-audit.md` = etapa 11, auditoria e plano I0–I8; `gameplay-integration-iN.md` = cada etapa).
+
+### Cenas
+| Cena | Para quê |
+|---|---|
+| `scenes/reception.tscn` | Sala experimental "pura": teclas **1/2** (entrar pela porta esquerda/direita), **R** (reset), botões das 3 cabines, **P** (BILLBOARD/PAPER), **F** (câmera livre). Sem regras de jogo. Não alterar: os testes comparam com ela. |
+| `scenes/reception_gameplay_test.tscn` | **Herda** a anterior e liga o gameplay real (sessão + `reception_presentation.gd`). É a cena de trabalho das etapas I2+. |
+| `tests/reception_arrival_fixture.tscn` | Herda a de gameplay com `enable_service = false` (só a chegada da I2). |
+
+Exports do nó raiz da `reception_gameplay_test.tscn`: `Test Day` (1–3, escolhe `dayN.tres`), `Initial Entrance`
+(Esquerda/Direita), `Enable Service` (I3: balcão), `Enable Departure` (I4: saída) e `Enable Marta` (I5/I6: dia
+completo com a Marta). Desligando de trás para frente volta-se às etapas anteriores. Com `Enable Marta`, o
+`Test Day` só vale na primeira abertura: depois o dia fica em `reception_presentation.gd: dia_em_andamento`
+(static), que o erro mantém e o fim do dia avança.
+
+### Etapas do plano (I0–I8)
+| Etapa | Situação | O que entrega |
+|---|---|---|
+| I0 | feita | Casos de regressão do 2D (`tests/gameplay_regression/`) |
+| I1 | feita | `ReceptionSession` (6.1b): o estado do atendimento sai do manager 2D |
+| I2 | feita | Visita real da agenda entra por uma porta e chega ao balcão |
+| I3 | feita | Balcão com objetos 3D clicáveis: crachá, livro, prancheta, painel de andares (1–6, -1, X, OK); fala em papel 3D |
+| **I4** | **feita (02/11/2026)** | Acerto embarca na **cabine 1**; recusa certa sai pela porta de entrada; erro trava; próximo visitante só depois da saída |
+| **I5** | **feita (02/11/2026)** | Marta 3D: introdução, regras depois do 2º e 4º atendimento (ativadas depois da fala) |
+| **I6** | **feita (02/11/2026)** | Erro (Marta com raiva, reload no mesmo dia), fim do dia, dias 1→2→3→tela final |
+| I7 | pendente | Política definitiva de cabines (3) e de vários visitantes ao mesmo tempo |
+| I8 | pendente | Ligar o 2.5D ao menu/tutorial e revisar regressões |
+
+### Arquitetura (resumo)
+- `ReceptionSession` é a **única autoridade** (fila, decisão via `RuleValidator`, contagem). A apresentação 2.5D
+  só move atores, abre portas e mostra UI; nunca sorteia nem valida.
+- `reception_presentation.gd` (adaptador): pega a visita da sessão, aplica o sprite no `TestVisitor`
+  (`test_sprite.gd`), anda pelas rotas (`visitor_movement.gd`, `visitor_orientation.gd`), controla portas
+  (`automatic_door.gd` nas entradas, `elevator_door.gd` nas cabines) e, na I4, a saída. Sinais:
+  `visit_reached_service(id)`, `visit_departed(id)`, `presentation_failed(motivo)`.
+- `desk_service.gd` (I3): objetos do balcão (`desk_models.gd` = caixas provisórias), picking por raycast
+  (`desk_picker.gd`), consultas modais (`desk_modal.gd` + `inspection_*.gd`, que reaproveitam a HUD 2D), fala
+  (`paper_dialogue.gd`, a cena `Dialogue` original numa textura) e crachá (`badge_transfer.gd`). Emite
+  `decision_processed(result)`.
+- **Andar ≠ cabine.** O painel envia o código do andar (1–6, -1, 999). A cabine é decisão de apresentação: por
+  enquanto sempre a cabine 1 (`PILOT_CABIN`), qualquer que seja o andar. Não associar cabine a andar sem decisão
+  de design.
+- `ElevatorSelection` e `VisitorMovementTest` (harness da sala pura) ficam **desligados** na cena de gameplay.
+- `marta_actor.gd` (I5): a Marta é um **segundo ator** (`MartaGround`, cópia do sprite e da sombra do visitante),
+  com movimento, orientação e balão de papel próprios. Usa só a **cabine 2** (`Elevator02`). API com `await`:
+  `arrive_from_entrance`, `arrive_from_cabin(sprite_chegada, sprite_saida)`, `speak`, `leave_into_cabin`; `cancel()`
+  faz todas devolverem `false`. A tecla P é lida só pela orientação do visitante; a da Marta copia o modo.
+- `reception_effects.gd` (I6): CanvasLayer 4 com as camadas do 2D (vermelho da falha, luzes apagando, luz
+  vermelha do dia 2) e o tremor, aplicado ao `RoomView`. Mesmos valores do `reception_manager.gd`.
+
+### I4 — saída do visitante (decisões tomadas)
+- **Cadência em série:** só um visitante na sala; o próximo entra depois que o anterior saiu de fato
+  (cabine **fechada** com ele dentro, ou porta de entrada **fechada** depois que ele sumiu no vestíbulo).
+  "Começou a fechar" não conta como saída.
+- **Acerto (andar ou subsolo):** a sessão conta o atendimento na hora da decisão (como no 2D); o crachá volta, o NPC
+  anda até a cabine 1, espera a porta abrir, entra, a porta fecha e só então `visit_departed` + próximo visitante.
+- **Recusa certa (X):** volta pela mesma porta de entrada (fila → entrada → vestíbulo), some e a porta fecha.
+- **Erro sem Marta (`Enable Marta` desligado):** estado `FAILED`; o NPC fica parado, nada abre, a fila não anda.
+- **Fim da fila sem Marta:** estado `DAY_DONE` ("Fila concluída · fim do dia na I6").
+- No modo só da I4 (`start_dispatch_preview`) nenhuma regra é anunciada.
+
+### I5/I6 — Marta, erro e fim do dia (decisões tomadas)
+Design: `docs/superpowers/specs/2026-11-02-recepcao-25d-marta-e-erro-design.md`. Igual ao 2D, com estas adaptações:
+- **Introdução:** a Marta entra pela porta de entrada, fala `mensagem_inicio` (espera Espaço), entra na cabine 2;
+  só então o primeiro visitante.
+- **Regras:** depois que o visitante do 2º/4º atendimento saiu de fato, a cabine 2 abre (`chegou_elevador` grave),
+  ela vem ao balcão e dita a regra. A regra só vale depois do último Espaço (`rule_announced`); a prancheta abre
+  sozinha por 1,8 s (não abre por cima de outra consulta) enquanto ela volta para a cabine 2.
+- **Erro:** som de erro, painel travado, 1 s, tela avermelha, o visitante sai pela porta de entrada; quando ele passa
+  do corredor, a Marta sai da cabine 2 e chega **com raiva em todos os dias** (`marta_anger.png`; no 2D a raiva
+  continua só no dia 1). Fala `mensagem_falha` (até 6 s ou Espaço) e recarrega o mesmo dia.
+- **Fim do dia:** como o 2D (suspense, `sprite_marta_fim` desde a saída da cabine, encarada sob luz vermelha no dia
+  2, `mensagem_fim`), depois transição "Dia N" para a mesma cena ou para a `cena_final` (dia 3 → créditos).
+- Enquanto a Marta está na sala, o painel de andares fica travado; livro e prancheta continuam consultáveis.
+- Sons: `sucess` no acerto, `erro` no erro, música do dia (`music_reverse` a partir do dia 3).
+
+### Cuidados
+- Não mexa na geometria, nos marcadores (`VisitorPositions`, `ElevatorRoutes`, `ApproachPoint`/`EntryPoint`/
+  `CabinStopPoint`), na velocidade nem nos materiais para "fazer um teste passar". Velocidade dos NPCs e da Marta:
+  **3,6** na `reception_gameplay_test.tscn` (override no nó `VisitorMovement`, pedido do Gustavo em 02/11/2026); a sala
+  experimental continua com 3 (padrão do `visitor_movement.gd`). A Marta copia a velocidade do visitante.
+- A tecla **P** é consumida pela orientação PAPER antes do `CheatMenu` nessas cenas (conflito conhecido).
+- `VisitorData.cena` (NPC feito como cena 2D) não é suportado no 2.5D: a visita é rejeitada (`UNSUPPORTED`). As
+  agendas atuais só usam sprites.
+- O editor regrava a `reception_gameplay_test.tscn` (ids `unique_id`, `transform` no lugar de `position`): é só
+  formato, mas confira o diff antes de commitar.

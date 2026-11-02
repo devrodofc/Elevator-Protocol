@@ -10,6 +10,8 @@ viewport_path = NodePath("RoomViewport")
 [node name="ReceptionGameplayTest" unique_id=2098443249 instance=ExtResource("1_reception")]
 script = ExtResource("2_presentation")
 enable_service = true
+enable_departure = true
+enable_marta = true
 
 [node name="RoomView" parent="." index="0" unique_id=20399849]
 texture = SubResource("ViewportTexture_px574")
@@ -30,6 +32,9 @@ transform = Transform3D(1, 0, 0, 0, 0.5735765, 0.819152, 0, -0.819152, 0.5735765
 
 [node name="TestVisitor" parent="RoomViewport/Room/VisitorGround" parent_id_path=PackedInt32Array(655563280) index="0" unique_id=1751512308]
 source_texture = null
+
+[node name="VisitorMovement" parent="." index="2" unique_id=768934271]
+movement_speed = 3.6
 
 [node name="VisitorMovementTest" parent="." index="3" unique_id=1110715786]
 enabled = false
