@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://src/gameplay/reception_25d/textures/elevator_01/metal.png" id="1_texture"]
+
+[resource]
+texture_filter = 0
+roughness = 0.9
+metallic = 0.15
+albedo_texture = ExtResource("1_texture")
+uv1_triplanar = true
+uv1_scale = Vector3(1.5, 1.5, 1.5)
+albedo_color = Color(0.6, 0.7, 0.73, 1)

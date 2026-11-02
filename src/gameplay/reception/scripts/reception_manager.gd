@@ -1,8 +1,12 @@
 class_name ReceptionManager
 extends Node2D
 
+const SessionScript := preload("res://src/gameplay/scripts/reception_session.gd")
+
 @export_group("Configuração do Turno")
-@export var schedule_config: DayScheduleConfig
+@export var schedule_config: DayScheduleConfig:
+	get:
+		return session.schedule_config if is_instance_valid(session) and session.state != SessionScript.State.IDLE else schedule_config
 
 @export_group("Cadência do Atendimento")
 ## Tempo de espera antes de o próximo visitante surgir pela porta
@@ -42,18 +46,31 @@ extends Node2D
 @onready var reception_hud: Control = $UI_CanvasLayer/ReceptionHUD
 @onready var feedback_audio: AudioStreamPlayer2D = $FeedbackAudio
 
-var queue_data: Array[Dictionary] = [] # Lista de dados: {"visitor": VisitorData, "dialogue": NPCDialogue}
-var current_entry: Dictionary = {}
+@onready var session: ReceptionSession = _create_session()
+## Fachada de consulta para os consumidores 2D; a sessão é a única autoridade.
+var queue_data: Array[Dictionary]:
+	get: return session.queue_data
+var current_entry: Dictionary:
+	get: return session.current_entry
 var current_visitor_node: Visitor = null
-var is_processing_decision: bool = false
+var is_processing_decision: bool:
+	get: return session.is_processing_decision
 var _badge_locked_panel: bool = false
 var marta_instance: Node2D = null
 ## Regras da Marta já ditadas hoje (valem para a validação a partir de quando ela fala)
-var active_rules: Array[MartaRule] = []
-var _served_count: int = 0
-var _next_rule_index: int = 0
+var active_rules: Array[MartaRule]:
+	get: return session.active_rules
+var _served_count: int:
+	get: return session.served_count
+var _next_rule_index: int:
+	get: return session.next_rule_index
 ## Regras da Marta na ordem sorteada para hoje (montada junto com a fila)
-var _rules_today: Array[MartaRule] = []
+var _rules_today: Array[MartaRule]:
+	get: return session.rules_today
+var _badge_arrival_callback: Callable
+var _decision_callback: Callable
+var _incoming_transition: bool = false
+var _failure_presenting: bool = false
 
 ## Dia em andamento entre trocas de cena: a recepção é recarregada para o dia seguinte e
 ## ao falhar (reload). null = usa o schedule_config da cena (dia 1). O tutorial zera.
@@ -69,10 +86,10 @@ var _saindo: bool = false
 
 
 func _ready() -> void:
+	_incoming_transition = SceneTransition.is_busy()
 	reception_hud.badge_details.toggled.connect(_on_badge_toggled)
 	reception_hud.set_current_visitor(null)
 	if elevator_panel:
-		elevator_panel.floor_selected.connect(_on_floor_selected)
 		elevator_panel.set_panel_locked(true)
 		
 	if dia_em_andamento:
@@ -87,49 +104,80 @@ func _ready() -> void:
 
 ## Monta a lista completa de atendimentos do dia
 func _build_schedule_data() -> void:
-	queue_data.clear()
-	_rules_today.clear()
-	if schedule_config:
-		var dia: Dictionary = schedule_config.montar_dia()
-		queue_data = dia["fila"]
-		_rules_today = dia["regras"]
+	session.start_day(schedule_config)
+
+
+func _create_session() -> ReceptionSession:
+	var instance := SessionScript.new()
+	instance.name = "ReceptionSession"
+	add_child(instance)
+	return instance
+
+
+func _process(_delta: float) -> void:
+	if _incoming_transition and not SceneTransition.is_busy():
+		_incoming_transition = false
+	_presentation_valid()
+
+
+## Também detecta transições iniciadas fora do manager (CheatMenu/pause).
+func _presentation_valid(expected_generation: int = -1) -> bool:
+	if not is_inside_tree() or _saindo:
+		return false
+	if not _incoming_transition and SceneTransition.is_busy():
+		_saindo = true
+		session.begin_transition()
+		if elevator_panel:
+			elevator_panel.set_panel_locked(true)
+		return false
+	return expected_generation < 0 or expected_generation == session.generation
+
+
+func _exit_tree() -> void:
+	if is_instance_valid(session):
+		session.close()
 
 
 ## Rotina de Introdução da Marta
 func _start_day_intro() -> void:
+	var generation: int = session.generation
 	if marta_scene == null:
+		session.finish_intro(generation)
 		_call_next_visitor()
 		return
 
 	# Primeira aparição do dia: a Marta chega pela esquerda...
 	await _marta_arrive(false)
-	if not is_inside_tree(): # a cena foi trocada (ex.: menu principal pelo pause)
+	if not _presentation_valid(generation):
 		return
 	var texto_inicio: String = schedule_config.mensagem_inicio if schedule_config else "Bom dia!"
 	_show_dialogue_via_autoload("Marta", texto_inicio, true)
 	await _wait_dialogue(0.0) # sem tempo limite: a Marta só sai quando o jogador aperta Espaço
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
 	_clear_dialogue_via_autoload()
 
 	# ...e vai embora pelo elevador
 	await _marta_leave()
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
 	if delay_between_visitors > 0.0:
 		await get_tree().create_timer(delay_between_visitors).timeout
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
-	_call_next_visitor()
+	if session.finish_intro(generation):
+		_call_next_visitor()
 
 
 ## Spawna o próximo visitante e o move diretamente para o balcão
 func _call_next_visitor() -> void:
-	if queue_data.is_empty():
-		_conclude_day()
+	if not _presentation_valid() or session.state != SessionScript.State.READY:
 		return
-		
-	current_entry = queue_data.pop_front()
+	if session.request_next_visit(session.generation).is_empty():
+		if session.state == SessionScript.State.CONCLUDING:
+			_conclude_day()
+		return
+	var visit_id: String = session.current_visit_id
 	var v_data: VisitorData = current_entry["visitor"]
 	
 	current_visitor_node = visitor_base_scene.instantiate() as Visitor
@@ -142,14 +190,20 @@ func _call_next_visitor() -> void:
 	current_visitor_node.global_position = spawn_point.global_position
 	current_visitor_node.setup(v_data, current_entry.get("sprite"))
 	# O sinal já existente marca o início do atendimento no balcão.
-	current_visitor_node.arrived.connect(_update_badge_visitor)
+	_badge_arrival_callback = _update_badge_visitor.bind(visit_id)
+	current_visitor_node.arrived.connect(_badge_arrival_callback)
+	if elevator_panel:
+		if _decision_callback.is_valid() and elevator_panel.floor_selected.is_connected(_decision_callback):
+			elevator_panel.floor_selected.disconnect(_decision_callback)
+		_decision_callback = _on_floor_selected.bind(visit_id)
+		elevator_panel.floor_selected.connect(_decision_callback)
 	
-	current_visitor_node.move_to_slot(desk_point.global_position, _on_visitor_arrived_at_desk, true)
+	current_visitor_node.move_to_slot(desk_point.global_position, _on_visitor_arrived_at_desk.bind(visit_id), true)
 
 
 ## Quando o visitante chega no balcão: mostra fala e libera o elevador
-func _on_visitor_arrived_at_desk() -> void:
-	if current_entry.is_empty():
+func _on_visitor_arrived_at_desk(visit_id: String) -> void:
+	if not _presentation_valid() or not session.service_reached(visit_id):
 		return
 		
 	var v_data: VisitorData = current_entry["visitor"]
@@ -165,36 +219,34 @@ func _on_visitor_arrived_at_desk() -> void:
 
 
 ## Trata o clique do jogador nos botões do elevador
-func _on_floor_selected(floor_code: int) -> void:
-	if is_processing_decision or current_entry.is_empty() or reception_hud.badge_details.visible:
+func _on_floor_selected(floor_code: int, visit_id: String) -> void:
+	if not _presentation_valid() or reception_hud.badge_details.visible:
 		return
-		
-	is_processing_decision = true
+	var result: Dictionary = session.submit_decision(visit_id, floor_code)
+	if result.is_empty():
+		return
 	
 	if elevator_panel:
 		elevator_panel.set_panel_locked(true)
 	_clear_dialogue_via_autoload()
 		
-	var v_data: VisitorData = current_entry["visitor"]
-	var d_data: NPCDialogue = current_entry["dialogue"]
-	var current_day: int = schedule_config.dia_numero if schedule_config else 1
-	
-	var success: bool = RuleValidator.validar_decisao(v_data, d_data, floor_code, current_day, active_rules)
-	
-	if success:
-		_process_success(floor_code)
+	if result.correct:
+		_process_success(floor_code, visit_id)
 	else:
 		fail()
 
 
 ## Sucesso: o visitante vai embora e, após o delay, surge o próximo
-func _process_success(floor_code: int = RuleValidator.DENY_ACTION) -> void:
+func _process_success(floor_code: int, visit_id: String) -> void:
+	if not _presentation_valid() or not session.complete_visit(visit_id):
+		return
+	var generation: int = session.generation
 	Audio.play_sfx(Audio.SUCESSO)
 	reception_hud.set_current_visitor(null)
 	if is_instance_valid(current_visitor_node):
 		# A chegada dele no elevador não pode atualizar o crachá do próximo visitante
-		if current_visitor_node.arrived.is_connected(_update_badge_visitor):
-			current_visitor_node.arrived.disconnect(_update_badge_visitor)
+		if current_visitor_node.arrived.is_connected(_badge_arrival_callback):
+			current_visitor_node.arrived.disconnect(_badge_arrival_callback)
 		if elevator and elevator.has_method("receive") and floor_code != RuleValidator.DENY_ACTION:
 			# Mandado para um andar: anda até o elevador e entra (sem esperar, a fila segue)
 			elevator.receive(current_visitor_node)
@@ -203,27 +255,28 @@ func _process_success(floor_code: int = RuleValidator.DENY_ACTION) -> void:
 			current_visitor_node.leave_to(spawn_point.global_position)
 		current_visitor_node = null
 		
-	current_entry = {}
-	is_processing_decision = false
-	_served_count += 1
-	
 	if delay_between_visitors > 0.0:
 		await get_tree().create_timer(delay_between_visitors).timeout
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
 	
 	# A cada N atendimentos a Marta aparece para ditar uma regra nova
 	var rule: MartaRule = _rule_due()
 	if rule:
 		await _marta_announce_rule(rule)
-		if not is_inside_tree():
+		if not _presentation_valid(generation):
 			return
-		
+	else:
+		session.finish_interval(visit_id)
 	_call_next_visitor()
 
 
 ## Função de falha com transição de tela vermelha lenta e aparição da Marta
 func fail() -> void:
+	if not _presentation_valid() or session.state != SessionScript.State.FAILED or _failure_presenting:
+		return
+	_failure_presenting = true
+	var generation: int = session.generation
 	Audio.play_sfx(Audio.ERRO)
 	reception_hud.set_current_visitor(null)
 	if elevator_panel:
@@ -234,7 +287,7 @@ func fail() -> void:
 		
 	# 1. Espera um momento de choque antes da reação
 	await get_tree().create_timer(1.0).timeout
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
 	
 	# 2. Cria overlay para avermelhar a tela lentamente
@@ -254,8 +307,8 @@ func fail() -> void:
 	
 	# 3. O visitante que estava no balcão vai embora pela porta (esquerda) enquanto a Marta chega
 	if is_instance_valid(current_visitor_node):
-		if current_visitor_node.arrived.is_connected(_update_badge_visitor):
-			current_visitor_node.arrived.disconnect(_update_badge_visitor)
+		if current_visitor_node.arrived.is_connected(_badge_arrival_callback):
+			current_visitor_node.arrived.disconnect(_badge_arrival_callback)
 		current_visitor_node.leave_to(spawn_point.global_position)
 		current_visitor_node = null
 		
@@ -263,21 +316,25 @@ func fail() -> void:
 	if marta_scene != null:
 		var sprite_raiva: Texture2D = preload("res://src/npcs/assets/marta/marta_anger.png") if schedule_config == null or schedule_config.dia_numero == 1 else null
 		await _marta_arrive(true, null, sprite_raiva) # troca o sprite somente ao chegar
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
 	var msg_falha: String = schedule_config.mensagem_falha if schedule_config else "Você falhou. Vamos tentar de novo."
 	_show_dialogue_via_autoload("Marta", msg_falha, true)
 		
 	# 5. Tempo total com a tela avermelhada e diálogo antes de reiniciar a cena
 	await _wait_dialogue(6.0) # Espaço encerra antes
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
 	_clear_dialogue_via_autoload()
+	session.begin_transition()
 	get_tree().reload_current_scene()
 
 
 ## Encerramento do dia
 func _conclude_day() -> void:
+	if not _presentation_valid() or session.state != SessionScript.State.CONCLUDING:
+		return
+	var generation: int = session.generation
 	reception_hud.set_current_visitor(null)
 	if elevator_panel:
 		elevator_panel.set_panel_locked(true)
@@ -287,14 +344,14 @@ func _conclude_day() -> void:
 	var som_escuro: AudioStream = schedule_config.som_no_escuro if schedule_config else null
 	if suspense > 0.0:
 		escuro = await _apagar_luzes(suspense, som_escuro)
-		if not is_inside_tree():
+		if not _presentation_valid(generation):
 			return
 
 	if marta_scene != null:
 		# No fim do dia a Marta pode vir com outro sprite (dia 2: ensanguentada)
 		var sprite_fim: Texture2D = schedule_config.sprite_marta_fim if schedule_config else null
 		await _marta_arrive(true, sprite_fim) # sai do elevador e vem até a mesa
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
 	if escuro and som_escuro:
 		# Ela para e encara em silêncio; a luz volta pouco e vermelha, pulsando enquanto ela fala
@@ -306,7 +363,7 @@ func _conclude_day() -> void:
 			pulso.tween_property(escuro, "color:a", 0.42, 1.1).set_trans(Tween.TRANS_SINE)
 		)
 		await get_tree().create_timer(1.8).timeout
-		if not is_inside_tree():
+		if not _presentation_valid(generation):
 			return
 	elif escuro:
 		# A luz volta só um pouco enquanto ela fala
@@ -321,16 +378,14 @@ func _conclude_day() -> void:
 	if not _tem_proximo_dia():
 		return
 	await _wait_dialogue(0.0)
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
 	_ir_para_proximo_dia()
 
 
 ## Há para onde ir depois deste dia? (próximo dia ou cena final)
 func _tem_proximo_dia() -> bool:
-	if schedule_config == null:
-		return false
-	return schedule_config.proximo_dia != null or not schedule_config.cena_final.is_empty()
+	return session.has_next_day()
 
 
 ## Troca para o próximo dia (transição "Dia N") ou, no último dia, para a cena final.
@@ -338,6 +393,7 @@ func _ir_para_proximo_dia() -> void:
 	if not _tem_proximo_dia() or _saindo:
 		return
 	_saindo = true
+	session.begin_transition()
 	if elevator_panel:
 		elevator_panel.set_panel_locked(true)
 	_clear_dialogue_via_autoload()
@@ -373,13 +429,14 @@ func _unhandled_key_input(event: InputEvent) -> void:
 ## piscam e a sala fica escura e em silêncio por "segundos". Com "som", ele toca no escuro (vindo do
 ## subsolo) com o cenário tremendo. Devolve o escurecimento (continua na tela).
 func _apagar_luzes(segundos: float, som: AudioStream = null) -> ColorRect:
+	var generation: int = session.generation
 	while elevator and elevator.has_method("is_busy") and elevator.is_busy():
 		await get_tree().process_frame
-		if not is_inside_tree():
+		if not _presentation_valid(generation):
 			return null
 	Audio.fade_out_music(1.2)
 	await get_tree().create_timer(1.4 if som else 0.6).timeout
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return null
 
 	var escuro := ColorRect.new()
@@ -398,12 +455,12 @@ func _apagar_luzes(segundos: float, som: AudioStream = null) -> ColorRect:
 		pisca.tween_interval(randf_range(0.05, 0.2))
 	pisca.tween_property(escuro, "color:a", 0.9 if som else 0.7, 0.6)
 	await pisca.finished
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return null
 
 	if som:
 		await get_tree().create_timer(1.0).timeout
-		if not is_inside_tree():
+		if not _presentation_valid(generation):
 			return null
 		var duracao: float = maxf(som.get_length(), 0.5)
 		Audio.play_sfx(som)
@@ -413,7 +470,7 @@ func _apagar_luzes(segundos: float, som: AudioStream = null) -> ColorRect:
 		brilho.tween_property(escuro, "color", Color(0.18, 0.0, 0.0, 0.92), duracao * 0.3)
 		brilho.tween_property(escuro, "color", Color(0.0, 0.0, 0.02, 0.9), duracao * 0.7)
 		await get_tree().create_timer(duracao).timeout
-		if not is_inside_tree():
+		if not _presentation_valid(generation):
 			return null
 	await get_tree().create_timer(segundos).timeout
 	return escuro
@@ -430,9 +487,10 @@ func _tremer(segundos: float, forca: float) -> void:
 	tween.tween_property(self, "position", origem, 0.05)
 
 
-func _update_badge_visitor() -> void:
-	if not is_instance_valid(current_visitor_node) or current_entry.is_empty():
-		reception_hud.set_current_visitor(null)
+func _update_badge_visitor(visit_id: String) -> void:
+	if not _presentation_valid() or visit_id != session.current_visit_id \
+			or session.state not in [SessionScript.State.ARRIVING, SessionScript.State.SERVING] \
+			or not is_instance_valid(current_visitor_node) or current_entry.is_empty():
 		return
 	var data: VisitorData = current_entry["visitor"]
 	reception_hud.set_current_visitor(current_visitor_node, current_entry.get("nome", data.nome), current_entry.get("cracha", {}))
@@ -441,14 +499,14 @@ func _update_badge_visitor() -> void:
 func _on_badge_toggled(is_open: bool) -> void:
 	if is_open:
 		# Inclui os 0,15 s da animação de confirmação já iniciada no painel.
-		if is_processing_decision or not elevator_panel or elevator_panel.locked:
+		if not _presentation_valid() or session.state != SessionScript.State.SERVING or not elevator_panel or elevator_panel.locked:
 			reception_hud.badge_details.close()
 			return
 		_badge_locked_panel = true
 		elevator_panel.set_panel_locked(true)
 	elif _badge_locked_panel:
 		_badge_locked_panel = false
-		if elevator_panel and not is_processing_decision and not current_entry.is_empty() \
+		if _presentation_valid() and elevator_panel and session.state == SessionScript.State.SERVING \
 				and is_instance_valid(current_visitor_node) and not current_visitor_node.is_moving:
 			elevator_panel.set_panel_locked(false)
 
@@ -487,7 +545,7 @@ func _leave_actor(actor: Node2D, target_pos: Vector2, on_finished: Callable = Ca
 
 ## skippable: mostra "[Espaço] acelerar" e deixa o jogador apressar a fala (usado pela Marta).
 func _show_dialogue_via_autoload(speaker_name: String, speech_text: String, skippable: bool = false) -> void:
-	if _saindo:
+	if not _presentation_valid():
 		return
 	var dialogue_singleton = get_node_or_null("/root/Dialogue")
 	if dialogue_singleton == null:
@@ -580,61 +638,64 @@ func _marta_exit_pos() -> Vector2:
 ## Próxima regra da Marta, se já for a vez dela (a cada intervalo_regras atendimentos).
 ## Não aparece depois do último visitante: aí quem fala é o encerramento do dia.
 func _rule_due() -> MartaRule:
-	if schedule_config == null or marta_scene == null or queue_data.is_empty():
+	if not _presentation_valid() or marta_scene == null:
 		return null
-	var intervalo: int = schedule_config.intervalo_regras
-	if intervalo <= 0 or _served_count % intervalo != 0:
-		return null
-	if _next_rule_index >= _rules_today.size():
-		return null
-	var rule: MartaRule = _rules_today[_next_rule_index]
-	_next_rule_index += 1
-	return rule
+	return session.take_due_rule(session.current_visit_id)
 
 
 ## A Marta entra, dita a regra (Espaço continua), a regra é anotada na prancheta e ela sai.
 func _marta_announce_rule(rule: MartaRule) -> void:
+	var generation: int = session.generation
 	await _marta_arrive(true)
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
 
 	_show_dialogue_via_autoload("Marta", rule.fala, true)
 	await _wait_dialogue(0.0)
-	if not is_inside_tree():
+	if not _presentation_valid(generation):
 		return
 	_clear_dialogue_via_autoload()
 
-	active_rules.append(rule)
+	if not session.activate_pending_rule(generation, rule):
+		return
 	var rules_board: Control = reception_hud.get_node_or_null("RulesBoard")
 	if rules_board and rules_board.has_method("add_rule"):
 		rules_board.add_rule(rule.texto_prancheta if not rule.texto_prancheta.is_empty() else rule.fala)
 		_flash_rules_board(rules_board)
 
 	await _marta_leave()
-	if delay_between_visitors > 0.0 and is_inside_tree():
+	if not _presentation_valid(generation):
+		return
+	if delay_between_visitors > 0.0:
 		await get_tree().create_timer(delay_between_visitors).timeout
+	if _presentation_valid(generation):
+		session.finish_rule(generation, rule)
 
 
 ## Mostra a prancheta aberta por um instante para o jogador ver a regra anotada.
 func _flash_rules_board(rules_board: Control) -> void:
+	var generation: int = session.generation
 	if rules_board.is_open:
 		return
 	rules_board.open()
 	await get_tree().create_timer(1.8).timeout
-	if is_instance_valid(rules_board) and rules_board.is_inside_tree():
+	if _presentation_valid(generation) and is_instance_valid(rules_board) and rules_board.is_inside_tree():
 		rules_board.close()
 
 
 ## Chama uma função que recebe um callback de "terminou" e espera ele ser chamado.
 func _await_callback(starter: Callable) -> void:
+	var generation: int = session.generation
 	var finished: Array[bool] = [false]
 	starter.call(func(): finished[0] = true)
-	while not finished[0] and is_inside_tree():
+	while not finished[0] and _presentation_valid(generation):
 		await get_tree().process_frame
 
 
 ## A Marta chega até a mesa: pela esquerda (from_elevator = false) ou saindo do elevador.
 func _marta_arrive(from_elevator: bool, sprite: Texture2D = null, arrival_sprite: Texture2D = null) -> void:
+	if not _presentation_valid():
+		return
 	var target_pos: Vector2 = marta_point.global_position if marta_point else desk_point.global_position
 	if from_elevator and elevator and elevator.has_method("release"):
 		marta_instance = _spawn_marta(elevator.door_position(), sprite, arrival_sprite)
@@ -646,10 +707,12 @@ func _marta_arrive(from_elevator: bool, sprite: Texture2D = null, arrival_sprite
 
 ## A Marta vai embora entrando no elevador (sem elevador na cena, sai pela esquerda).
 func _marta_leave() -> void:
-	if not is_instance_valid(marta_instance):
+	var generation: int = session.generation
+	if not _presentation_valid(generation) or not is_instance_valid(marta_instance):
 		return
 	if elevator and elevator.has_method("receive"):
 		await elevator.receive(marta_instance)
 	else:
 		await _await_callback(func(done: Callable): _leave_actor(marta_instance, _marta_exit_pos(), done))
-	marta_instance = null
+	if _presentation_valid(generation):
+		marta_instance = null

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="DayScheduleConfig" format=3]
+[gd_resource type="Resource" script_class="DayScheduleConfig" format=3 uid="uid://bkxe252udpo2r"]
 
 [ext_resource type="Script" uid="uid://30jqbkcb4q5" path="res://src/npcs/dialogue/npc_dialogue.gd" id="1_fala"]
 [ext_resource type="Script" uid="uid://c8k1xw7vuahns" path="res://src/npcs/resources/scripts/visitor_data.gd" id="1_visitor"]
@@ -50,11 +50,6 @@ visitante = ExtResource("5_tiao")
 sprite = ExtResource("6_tiao_sprite")
 dialogo = SubResource("Fala_tiao")
 
-[sub_resource type="Resource" id="Regra_tiao"]
-script = ExtResource("4_rule")
-fala = "Ah, o Seu Tião, nosso faxineiro, vai passar aqui hoje. Não importa o andar que ele pedir: mande para o subsolo. Tem uma sujeira enorme lá embaixo, e ele é o único que limpa sem fazer perguntas."
-texto_prancheta = "Seu Tião (faxineiro)? Sempre para o subsolo."
-
 [sub_resource type="Resource" id="Regra_rh"]
 script = ExtResource("4_rule")
 fala = "O RH está em... reestruturação. Quem pedir o 2º andar, mande esperar no refeitório. Vão esperar bastante."
@@ -84,7 +79,6 @@ script = ExtResource("4_rule")
 fala = "O refeitório está interditado hoje. Negue quem pedir o 1º andar. E não pergunte qual é o cardápio."
 texto_prancheta = "1º andar: negar acesso."
 andar_pedido = 1
-andar_destino = 999
 falas_caso = Array[ExtResource("1_fala")]([ExtResource("f1a"), ExtResource("f1b"), ExtResource("f1c")])
 
 [sub_resource type="Resource" id="Regra_cheiro"]
@@ -102,18 +96,24 @@ script = ExtResource("4_rule")
 fala = "Não abra a gaveta de baixo da sua mesa. Ela é minha. O que tem dentro também."
 texto_prancheta = "Não abra a gaveta de baixo."
 
+[sub_resource type="Resource" id="Regra_tiao"]
+script = ExtResource("4_rule")
+fala = "Ah, o Seu Tião, nosso faxineiro, vai passar aqui hoje. Não importa o andar que ele pedir: mande para o subsolo. Tem uma sujeira enorme lá embaixo, e ele é o único que limpa sem fazer perguntas."
+texto_prancheta = "Seu Tião (faxineiro)? Sempre para o subsolo."
+
 [resource]
 script = ExtResource("2_dia")
 dia_numero = 3
 cena_final = "res://src/ui/menus/scenes/end_screen.tscn"
-suspense_antes_do_fim = 2.0
 mensagem_inicio = "Bom dia, querido! Hoje o dia vai ser levinho, eu prometo. Ah, e o Seu Tião vai passar por aqui. Ele é um amor de pessoa... já já eu te explico o que fazer com ele."
 mensagem_fim = "Viu como o Seu Tião é eficiente? Daqui a pouco não sobra nem uma manchinha de katchup lá embaixo. Nem do katchup, nem de... bom, de nada. Até amanhã! Se você voltar, claro."
+suspense_antes_do_fim = 2.0
 mensagem_falha = "Três dias e ainda errando? Tudo bem... o Seu Tião limpa qualquer bagunça. Vamos de novo."
-regras_obrigatorias = Array[ExtResource("4_rule")]([SubResource("Regra_tiao")])
 regras_marta = Array[ExtResource("4_rule")]([SubResource("Regra_rh"), SubResource("Regra_marketing"), SubResource("Regra_ti"), SubResource("Regra_refeitorio"), SubResource("Regra_cheiro"), SubResource("Regra_entregador"), SubResource("Regra_gaveta")])
+regras_obrigatorias = Array[ExtResource("4_rule")]([SubResource("Regra_tiao")])
 pool_padrao = Array[ExtResource("1_visitor")]([ExtResource("8_female"), ExtResource("7_male")])
 interacoes = Array[ExtResource("3_inter")]([SubResource("Interaction_aleatorios"), SubResource("Interaction_aleatorias_pool"), SubResource("Interaction_tiao")])
-usar_falas_do_visitante = false
+andares_do_dia = null
 falas_comuns = Array[ExtResource("1_fala")]([ExtResource("f1a"), ExtResource("f1b"), ExtResource("f1c"), ExtResource("f2a"), ExtResource("f2b"), ExtResource("f2c"), ExtResource("f3a"), ExtResource("f3b"), ExtResource("f3c"), ExtResource("f4a"), ExtResource("f4b"), ExtResource("f4c"), ExtResource("f5a"), ExtResource("f5b"), ExtResource("f5c"), ExtResource("f6a"), ExtResource("f6b"), ExtResource("f6c")])
+usar_falas_do_visitante = false
 metadata/_custom_type_script = "uid://dw560omsfs2go"

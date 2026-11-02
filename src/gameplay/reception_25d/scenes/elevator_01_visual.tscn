@@ -1,0 +1,251 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://src/gameplay/reception_25d/scenes/elevator_shell.tscn" id="1_shell"]
+[ext_resource type="Material" path="res://src/gameplay/reception_25d/materials/elevator_01/door.tres" id="mat_door"]
+[ext_resource type="Material" path="res://src/gameplay/reception_25d/materials/elevator_01/frame.tres" id="mat_frame"]
+[ext_resource type="Material" path="res://src/gameplay/reception_25d/materials/elevator_01/cabin.tres" id="mat_cabin"]
+[ext_resource type="Material" path="res://src/gameplay/reception_25d/materials/elevator_01/floor.tres" id="mat_floor"]
+[ext_resource type="Material" path="res://src/gameplay/reception_25d/materials/elevator_01/dark.tres" id="mat_dark"]
+[ext_resource type="Material" path="res://src/gameplay/reception_25d/materials/elevator_01/lamp.tres" id="mat_lamp"]
+[ext_resource type="Material" path="res://src/gameplay/reception_25d/materials/elevator_01/indicator.tres" id="mat_indicator"]
+
+[sub_resource type="QuadMesh" id="mesh_PixelFaceLeft"]
+size = Vector2(1.08, 2.58)
+
+[sub_resource type="QuadMesh" id="mesh_PixelFaceRight"]
+size = Vector2(1.08, 2.58)
+
+[sub_resource type="BoxMesh" id="mesh_OuterTrimLeft"]
+size = Vector3(0.07, 2.74, 0.4)
+
+[sub_resource type="BoxMesh" id="mesh_FrameFootLeft"]
+size = Vector3(0.2, 0.32, 0.05)
+
+[sub_resource type="BoxMesh" id="mesh_FrameCapLeft"]
+size = Vector3(0.2, 0.06, 0.05)
+
+[sub_resource type="BoxMesh" id="mesh_OuterTrimRight"]
+size = Vector3(0.07, 2.74, 0.4)
+
+[sub_resource type="BoxMesh" id="mesh_FrameFootRight"]
+size = Vector3(0.2, 0.32, 0.05)
+
+[sub_resource type="BoxMesh" id="mesh_FrameCapRight"]
+size = Vector3(0.2, 0.06, 0.05)
+
+[sub_resource type="BoxMesh" id="mesh_HeaderCrown"]
+size = Vector3(2.74, 0.08, 0.4)
+
+[sub_resource type="BoxMesh" id="mesh_DisplayHousing"]
+size = Vector3(0.84, 0.28, 0.09)
+
+[sub_resource type="QuadMesh" id="mesh_PixelDisplay"]
+size = Vector2(0.76, 0.24)
+
+[sub_resource type="BoxMesh" id="mesh_NumberPlaque"]
+size = Vector3(0.64, 0.43, 0.04)
+
+[sub_resource type="BoxMesh" id="mesh_BackWainscot"]
+size = Vector3(2.26, 1.04, 0.035)
+
+[sub_resource type="BoxMesh" id="mesh_BackRail"]
+size = Vector3(2.12, 0.07, 0.07)
+
+[sub_resource type="BoxMesh" id="mesh_SideRailLeft"]
+size = Vector3(0.06, 0.07, 2.24)
+
+[sub_resource type="BoxMesh" id="mesh_SideRailRight"]
+size = Vector3(0.06, 0.07, 2.24)
+
+[sub_resource type="BoxMesh" id="mesh_BackJointLeft"]
+size = Vector3(0.025, 1.5, 0.025)
+
+[sub_resource type="BoxMesh" id="mesh_BackJointRight"]
+size = Vector3(0.025, 1.5, 0.025)
+
+[sub_resource type="BoxMesh" id="mesh_LightTray"]
+size = Vector3(1.5, 0.05, 0.52)
+
+[sub_resource type="BoxMesh" id="mesh_LightDiffuser"]
+size = Vector3(1.3, 0.02, 0.36)
+
+[sub_resource type="BoxMesh" id="mesh_SillGroove0"]
+size = Vector3(2.15, 0.002, 0.018)
+
+[sub_resource type="BoxMesh" id="mesh_SillGroove1"]
+size = Vector3(2.15, 0.002, 0.018)
+
+[sub_resource type="BoxMesh" id="mesh_SillGroove2"]
+size = Vector3(2.15, 0.002, 0.018)
+
+[sub_resource type="BoxMesh" id="mesh_SillGroove3"]
+size = Vector3(2.15, 0.002, 0.018)
+
+[node name="Elevator" instance=ExtResource("1_shell")]
+
+[node name="FrameLeft" parent="."]
+material_override = ExtResource("mat_frame")
+
+[node name="FrameRight" parent="."]
+material_override = ExtResource("mat_frame")
+
+[node name="Lintel" parent="."]
+material_override = ExtResource("mat_frame")
+
+[node name="Threshold" parent="."]
+material_override = ExtResource("mat_frame")
+
+[node name="LeftPanel" parent="DoorAssembly"]
+material_override = ExtResource("mat_dark")
+
+[node name="RightPanel" parent="DoorAssembly"]
+material_override = ExtResource("mat_dark")
+
+[node name="RecessBack" parent="DoorAssembly"]
+material_override = ExtResource("mat_cabin")
+
+[node name="RevealLeft" parent="DoorAssembly"]
+material_override = ExtResource("mat_dark")
+
+[node name="RevealRight" parent="DoorAssembly"]
+material_override = ExtResource("mat_dark")
+
+[node name="Floor" parent="Cabin"]
+material_override = ExtResource("mat_floor")
+
+[node name="WallLeft" parent="Cabin"]
+material_override = ExtResource("mat_cabin")
+
+[node name="WallRight" parent="Cabin"]
+material_override = ExtResource("mat_cabin")
+
+[node name="Ceiling" parent="Cabin"]
+material_override = ExtResource("mat_dark")
+
+[node name="Indicator" parent="."]
+visible = false
+
+[node name="VisualDetails" type="Node3D" parent="."]
+
+[node name="PixelFaceLeft" type="MeshInstance3D" parent="DoorAssembly/LeftPanel"]
+position = Vector3(0, 0, 0.064)
+mesh = SubResource("mesh_PixelFaceLeft")
+material_override = ExtResource("mat_door")
+cast_shadow = 0
+
+[node name="PixelFaceRight" type="MeshInstance3D" parent="DoorAssembly/RightPanel"]
+position = Vector3(0, 0, 0.064)
+mesh = SubResource("mesh_PixelFaceRight")
+material_override = ExtResource("mat_door")
+cast_shadow = 0
+
+[node name="OuterTrimLeft" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(-1.335, 1.37, 0.16)
+mesh = SubResource("mesh_OuterTrimLeft")
+material_override = ExtResource("mat_dark")
+
+[node name="FrameFootLeft" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(-1.2, 0.16, 0.35)
+mesh = SubResource("mesh_FrameFootLeft")
+material_override = ExtResource("mat_dark")
+
+[node name="FrameCapLeft" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(-1.2, 2.48, 0.35)
+mesh = SubResource("mesh_FrameCapLeft")
+material_override = ExtResource("mat_dark")
+
+[node name="OuterTrimRight" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(1.335, 1.37, 0.16)
+mesh = SubResource("mesh_OuterTrimRight")
+material_override = ExtResource("mat_dark")
+
+[node name="FrameFootRight" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(1.2, 0.16, 0.35)
+mesh = SubResource("mesh_FrameFootRight")
+material_override = ExtResource("mat_dark")
+
+[node name="FrameCapRight" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(1.2, 2.48, 0.35)
+mesh = SubResource("mesh_FrameCapRight")
+material_override = ExtResource("mat_dark")
+
+[node name="HeaderCrown" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 2.84, 0.16)
+mesh = SubResource("mesh_HeaderCrown")
+material_override = ExtResource("mat_dark")
+
+[node name="DisplayHousing" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 2.7, 0.375)
+mesh = SubResource("mesh_DisplayHousing")
+material_override = ExtResource("mat_dark")
+
+[node name="PixelDisplay" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 2.7, 0.424)
+mesh = SubResource("mesh_PixelDisplay")
+material_override = ExtResource("mat_indicator")
+cast_shadow = 0
+
+[node name="NumberPlaque" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 3.05, 0.315)
+mesh = SubResource("mesh_NumberPlaque")
+material_override = ExtResource("mat_dark")
+
+[node name="BackWainscot" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 0.52, -3.22)
+mesh = SubResource("mesh_BackWainscot")
+material_override = ExtResource("mat_dark")
+
+[node name="BackRail" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 1.02, -3.16)
+mesh = SubResource("mesh_BackRail")
+material_override = ExtResource("mat_frame")
+
+[node name="SideRailLeft" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(-1.11, 1.02, -2.06)
+mesh = SubResource("mesh_SideRailLeft")
+material_override = ExtResource("mat_frame")
+
+[node name="SideRailRight" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(1.11, 1.02, -2.06)
+mesh = SubResource("mesh_SideRailRight")
+material_override = ExtResource("mat_frame")
+
+[node name="BackJointLeft" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(-0.56, 1.83, -3.225)
+mesh = SubResource("mesh_BackJointLeft")
+material_override = ExtResource("mat_dark")
+
+[node name="BackJointRight" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0.56, 1.83, -3.225)
+mesh = SubResource("mesh_BackJointRight")
+material_override = ExtResource("mat_dark")
+
+[node name="LightTray" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 2.575, -1.8)
+mesh = SubResource("mesh_LightTray")
+material_override = ExtResource("mat_dark")
+
+[node name="LightDiffuser" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 2.54, -1.8)
+mesh = SubResource("mesh_LightDiffuser")
+material_override = ExtResource("mat_lamp")
+
+[node name="SillGroove0" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 0.003, -0.24)
+mesh = SubResource("mesh_SillGroove0")
+material_override = ExtResource("mat_dark")
+
+[node name="SillGroove1" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 0.003, -0.08)
+mesh = SubResource("mesh_SillGroove1")
+material_override = ExtResource("mat_dark")
+
+[node name="SillGroove2" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 0.003, 0.08)
+mesh = SubResource("mesh_SillGroove2")
+material_override = ExtResource("mat_dark")
+
+[node name="SillGroove3" type="MeshInstance3D" parent="VisualDetails"]
+position = Vector3(0, 0.003, 0.24)
+mesh = SubResource("mesh_SillGroove3")
+material_override = ExtResource("mat_dark")

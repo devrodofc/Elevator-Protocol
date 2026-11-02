@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ba3wsiwfxc3la"]
+
+[ext_resource type="PackedScene" path="res://src/gameplay/reception_25d/scenes/reception_gameplay_test.tscn" id="1"]
+
+[node name="ReceptionArrivalFixture" instance=ExtResource("1")]
+enable_service = false
