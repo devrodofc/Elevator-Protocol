@@ -73,6 +73,10 @@ var _pulou: bool = false
 func _ready() -> void:
 	# Jogo novo depois daqui começa do dia 1
 	ReceptionManager.dia_em_andamento = null
+	# Recepção 3D (a do jogo): dia e quem foi mandado ao subsolo
+	load("res://src/gameplay/reception_25d/scripts/reception_presentation.gd").dia_em_andamento = null
+	load("res://src/gameplay/reception_25d/scripts/horror_director.gd").victims.clear()
+	load("res://src/gameplay/reception_25d/scripts/horror_director.gd").victim_names.clear()
 	var dialogo = get_node_or_null("/root/Dialogue")
 	if dialogo:
 		dialogo.clear_dialogue()

@@ -10,6 +10,8 @@ enum Mode { BILLBOARD, PAPER }
 @export var movement: VisitorMovement
 @export var service_point: Marker3D
 @export var camera: Camera3D
+## P toggles BILLBOARD/PAPER (experiment). Off in the 3D game scene, where P is the cheat menu.
+@export var allow_mode_key: bool = true
 
 var _previous_position: Vector3
 var _target_yaw: float
@@ -33,7 +35,7 @@ func _input(event: InputEvent) -> void:
 	if key_event == null or not key_event.pressed or key_event.echo:
 		return
 	var key: Key = key_event.physical_keycode if key_event.physical_keycode != 0 else key_event.keycode
-	if key == KEY_P:
+	if key == KEY_P and allow_mode_key:
 		# Consume P locally before the global cheat menu; other scenes keep their shortcut.
 		orientation_mode = Mode.PAPER if orientation_mode == Mode.BILLBOARD else Mode.BILLBOARD
 		_apply_mode()

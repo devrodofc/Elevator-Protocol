@@ -2,6 +2,7 @@ extends "res://tests/gameplay_regression/reception_flow_test.gd"
 ## I1: contratos da sessão no manager real e interrupções pelos caminhos existentes.
 
 const Session := preload("res://src/gameplay/scripts/reception_session.gd")
+const RECEPTION_3D := "res://src/gameplay/reception_25d/scenes/reception_3d.tscn"
 
 
 func _wait_new_scene(old_id: int, path: String) -> Node:
@@ -84,10 +85,18 @@ func _manager_contracts() -> void:
 	root.get_node("CheatMenu").go_to_day(3)
 	await _frames(2)
 	_check(session.state == Session.State.TRANSITION and scene._saindo, "External cheat fade cancels async intro")
-	scene = await _wait_new_scene(old_scene_id, RECEPTION)
+	# I8: o cheat agora abre a recepção 3D (a do jogo), com sessão nova do dia 3.
+	scene = await _wait_new_scene(old_scene_id, RECEPTION_3D)
 	if scene == null:
 		return
-	_check(scene.session.day_number == 3 and scene.queue_data.size() == 7, "Cheat still opens original 2D with fresh day-three session")
+	_check(scene.session.day_number == 3 and scene.session.queue_data.size() == 7, "Cheat opens the 3D reception with fresh day-three session")
+	if not await _wait_until(func(): return not root.get_node("SceneTransition").is_busy(), "I8 cheat fade done"):
+		return
+	# A recepção 2D continua funcionando sozinha: abre o dia 3 nela para seguir conferindo os contratos.
+	scene = await _new_scene(3, 4203)
+	if scene == null:
+		return
+	_check(scene.session.day_number == 3 and scene.queue_data.size() == 7, "Original 2D still opens a fresh day-three session")
 	entries = _check_day_start(scene, 3)
 	if not await _finish_marta(scene, scene.schedule_config.mensagem_inicio, "intro"):
 		return
@@ -116,13 +125,14 @@ func _manager_contracts() -> void:
 	if scene != null:
 		await _frames(30)
 		_check(not dialogue.visible, "No previous reception dialogue survives on menu")
-		var manager_script = load("res://src/gameplay/reception/scripts/reception_manager.gd")
-		# O tutorial continua zerando o mesmo campo estático ao entrar pelo menu.
+		var presentation_script = load("res://src/gameplay/reception_25d/scripts/reception_presentation.gd")
+		presentation_script.dia_em_andamento = load("res://src/gameplay/schedules/day3.tres")
+		# I8: Jogar abre o tutorial 3D, que zera o dia da recepção 3D.
 		old_scene_id = scene.get_instance_id()
 		scene._on_play_pressed()
-		scene = await _wait_new_scene(old_scene_id, "res://src/gameplay/tutorial/scenes/tutorial.tscn")
+		scene = await _wait_new_scene(old_scene_id, "res://src/gameplay/reception_25d/scenes/tutorial_3d.tscn")
 		if scene != null:
-			_check(manager_script.dia_em_andamento == null, "Tutorial still resets static day")
+			_check(presentation_script.dia_em_andamento == null, "3D tutorial resets static day")
 
 
 func _run() -> void:

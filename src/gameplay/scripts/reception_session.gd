@@ -149,7 +149,7 @@ func submit_decision(visit_id: String, floor_code: int) -> Dictionary:
 		return {}
 	var visitor: VisitorData = _entry["visitor"]
 	var dialogue: NPCDialogue = _entry.get("dialogue")
-	var correct: bool = RuleValidator.validar_decisao(visitor, dialogue, floor_code, day_number, _active_rules)
+	var correct: bool = RuleValidator.validar_decisao(visitor, dialogue, floor_code, day_number, _active_rules, _entry)
 	_state = State.RESOLVED if correct else State.FAILED
 	return {"visit_id": visit_id, "floor_code": floor_code, "correct": correct}
 
@@ -199,6 +199,24 @@ func finish_interval(visit_id: String) -> bool:
 	if not _matches(visit_id, State.INTERVAL):
 		return false
 	_state = State.READY
+	return true
+
+
+## Recepção 3D: regra que não vem da agenda (ligação do Godofredo/Marta). Vale a partir de agora,
+## como as regras da Marta, e aparece na prancheta. Não muda fila, contagem nem estado.
+func add_extra_rule(rule: MartaRule) -> void:
+	if rule != null and _state not in [State.TRANSITION, State.CLOSED] and not _active_rules.has(rule):
+		_active_rules.append(rule)
+
+
+## Recepção 3D: troca campos de uma visita que ainda não chegou (index 0 = a próxima), para a
+## história preparar convidados do telefone. Nunca mexe na visita atual nem em visitas fixas.
+func override_upcoming(index: int, changes: Dictionary) -> bool:
+	if index < 0 or index >= _queue.size() or _queue[index].get("fixo", false):
+		return false
+	var entry: Dictionary = _queue[index].duplicate()
+	entry.merge(changes, true)
+	_queue[index] = entry
 	return true
 
 

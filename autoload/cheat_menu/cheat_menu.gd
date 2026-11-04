@@ -4,9 +4,10 @@ extends CanvasLayer
 ## Enquanto está aberta o jogo fica pausado; P ou Esc fecham e devolvem o estado anterior.
 ## A interface é montada em código (sem .tscn) para não depender de uid.
 
-const RECEPTION_SCENE := "res://src/gameplay/reception/scenes/reception.tscn"
+## Recepção 3D (a do jogo). A 2D antiga: src/gameplay/reception/scenes/reception.tscn.
+const RECEPTION_SCENE := "res://src/gameplay/reception_25d/scenes/reception_3d.tscn"
 const MENU_SCENE := "res://src/ui/menus/scenes/menu.tscn"
-const RECEPTION_SCRIPT := "res://src/gameplay/reception/scripts/reception_manager.gd"
+const RECEPTION_SCRIPT := "res://src/gameplay/reception_25d/scripts/reception_presentation.gd"
 const DIAS: Array[String] = [
 	"res://src/gameplay/schedules/day1.tres",
 	"res://src/gameplay/schedules/day2.tres",

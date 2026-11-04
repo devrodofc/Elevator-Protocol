@@ -12,6 +12,9 @@ const DEFAULT_SPRITE = preload("res://src/npcs/assets/marta/marta_1_frame.png")
 const ANGER_SPRITE = preload("res://src/npcs/assets/marta/marta_anger.png")
 
 var presentation: Node2D
+## Cabin and sprite of this actor (the 3D game also uses this script for Godofredo, in cabin 3).
+var cabin_name: String = CABIN
+var default_sprite: Texture2D = DEFAULT_SPRITE
 var ground: Node3D
 var sprite: Sprite3D
 var movement: Movement
@@ -28,7 +31,7 @@ func setup(owner_scene: Node2D) -> void:
 	presentation = owner_scene
 	_room = presentation.get_node("RoomViewport/Room")
 	_service_point = presentation.service_point
-	cabin = _room.get_node("Elevators/" + CABIN)
+	cabin = _room.get_node("Elevators/" + cabin_name)
 	# Same sprite and contact shadow as the visitor, without the visitor's runtime children (paper, metadata).
 	ground = Node3D.new()
 	ground.name = "MartaGround"
@@ -38,7 +41,7 @@ func setup(owner_scene: Node2D) -> void:
 	_room.add_child(ground)
 	ground.hide()
 	sprite = ground.get_node("TestVisitor")
-	sprite.apply_visit_texture(DEFAULT_SPRITE)
+	sprite.apply_visit_texture(default_sprite)
 	movement = Movement.new()
 	movement.visitor = ground
 	movement.floor_reference = _service_point
@@ -66,7 +69,7 @@ func _process(_delta: float) -> void:
 func arrive_from_entrance(door: Door, entrance: Marker3D) -> bool:
 	var version := _version
 	busy = true
-	sprite.apply_visit_texture(DEFAULT_SPRITE)
+	sprite.apply_visit_texture(default_sprite)
 	orientation.face_when_idle(null)
 	movement.reset_at(door.spawn_point)
 	ground.show()
@@ -85,7 +88,7 @@ func arrive_from_entrance(door: Door, entrance: Marker3D) -> bool:
 func arrive_from_cabin(arrival_sprite: Texture2D = null, start_sprite: Texture2D = null) -> bool:
 	var version := _version
 	busy = true
-	sprite.apply_visit_texture(start_sprite if start_sprite else DEFAULT_SPRITE)
+	sprite.apply_visit_texture(start_sprite if start_sprite else default_sprite)
 	orientation.face_when_idle(null)
 	movement.reset_at(cabin.cabin_stop_point)
 	ground.hide()
@@ -95,7 +98,7 @@ func arrive_from_cabin(arrival_sprite: Texture2D = null, start_sprite: Texture2D
 		return false
 	ground.show()
 	var routes: Node3D = _room.get_node("ElevatorRoutes")
-	_follow([cabin.entry_point, cabin.get_node("ApproachPoint") as Marker3D, routes.get_node(CABIN + "TurnPoint") as Marker3D,
+	_follow([cabin.entry_point, cabin.get_node("ApproachPoint") as Marker3D, routes.get_node(cabin_name + "TurnPoint") as Marker3D,
 		routes.get_node("CorridorEntry") as Marker3D, routes.get_node("RetreatPoint") as Marker3D, _service_point])
 	var settled := func() -> bool:
 		if cabin.has_exited_passage(ground.global_position):
@@ -130,7 +133,7 @@ func leave_into_cabin() -> bool:
 	var routes: Node3D = _room.get_node("ElevatorRoutes")
 	var approach := cabin.get_node("ApproachPoint") as Marker3D
 	_follow([routes.get_node("RetreatPoint") as Marker3D, routes.get_node("CorridorEntry") as Marker3D,
-		routes.get_node(CABIN + "TurnPoint") as Marker3D, approach])
+		routes.get_node(cabin_name + "TurnPoint") as Marker3D, approach])
 	if not await _until(func(): return _at(approach), version):
 		return false
 	orientation.face_when_idle(cabin)
