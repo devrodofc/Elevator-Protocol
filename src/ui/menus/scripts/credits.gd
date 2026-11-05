@@ -6,6 +6,7 @@ const OPTIONS_SCENE := "res://src/ui/menus/scenes/options.tscn"
 
 
 func _ready() -> void:
+	preload("res://src/ui/menus/scripts/menu_qr_code.gd").ensure_visible(get_tree())
 	back_button.pressed.connect(_on_back_pressed)
 
 
