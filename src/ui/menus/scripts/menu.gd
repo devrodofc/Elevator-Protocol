@@ -9,6 +9,7 @@ const OPTIONS_SCENE := "res://src/ui/menus/scenes/options.tscn"
 @onready var quit_button: TextureButton = $Quit
 
 func _ready() -> void:
+	preload("res://src/ui/menus/scripts/menu_qr_code.gd").ensure_visible(get_tree())
 	play_button.pressed.connect(_on_play_pressed)
 	options_button.pressed.connect(_on_options_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)

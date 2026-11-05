@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://6twjuxuefxlx"]
+
+[ext_resource type="Script" uid="uid://b0jk084wtd7ae" path="res://src/ui/menus/scripts/menu_qr_code.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://ducrvj10pgsx2" path="res://src/ui/menus/assets/qr_code.jpeg" id="2_qr"]
+[ext_resource type="FontFile" uid="uid://bx0yeia6d4qwe" path="res://assets/fonts/pixeloid_sans.ttf" id="3_font"]
+
+[sub_resource type="StyleBoxFlat" id="Style_frame"]
+bg_color = Color(0.045, 0.052, 0.055, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.43, 0.44, 1)
+
+[node name="MenuQrCode" type="CanvasLayer" unique_id=689118730]
+script = ExtResource("1_script")
+
+[node name="Layout" type="Control" parent="." unique_id=501700637]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Card" type="Panel" parent="Layout" unique_id=243873562]
+layout_mode = 1
+offset_left = 566.0
+offset_top = 12.0
+offset_right = 690.0
+offset_bottom = 156.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_frame")
+
+[node name="QuietMargin" type="ColorRect" parent="Layout/Card" unique_id=1756782277]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 120.0
+offset_bottom = 120.0
+mouse_filter = 2
+color = Color(0.96862745, 0.96862745, 0.96862745, 1)
+metadata/_edit_lock_ = true
+
+[node name="Code" type="TextureRect" parent="Layout/Card/QuietMargin" unique_id=1996188954]
+texture_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 108.0
+offset_bottom = 108.0
+mouse_filter = 2
+texture = ExtResource("2_qr")
+expand_mode = 1
+stretch_mode = 5
+metadata/_edit_lock_ = true
+
+[node name="Caption" type="Label" parent="Layout/Card" unique_id=1073757281]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 122.0
+offset_right = 114.0
+offset_bottom = 142.0
+theme_override_colors/font_color = Color(0.72, 0.75, 0.73, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 10
+text = "Coffe&Games"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CornerLeft" type="ColorRect" parent="Layout/Card" unique_id=594281513]
+layout_mode = 0
+offset_top = 126.0
+offset_right = 2.0
+offset_bottom = 140.0
+mouse_filter = 2
+color = Color(0.64, 0.59, 0.43, 1)
+
+[node name="CornerRight" type="ColorRect" parent="Layout/Card" unique_id=1295213107]
+layout_mode = 0
+offset_left = 122.0
+offset_top = 126.0
+offset_right = 124.0
+offset_bottom = 140.0
+mouse_filter = 2
+color = Color(0.64, 0.59, 0.43, 1)

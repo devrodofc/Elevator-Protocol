@@ -18,6 +18,7 @@ const DisplayMode = preload("res://src/ui/menus/scripts/display_mode.gd")
 
 
 func _ready() -> void:
+	preload("res://src/ui/menus/scripts/menu_qr_code.gd").ensure_visible(get_tree())
 	# Carrega o estado atual das configurações
 
 	_update_fullscreen_text()
