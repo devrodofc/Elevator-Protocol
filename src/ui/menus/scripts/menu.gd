@@ -1,6 +1,7 @@
 extends Control
 
-const GAME_SCENE := "res://src/gameplay/tutorial/scenes/tutorial.tscn"
+## Tutorial 3D (abre a recepção 3D no fim). O tutorial 2D antigo continua em src/gameplay/tutorial/.
+const GAME_SCENE := "res://src/gameplay/reception_25d/scenes/tutorial_3d.tscn"
 const OPTIONS_SCENE := "res://src/ui/menus/scenes/options.tscn"
 
 @onready var play_button: TextureButton = $Play

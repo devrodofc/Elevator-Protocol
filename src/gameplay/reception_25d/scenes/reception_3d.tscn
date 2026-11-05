@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://l3hkgqv5woir" path="res://src/gameplay/reception_25d/scenes/reception_gameplay_test.tscn" id="1_base"]
+[ext_resource type="Script" path="res://src/gameplay/reception_25d/scripts/reception_3d.gd" id="2_game"]
+[ext_resource type="PackedScene" uid="uid://btagpc2oh1ho6" path="res://src/ui/menus/scenes/pause.tscn" id="3_pause"]
+
+[node name="Reception3D" instance=ExtResource("1_base")]
+script = ExtResource("2_game")
+
+[node name="Pause" parent="." instance=ExtResource("3_pause")]

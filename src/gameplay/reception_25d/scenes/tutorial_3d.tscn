@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://src/gameplay/reception_25d/scenes/reception_3d.tscn" id="1_game"]
+
+[node name="Tutorial3D" instance=ExtResource("1_game")]
+tutorial_mode = true

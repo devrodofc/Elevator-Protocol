@@ -43,11 +43,14 @@ O subsolo é um "pavimento não atribuído" que oficialmente não existe.
 ## 2. Fluxo do jogo (cenas)
 
 ```
-menu.tscn ──Jogar──▶ tutorial.tscn ──fim ou "Pular tutorial [Esc]"──▶ (SceneTransition: "Dia 1") ──▶ reception.tscn
+menu.tscn ──Jogar──▶ tutorial_3d.tscn ──fim ou "Pular tutorial [Esc]"──▶ (SceneTransition: "Dia 1") ──▶ reception_3d.tscn
 	│                                                         (dia 1 → dia 2 → dia 3, mesma cena)
 	└─Opções──▶ options.tscn ──Créditos──▶ credits.tscn
 ```
-Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu principal, Sair do jogo).
+**Desde 04/11/2026 o jogo é 3D** (`src/gameplay/reception_25d/scenes/reception_3d.tscn` e `tutorial_3d.tscn`,
+ver seção 14). A recepção e o tutorial 2D continuam no repositório e funcionam sozinhos, mas o menu, o cheat e a
+tela final só conhecem a 3D. Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu principal,
+Sair do jogo).
 
 - Cena principal (`run/main_scene`): `src/ui/menus/scenes/menu.tscn` (uid `b6hgpbqqj2j76`).
 - O botão Jogar abre o **tutorial** (`menu.gd: GAME_SCENE`), não a recepção.
@@ -57,8 +60,9 @@ Na recepção, **Esc** abre o pause (`pause.tscn`: Continuar, Opções, Menu pri
   (static); o tutorial zera para o dia 1. Dia 1 → `day1.tres`, Dia 2 → `day2.tres`, Dia 3 → `day3.tres` (último por enquanto).
 - **Fim de jogo**: depois da fala de fim do dia 3 (Espaço), transição para `src/ui/menus/scenes/end_screen.tscn`
   (campo `cena_final` do `day3.tres`): epílogo narrado, "Fim.", créditos subindo e "Voltar ao menu".
-- **Recepção 2.5D (experimento, fora do fluxo):** `src/gameplay/reception_25d/` não é aberta pelo menu, pelo
-  tutorial nem pelo cheat. Só roda com **F6** na própria cena. O fluxo acima continua 100% 2D. Ver seção 13.
+- **Dia em andamento da 3D:** `reception_presentation.gd: dia_em_andamento` (static). O tutorial 3D e a tela final
+  zeram esse campo (e a lista de vítimas do subsolo, `horror_director.gd: victims`).
+- As cenas experimentais 2.5D (`reception.tscn`, `reception_gameplay_test.tscn`) seguem fora do fluxo (F6). Ver seção 13.
 
 ---
 
@@ -425,7 +429,7 @@ Os MP3 foram importados sem loop: `audio.gd` liga `loop` em código nas músicas
 `autoload/cheat_menu/cheat_menu.gd` (registrado pelo caminho; interface montada em código, sem `.tscn`).
 A tecla **P** abre/fecha em qualquer cena e pausa o jogo; **Esc** também fecha (e não chega ao pause, então
 abrir por cima do pause e fechar volta ao pause). Botões: Primeira/Segunda/Terceira fase (Dia 1/2/3) e Menu inicial.
-Ir para um dia = `ReceptionManager.dia_em_andamento = dayN.tres` + `SceneTransition.transition_to(reception, "Dia N")`,
+Ir para um dia = `reception_presentation.gd: dia_em_andamento = dayN.tres` + `SceneTransition.transition_to(reception_3d, "Dia N")`,
 o mesmo caminho do fim do dia. Antes de trocar: despausa, limpa a fala, para o loop do `Audio` e a música do menu;
 depois que a cena nova entra, limpa a fala de novo (a cena antiga continua rodando durante o fade).
 Para tirar da build final: remover a linha `CheatMenu` de `[autoload]` no `project.godot`.
@@ -454,6 +458,7 @@ Para tirar da build final: remover a linha `CheatMenu` de `[autoload]` no `proje
 | Falas/andar de um NPC | `.tres` em `src/npcs/resources/Day*/` ou `src/npcs/dialogue/` |
 | Livro de andares | `src/gameplay/resources/company_directory.tres` |
 | Roteiro do tutorial | `src/gameplay/tutorial/resources/tutorial_intro.tres` |
+| **Diálogos da 3D (o jogo)**: tutorial, Marta, Godofredo, telefone, regras da Marta, mensagens do dia | `src/gameplay/reception_25d/scripts/story_lines.gd` (sobrescreve em memória os textos dos `.tres`; nada é salvo) |
 | Lista de nomes | `src/npcs/resources/visitors/male_names.tres` |
 | Ritmo da recepção | nó `Reception`: `delay_between_visitors`, `visitor_move_speed` |
 | Título da transição | `src/gameplay/tutorial/scenes/tutorial.tscn` → `titulo_dia` |
@@ -658,7 +663,7 @@ completo com a Marta). Desligando de trás para frente volta-se às etapas anter
 | **I5** | **feita (02/11/2026)** | Marta 3D: introdução, regras depois do 2º e 4º atendimento (ativadas depois da fala) |
 | **I6** | **feita (02/11/2026)** | Erro (Marta com raiva, reload no mesmo dia), fim do dia, dias 1→2→3→tela final |
 | I7 | pendente | Política definitiva de cabines (3) e de vários visitantes ao mesmo tempo |
-| I8 | pendente | Ligar o 2.5D ao menu/tutorial e revisar regressões |
+| I8 | **feita (04/11/2026)** | Jogo ligado ao 3D: `reception_3d.tscn` + `tutorial_3d.tscn` (seção 14); regressões revisadas |
 
 ### Arquitetura (resumo)
 - `ReceptionSession` é a **única autoridade** (fila, decisão via `RuleValidator`, contagem). A apresentação 2.5D
@@ -718,3 +723,85 @@ Design: `docs/superpowers/specs/2026-11-02-recepcao-25d-marta-e-erro-design.md`.
   agendas atuais só usam sprites.
 - O editor regrava a `reception_gameplay_test.tscn` (ids `unique_id`, `transform` no lugar de `position`): é só
   formato, mas confira o diff antes de commitar.
+
+
+---
+
+## 14. Recepção 3D — o jogo (desde 04/11/2026)
+
+Cenas em `src/gameplay/reception_25d/scenes/`:
+- `reception_3d.tscn`: **herda** `reception_gameplay_test.tscn` (mesma sessão, regras, Marta e saídas já testadas) e
+  troca o script raiz por `scripts/reception_3d.gd` (que `extends reception_presentation.gd`). Tem o `Pause`.
+- `tutorial_3d.tscn`: herda `reception_3d.tscn` com `tutorial_mode = true`: toca o `tutorial_intro.tres` na mesma
+  sala (narração em tela preta, a Marta entra pela porta, cada fala destaca o objeto em vermelho: livro, prancheta,
+  crachá, painel). Esc pula. No fim a luz apaga, ela some e abre o "Dia 1".
+
+**Não altere `reception_gameplay_test.tscn` nem `reception.tscn` para mudar o jogo**: os testes I2–I6 usam essas
+cenas. Tudo o que é só do jogo fica nos scripts novos abaixo (criados em código, sem `.tscn` próprios):
+
+| Script | O que faz |
+|---|---|
+| `reception_3d.gd` | Raiz. 3D renderizado na **resolução da janela** (`_apply_resolution`, não 640×360: texto e geometria nítidos), câmera (posição, inclinação −14°, A/D/setas, borda do mouse de 3,5%, sem girar com o mouse sobre algo clicável), HUD, tooltip, F9, susto do erro, fim do dia, final do dia 3 e o tutorial. |
+| `desk_dressing.gd` | Veste o balcão com a **arte da HUD**: painel com `painel elevador.png` e os sprites dos botões (afunda, acende, `BotãoPressionado`), livro, prancheta e crachá com as figuras originais, balcão com o miolo de `mesa.png`, abajur, luz de rosto e monitor com relógio do turno. `DESK_TOP` = 0,93 m (balcão mais baixo que o da sala experimental para os chibis aparecerem). |
+| `horror_director.gd` | Camada de terror (só apresentação: nunca decide nem valida). Ver abaixo. |
+| `screen_hud.gd` | HUD 2D nítida: barra de instrução (traduz o `status` do `desk_service`), dia e atendidos, nome do objeto sob o mouse, dica de controles, narração do tutorial. |
+| `ambience.gd` | Áudio **procedural** (AudioStreamGenerator, bus SFX): zumbido de lâmpada, estalos, batimento cardíaco, batidas no poço, impacto grave, drone no dia 3. Nenhum arquivo de áudio novo. |
+| `shaders/room_post.gdshader` | Pós-efeito só da imagem 3D (`RoomView`): vinheta, grão, aberração cromática, distorção e pulso vermelho. |
+
+Mudanças em scripts compartilhados (todas desligadas por padrão, os testes antigos não mudam):
+`paper_dialogue.gd: screen_space` (fala no `Dialogue` global, ao lado da cabeça de quem fala, na faixa de cima da
+tela), `reception_camera.gd: keyboard_look/edge_hold/effect_rotation`, `visitor_orientation.gd: allow_mode_key`
+(desligado no jogo: o **P** volta a abrir o cheat).
+
+**Terror (`horror_director.gd`), crescendo por dia (`DAY_LOOK`):**
+- Todo dia começa no escuro: as lâmpadas acendem falhando (`lights_on`). Neblina, luz, janelas (anoitecendo) e
+  saturação pioram a cada dia; o dia 3 fica avermelhado.
+- Visores de andar nas 3 cabines (T, 1–6, S). Quem embarca sobe andar por andar; ao chegar no **S** há impacto,
+  tremor, pulso vermelho e "SUBSOLO" no monitor. O visor da cabine 2 (a da Marta) fica sempre no **S** e pisca
+  antes de ela aparecer (`marta_incoming`), com batimento cardíaco enquanto ela está na sala.
+- **Vítimas do subsolo** (`victims`, static, máx. 4): voltam paradas dentro da cabine quando ela abre para o próximo
+  visitante e ficam sentadas nas cadeiras, visíveis só quando a luz falha.
+- Eventos aleatórios com visitante no balcão: luz piscando, batidas no poço, porta de entrada abrindo sozinha,
+  cabine 3 abrindo vazia com luz vermelha, a **Marta parada no canto** (some quando você olha para ela),
+  "ELA ESTÁ VENDO" no monitor e flash subliminar da Marta ensanguentada no rosto do visitante (dia 3).
+- Câmera de segurança no teto que segue o jogador (LED piscando). Regra das câmeras → "SORRIA." no monitor.
+- **Erro:** a luz cai, o visitante some no escuro e a Marta (com raiva) aparece colada no balcão com impacto,
+  tremor, aberração e zoom; depois fala `mensagem_falha` e o dia recarrega.
+- **Fim do dia 3:** depois da fala, apagão, a cabine dela desce e o rosto ensanguentado aparece por um instante.
+- Personagens: ciclo de passos com os quadros existentes (`npc_male_1` 1–3, `marta` 1–3) e balanço ao andar.
+  Visitantes em tamanho humano (`pixel_size` 0,0084), iluminados pela sala (`shaded`), sem sombra projetada.
+
+**Como verificar:** abrir `tutorial_3d.tscn` ou `reception_3d.tscn` com F6 (ou F5 pelo menu). Para o dia, use o cheat
+(P) ou `reception_presentation.gd: dia_em_andamento` num script `-s`. Testes automáticos continuam os da seção 12.
+Não há teste automático de áudio: o volume do ambiente (`ambience.gd: volume_db` −8 dB) foi escolhido sem ouvir.
+
+### 14.1 Mecânicas e história da 3D (desde 04/11/2026)
+
+**Sem música no gameplay** (`reception_3d.gd` chama `Audio.stop_music()`): o som é o ambiente procedural, o telefone
+e o elevador. O menu e os créditos continuam com música.
+
+Referências usadas: FNAF (regras e lore por telefone; a voz confiável que depois liga de onde não deveria),
+Doki Doki Literature Club (a personagem simpática que racha aos poucos) e Papers, Please (regras acumuladas,
+advertências). Tudo em `story_director.gd` (`DAYS` = o roteiro de cada dia).
+
+| Mecânica | Como funciona | Onde |
+|---|---|---|
+| **Telefone** | O telefone da mesa toca (som procedural, fone tremendo, LED). Clique atende; a ligação aparece no canto superior esquerdo (Espaço passa a fala). Não atender em 22 s = chamada perdida (advertência se era do Godofredo). | `desk_devices.gd`, `story_director.gd`, `screen_hud.gd: show_call` |
+| **Regra do 6º andar** | Do dia 1 em diante: só sobe ao 6º quem foi **anunciado pelo nome** por telefone; os outros que pedem o 6º: negar. A regra e os nomes ficam numa **folha de papel na mesa** (`sixth_floor_note.gd`), não na prancheta da Marta. A história transforma visitas futuras em convidados (nome único no dia) e às vezes num "penetra" não anunciado. | `src/gameplay/scripts/phone_rule.gd` (GUARDA/CONVIDADO, sem texto de prancheta), `ReceptionSession.add_extra_rule/override_upcoming`, `RuleValidator` (`visita` opcional, regras `final`), `desk_modal.gd` (não lista regras sem texto) |
+| **Câmera do elevador + ALARME** | Quem embarca é visto ao vivo no monitor da mesa (câmera dentro da cabine 1). Alguns passeios **descem sozinhos** ao subsolo (luz vermelha, figura atrás do passageiro): nos dias 1 e 2 o ALARME salva; se não apertar, ele some. Alarme sem motivo = advertência. **Dia 3:** a Marta proíbe o alarme na abertura; apertar ainda para a cabine, mas ela responde pelo alto-falante e o jogador leva advertência **a cada aperto** (3 sabotagens no dia: não dá para salvar todos sem ser demitido). O Seu Tião (tag `send_to_basement`) desce para limpar e não vira vítima. | `elevator_watch.gd`, `story_director.gd: begin_ride/_on_alarm_clicked` |
+| **Advertências** | 3 = demitido: a Marta "consegue seu emprego de volta" e o mesmo dia recomeça. | `story_director.gd: _warn`, `reception_3d.gd: _run_fired` |
+| **Recomeço depois de falhar** | Andar errado ou demissão recarregam o mesmo dia **direto no atendimento**: sem luzes falhando, sem Godofredo nem Marta na abertura ("Dia N · de novo"). A regra do 6º andar volta à prancheta; ligações de lore e a visita do Godofredo do dia 2 já ouvidas não se repetem (ligações de convidado sim, porque dão os nomes). | `reception_3d.gd: _retry_day/_skip_intro`, `story_director.gd: heard/on_retry`, `horror_director.gd: lights_now` |
+| **Relatório do turno** | Antes de trocar de dia: atendidos, salvos, mandados ao subsolo, desaparecidos, advertências e um comentário da Marta. | `story_director.gd: report_text`, `screen_hud.gd: show_report` |
+
+**Arco da história** (textos em `story_lines.gd`):
+- **Dia 1, parece tudo normal:** o Godofredo (sprite `manfredo_diretor.png`, cabine 3) é um chefe mal-humorado comum;
+  a Marta é simpática e prestativa. Fora do lugar: "o subsolo... essa parte é comigo", o elevador "parado no subsolo a
+  tarde toda". Errar no dia 1 é suave (sem apagão, sem Marta com raiva). O tutorial termina com ela só indo embora.
+- **Dia 2, fica claro:** o Godofredo liga avisando que o elevador desceu à noite, pede segredo da Marta e desce para
+  cobrar explicações (funcionários e entregador sumidos); a Marta o desmente na frente do jogador e pede que ele conte
+  o que o Godofredo disser. O entregador da encomenda dela não volta ("é katchup").
+- **Dia 3, sem disfarce:** o Godofredo some (não aparece nem liga); a Marta assume o prédio e o ramal do 6º, proíbe o
+  alarme e o Seu Tião limpa a "bagunça" lá embaixo. **Ninguém liga do subsolo:** quem desce, morre lá.
+
+**Testar:** o roteiro de cada dia foi validado jogando os dias 1, 2 e 3 completos por script (atendendo o telefone,
+apertando ou ignorando o alarme, com 3 alarmes falsos). As suítes da seção 12 continuam passando.

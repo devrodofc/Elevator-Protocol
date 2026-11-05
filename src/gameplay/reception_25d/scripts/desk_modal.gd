@@ -55,7 +55,9 @@ func open(which: String, entry: Dictionary, active_rules: Array[MartaRule]) -> b
 	elif which == "rules":
 		rules.clear_rules()
 		for rule in active_rules:
-			rules.add_rule(rule.texto_prancheta)
+			# Rules without clipboard text (3D game: the 6th-floor list on its own sheet) are not listed.
+			if not rule.texto_prancheta.is_empty():
+				rules.add_rule(rule.texto_prancheta)
 	surface.show()
 	content.show()
 	_layout()

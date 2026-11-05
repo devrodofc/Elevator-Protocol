@@ -6,7 +6,8 @@ const DENY_ACTION: int = 999
 
 ## Destino correto do visitante: andar, -1 (subsolo) ou DENY_ACTION (negar).
 ## regras: regras da Marta já ditadas no dia (MartaRule), aplicadas por último.
-static func andar_esperado(visitor: VisitorData, dialogo: NPCDialogue, dia: int, regras: Array = []) -> int:
+## visita: entrada da fila ({nome, ...}); só regras de telefone (PhoneRule, aplicar_visita) usam.
+static func andar_esperado(visitor: VisitorData, dialogo: NPCDialogue, dia: int, regras: Array = [], visita: Dictionary = {}) -> int:
 	# Intruso/recusa: o certo é negar o acesso
 	if visitor.has_tag("intruder") or visitor.has_tag("deny_access"):
 		return DENY_ACTION
@@ -24,11 +25,19 @@ static func andar_esperado(visitor: VisitorData, dialogo: NPCDialogue, dia: int,
 
 	# REGRAS DA MARTA: valem a partir do momento em que ela as dita
 	for regra in regras:
-		if regra != null and regra.has_method("aplicar"):
+		if regra != null and regra.has_method("aplicar_visita"):
+			if not regra.get("final"):
+				andar_correto = regra.aplicar_visita(visita, andar_pedido, andar_correto)
+		elif regra != null and regra.has_method("aplicar"):
 			andar_correto = regra.aplicar(andar_pedido, andar_correto)
+
+	# REGRAS FINAIS (convidado anunciado por telefone): valem acima de todas as outras
+	for regra in regras:
+		if regra != null and regra.has_method("aplicar_visita") and regra.get("final"):
+			andar_correto = regra.aplicar_visita(visita, andar_pedido, andar_correto)
 
 	return andar_correto
 
 
-static func validar_decisao(visitor: VisitorData, dialogo: NPCDialogue, decisao: int, dia: int, regras: Array = []) -> bool:
-	return decisao == andar_esperado(visitor, dialogo, dia, regras)
+static func validar_decisao(visitor: VisitorData, dialogo: NPCDialogue, decisao: int, dia: int, regras: Array = [], visita: Dictionary = {}) -> bool:
+	return decisao == andar_esperado(visitor, dialogo, dia, regras, visita)
