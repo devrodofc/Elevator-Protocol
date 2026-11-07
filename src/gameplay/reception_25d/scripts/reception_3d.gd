@@ -1,7 +1,7 @@
 extends "res://src/gameplay/reception_25d/scripts/reception_presentation.gd"
 ## The game's reception, in 3D (main flow: menu → tutorial_3d → reception_3d, days 1 → 2 → 3 → end screen).
 ## Built on the tested 2.5D presentation (session, rules, Marta, departures); this layer adds:
-## - full-resolution 3D and screen-space speech (sharp text), a 2D HUD, better framing and camera controls;
+## - full-resolution 3D, fixed world-space speech, a 2D HUD and gameplay camera controls;
 ## - the desk dressed with the HUD art (desk_dressing.gd) and the horror layer (horror_director.gd);
 ## - the failure jump scare, the end of day with the indicator rising from the basement, the final scene;
 ## - tutorial_mode: the tutorial script played in the same room; F9 skips the day (test hack, like the 2D).
@@ -23,6 +23,8 @@ const CAMERA_POSITION := Vector3(0.0, 1.62, 2.4)
 
 ## Plays tutorial_intro.tres in this room instead of a day, then opens Day 1.
 @export var tutorial_mode: bool = false
+## Time the alarm remains down, excluding its press and return animations.
+@export_range(0.0, 60.0, 0.1, "or_greater", "suffix:s") var alarm_hold_seconds: float = 5.0
 
 var dressing: DressingScript
 var director: DirectorScript
@@ -42,7 +44,8 @@ var retrying: bool = false
 
 
 func _ready() -> void:
-	PaperScript.screen_space = true
+	session.allow_wrong_dispatches = not tutorial_mode
+	PaperScript.screen_space = false
 	_setup_view()
 	visual.shaded = true
 	# Human size (the 256 px art at 0.01 m/px made everyone ~2.3 m tall) and no odd sprite shadows.
@@ -95,11 +98,14 @@ func _create_desk() -> void:
 	devices = DevicesScript.new()
 	devices.name = "DeskDevices"
 	add_child(devices)
-	devices.build($RoomViewport/Room, DressingScript.DESK_TOP)
+	devices.alarm_hold_seconds = alarm_hold_seconds
+	devices.cabin_occupied = _has_elevator_occupant
+	devices.dialogue_active = _alarm_dialogue_active
+	devices.build($RoomViewport/Room)
 	note = NoteScript.new()
 	note.name = "SixthFloorNote"
 	add_child(note)
-	note.build($RoomViewport/Room, DressingScript.DESK_TOP)
+	note.build($RoomViewport/Room)
 	_names = {desk.book: "Livro de andares", desk.clipboard: "Regras do dia", desk.badge: "Crachá do visitante",
 		desk.confirm: "Confirmar", devices.phone: "Telefone", devices.alarm: "ALARME do elevador",
 		note.body: "Quem pode subir ao 6º andar"}
@@ -130,8 +136,6 @@ func _finish_setup() -> void:
 		add_child(story)
 		story.setup(self)
 		watch.anomaly_started.connect(story.on_anomaly)
-		# No gameplay music: the room hum, the phone and the elevator are the soundtrack.
-		Audio.stop_music()
 	_day_total = session.queue_data.size()
 	if not rule_announced.is_connected(_on_rule_announced):
 		rule_announced.connect(_on_rule_announced)
@@ -140,13 +144,35 @@ func _finish_setup() -> void:
 		indicator.hide()
 
 
+func _alarm_dialogue_active() -> bool:
+	if marta and marta.paper and marta.paper.visible:
+		return true
+	return story != null and story.godofredo.paper.visible
+
+
+func _has_elevator_occupant() -> bool:
+	if not is_inside_tree() or stage in [Stage.CANCELLED, Stage.UNSUPPORTED, Stage.LEAVING_SCENE]:
+		return false
+	if watch and watch.has_passenger():
+		return true
+	# Only the session's visitor boards through I4; named actors use separate MartaActor instances.
+	return stage == Stage.ENTERING_CABIN and _route_finished(cabin.cabin_stop_point)
+
+
 func _process(delta: float) -> void:
 	super(delta)
 	if hud == null or desk == null:
 		return
 	# A consultation (book, rules, badge) hides the speech balloon instead of fighting it for space.
-	var board := Dialogue.get_node("Board") as CanvasItem
-	board.modulate.a = move_toward(board.modulate.a, 0.0 if not desk.modal.kind.is_empty() else 1.0, delta * 8.0)
+	var papers: Array = [desk.paper]
+	if marta:
+		papers.append(marta.paper)
+	if story:
+		papers.append(story.godofredo.paper)
+	for balloon in papers:
+		var board: CanvasItem = balloon.dialogue.get_node("Board")
+		var target_alpha := 0.0 if not desk.modal.kind.is_empty() else 1.0
+		board.modulate.a = move_toward(board.modulate.a, target_alpha, delta * 8.0)
 	var hovered: Node = desk.picker.hovered if is_instance_valid(desk.picker.hovered) else null
 	hud.set_tooltip(_names.get(hovered, "") if hovered else "")
 	$RoomViewport/Room/ReceptionCamera.edge_hold = hovered != null
@@ -169,6 +195,7 @@ func _process(delta: float) -> void:
 		status = "O telefone está tocando  ·  clique nele para atender"
 	hud.set_status(status)
 	hud.set_warnings(story.warnings, story.MAX_WARNINGS)
+	hud.set_wrong_dispatches(session.wrong_dispatches)
 	# The next boarding needs cabin 1: a ride still running ends now.
 	if stage == Stage.TO_CABIN and watch.riding:
 		watch.finish_now()
@@ -277,6 +304,17 @@ func _on_rule_announced(rule: MartaRule) -> void:
 
 
 func _on_decision_processed(result: Dictionary) -> void:
+	if stage != Stage.AT_SERVICE or result.get("visit_id") != visit_id:
+		return
+	if not result.get("correct", false) and result.get("floor_code") != RuleValidator.DENY_ACTION:
+		hud.set_wrong_dispatches(session.wrong_dispatches)
+		if session.wrong_dispatches >= 3:
+			_run_dispatch_failure()
+		elif session.complete_visit(visit_id):
+			_last_floor = result.floor_code
+			_pending_result = result
+			Audio.play_sfx(Audio.ERRO)
+		return
 	if result.get("visit_id") == visit_id and result.get("correct", false):
 		_last_floor = result.get("floor_code", 0)
 	super(result)
@@ -289,7 +327,37 @@ func _release() -> void:
 	super()
 
 
-## Three warnings: Godofredo fires you... and Marta "gets your job back". The same day starts over.
+## Third confirmed wrong destination: a dedicated, player-completed complaint.
+func _run_dispatch_failure() -> void:
+	if stage in [Stage.FAILING, Stage.LEAVING_SCENE, Stage.CANCELLED, Stage.CONCLUDING]:
+		return
+	var generation: int = session.generation
+	stage = Stage.FAILING
+	desk.cancel()
+	watch.cancel()
+	story.set_process(false)
+	story.cancel()
+	story.godofredo.cancel()
+	movement.set_process(false)
+	actor.hide()
+	marta.cancel()
+	if not await marta.arrive_from_cabin(MartaActor.ANGER_SPRITE):
+		return
+	if not await marta.speak(
+		"Marta",
+		"Três visitantes no lugar errado! Preste atenção aos andares. Vamos recomeçar este dia."
+	):
+		return
+	if not _still(generation):
+		return
+	dia_em_andamento = session.schedule_config
+	_retry_day = session.day_number
+	stage = Stage.LEAVING_SCENE
+	session.begin_transition()
+	get_tree().reload_current_scene()
+
+
+## Three warnings retain their existing, independent failure flow.
 func _run_fired() -> void:
 	if stage in [Stage.LEAVING_SCENE, Stage.CANCELLED, Stage.FAILING, Stage.CONCLUDING]:
 		return
@@ -475,6 +543,8 @@ func _finale(generation: int) -> void:
 # --- tutorial --------------------------------------------------------------------------------------
 
 func _ready_tutorial() -> void:
+	MusicMenu.stop_music()
+	Audio.stop_music()
 	dia_em_andamento = null
 	_retry_day = 0
 	DirectorScript.victims.clear()

@@ -1,6 +1,6 @@
 extends SceneTree
 ## I4: real decisions resolve to cabin 1 or to the entrance; one release per visit; serial next visit.
-const SCENE = "res://src/gameplay/reception_25d/scenes/reception_gameplay_test.tscn"
+const SCENE = "res://src/gameplay/reception_25d/tests/reception_service_fixture.tscn"
 const Session = preload("res://src/gameplay/scripts/reception_session.gd")
 const Validator = preload("res://src/shared/scripts/rule_validator.gd")
 const Door = preload("res://src/gameplay/reception_25d/scripts/automatic_door.gd")

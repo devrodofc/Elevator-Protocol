@@ -44,11 +44,6 @@ func dress(owner_scene: Node2D, service: Node) -> void:
 	var room: Node3D = presentation.get_node("RoomViewport/Room")
 	var anchors: Node3D = room.get_node("ReceptionDesk/ServiceObjects")
 	_dress_counter(room)
-	# The player's own work surface: items lie close, under the visitor, like at a real desk.
-	_place(anchors.get_node("ClipboardRest"), Vector3(-0.98, 0, 1.12), 30.0, 0.27)
-	_place(anchors.get_node("BookRest"), Vector3(-0.4, 0, 1.2), 20.0, 0.24)
-	_place(anchors.get_node("BadgeRest"), Vector3(0.2, 0, 1.08), 16.0, 0.18)
-	_place(anchors.get_node("PanelRest"), Vector3(0.8, 0, 1.12), 48.0, PLATE_PX.y * _scale * 0.5)
 	_skin_object(desk.clipboard, "rules", "rules/regras.png", Vector2(0.42, 0.547), Color("6b4a2f"))
 	_skin_object(desk.book, "book", "company_book/livro.png", Vector2(0.66, 0.486), Color("4a2c1f"))
 	_skin_object(desk.badge, "badge", "badge/cracha.png", Vector2(0.17, 0.364), Color(0, 0, 0, 0))
@@ -56,14 +51,6 @@ func dress(owner_scene: Node2D, service: Node) -> void:
 	desk.status.hide()
 	_build_lamp(room)
 	_build_monitor(room)
-
-
-## Anchor on the counter, leaning toward the player by tilt_deg, its lower edge resting on the top.
-func _place(anchor: Node3D, at: Vector3, tilt_deg: float, half_depth: float) -> void:
-	var tilt := deg_to_rad(tilt_deg)
-	var top: float = DESK_TOP + 0.005
-	anchor.position = Vector3(at.x, top + sin(tilt) * half_depth + 0.012, at.z)
-	anchor.basis = Basis(Vector3.RIGHT, tilt)
 
 
 func _texture(path: String, mipmaps: bool = true) -> Texture2D:
@@ -367,18 +354,16 @@ func _build_lamp(room: Node3D) -> void:
 	desk_node.add_child(fill)
 
 
-## A small CRT-like monitor at the right corner: shift clock and system messages (the director writes).
+## A small CRT-like monitor at the left corner: shift clock and system messages (the director writes).
 func _build_monitor(room: Node3D) -> void:
-	var desk_node: Node3D = room.get_node("ReceptionDesk")
+	var anchor: Node3D = room.get_node("ReceptionDesk/ServiceObjects/MonitorRest")
 	var holder := Node3D.new()
-	holder.position = Vector3(1.55, DESK_TOP + 0.005, 0.72)
-	holder.rotation = Vector3(0, deg_to_rad(-32), 0)
-	desk_node.add_child(holder)
+	anchor.add_child(holder)
 	_box(holder, Vector3(0.12, 0.08, 0.12), Vector3(0, 0.04, 0), Color("22282b"))
-	_box(holder, Vector3(0.5, 0.38, 0.32), Vector3(0, 0.3, -0.04), Color("30383c"))
-	monitor_screen = _box(holder, Vector3(0.42, 0.3, 0.01), Vector3(0, 0.31, 0.125), Color(0.05, 0.16, 0.1), 0.8)
-	monitor_label = _screen_label(holder, Vector3(0, 0.36, 0.132), 30)
-	monitor_sub = _screen_label(holder, Vector3(0, 0.27, 0.132), 16)
+	_box(holder, Vector3(0.6, 0.38, 0.32), Vector3(0, 0.3, -0.04), Color("30383c"))
+	monitor_screen = _box(holder, Vector3(0.504, 0.3, 0.01), Vector3(0, 0.31, 0.125), Color(0.05, 0.16, 0.1), 0.8)
+	monitor_label = _screen_label(holder, Vector3(0, 0.37, 0.132), 30)
+	monitor_sub = _screen_label(holder, Vector3(0, 0.25, 0.132), 16)
 
 
 func _screen_label(holder: Node3D, at: Vector3, size: int) -> Label3D:
@@ -390,8 +375,10 @@ func _screen_label(holder: Node3D, at: Vector3, size: int) -> Label3D:
 	label.outline_size = 0
 	label.shaded = false
 	label.position = at
-	label.width = 150
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.width = 176
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	holder.add_child(label)
 	return label
 
@@ -399,10 +386,23 @@ func _screen_label(holder: Node3D, at: Vector3, size: int) -> Label3D:
 func set_monitor(text: String, sub: String = "", color: Color = Color(0.45, 1.0, 0.6)) -> void:
 	if monitor_label == null:
 		return
-	monitor_label.text = text
-	monitor_sub.text = sub
+	_fit_monitor_text(monitor_label, text, 30)
+	_fit_monitor_text(monitor_sub, sub.replace(" · ", "\n"), 16)
 	monitor_label.modulate = color
 	monitor_sub.modulate = color
 	var screen := monitor_screen.material_override as StandardMaterial3D
 	screen.emission = color.darkened(0.82)
 	screen.albedo_color = color.darkened(0.85)
+
+
+## Fit complete lines, never split words or alter the source font resource.
+func _fit_monitor_text(label: Label3D, text: String, maximum: int) -> void:
+	label.text = text
+	for size in range(maximum, 0, -1):
+		var fits := true
+		for line in text.split("\n"):
+			if label.font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x > label.width:
+				fits = false
+		if fits:
+			label.font_size = size
+			return

@@ -18,13 +18,10 @@ var _t: float = 0.0
 var _list: Array[String] = []
 
 
-func build(room: Node3D, desk_top: float) -> void:
+func build(room: Node3D) -> void:
 	body = Interactable.new()
 	body.name = "SixthFloorNote"
-	room.get_node("ReceptionDesk").add_child(body)
-	# Close to the player, a little crooked, leaning toward the camera.
-	body.position = Vector3(0.2, desk_top + 0.1, 1.52)
-	body.basis = Basis(Vector3.UP, deg_to_rad(-4)) * Basis(Vector3.RIGHT, deg_to_rad(50))
+	room.get_node("ReceptionDesk/ServiceObjects/SixthFloorNoteRest").add_child(body)
 	var visual := Node3D.new()
 	body.add_child(visual)
 	var face := Node3D.new()

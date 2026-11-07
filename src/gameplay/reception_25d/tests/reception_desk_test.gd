@@ -1,6 +1,6 @@
 extends SceneTree
 ## Real I3 objects, physics, modal input and session decisions. No fixture rewrites.
-const SCENE = "res://src/gameplay/reception_25d/scenes/reception_gameplay_test.tscn"
+const SCENE = "res://src/gameplay/reception_25d/tests/reception_service_fixture.tscn"
 const Session = preload("res://src/gameplay/scripts/reception_session.gd")
 const Validator = preload("res://src/shared/scripts/rule_validator.gd")
 var checks: int = 0

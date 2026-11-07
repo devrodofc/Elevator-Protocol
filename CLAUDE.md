@@ -62,7 +62,7 @@ Sair do jogo).
   (campo `cena_final` do `day3.tres`): epílogo narrado, "Fim.", créditos subindo e "Voltar ao menu".
 - **Dia em andamento da 3D:** `reception_presentation.gd: dia_em_andamento` (static). O tutorial 3D e a tela final
   zeram esse campo (e a lista de vítimas do subsolo, `horror_director.gd: victims`).
-- As cenas experimentais 2.5D (`reception.tscn`, `reception_gameplay_test.tscn`) seguem fora do fluxo (F6). Ver seção 13.
+- A base experimental 2.5D e os fixtures em `reception_25d/tests/` seguem fora do fluxo (F6). Ver seção 13.
 
 ---
 
@@ -630,6 +630,9 @@ agendas forem aceitas, regenere o fixture.
 
 ## 13. Recepção 2.5D (experimento em andamento)
 
+**Histórico I2–I6:** desde a Etapa B (07/11/2026), `reception_3d.tscn` herda diretamente
+`reception.tscn`. A Etapa C removeu a intermediária e isolou I2–I6 nos fixtures de `tests/`; ver seção 14 e README.
+
 Iniciado pelo Rodrigo na branch `feat/2.5d-experiment` (PR #54). Objetivo: trocar a recepção 2D por uma sala 3D
 renderizada em 640×360 e ampliada com filtro nearest (mantém o visual pixel art), com os NPCs como `Sprite3D`
 usando os mesmos PNGs. **Continua fora do fluxo do jogo**: menu, tutorial, cheat e F9 só conhecem a recepção 2D.
@@ -643,10 +646,10 @@ câmera, portas, cabines, arte do Elevador 1, câmera livre) e `src/gameplay/rec
 | Cena | Para quê |
 |---|---|
 | `scenes/reception.tscn` | Sala experimental "pura": teclas **1/2** (entrar pela porta esquerda/direita), **R** (reset), botões das 3 cabines, **P** (BILLBOARD/PAPER), **F** (câmera livre). Sem regras de jogo. Não alterar: os testes comparam com ela. |
-| `scenes/reception_gameplay_test.tscn` | **Herda** a anterior e liga o gameplay real (sessão + `reception_presentation.gd`). É a cena de trabalho das etapas I2+. |
-| `tests/reception_arrival_fixture.tscn` | Herda a de gameplay com `enable_service = false` (só a chegada da I2). |
+| `tests/reception_arrival_fixture.tscn` | Herda diretamente a base com sessão e `reception_presentation.gd`; `enable_service = false` isola a chegada I2. |
+| `tests/reception_service_fixture.tscn` | Herda o fixture I2 e liga `enable_service = true`; usado pelos testes I3–I6 sem os sistemas narrativos do jogo final. |
 
-Exports do nó raiz da `reception_gameplay_test.tscn`: `Test Day` (1–3, escolhe `dayN.tres`), `Initial Entrance`
+Exports dos fixtures de teste: `Test Day` (1–3, escolhe `dayN.tres`), `Initial Entrance`
 (Esquerda/Direita), `Enable Service` (I3: balcão), `Enable Departure` (I4: saída) e `Enable Marta` (I5/I6: dia
 completo com a Marta). Desligando de trás para frente volta-se às etapas anteriores. Com `Enable Marta`, o
 `Test Day` só vale na primeira abertura: depois o dia fica em `reception_presentation.gd: dia_em_andamento`
@@ -716,12 +719,12 @@ Design: `docs/superpowers/specs/2026-11-02-recepcao-25d-marta-e-erro-design.md`.
 ### Cuidados
 - Não mexa na geometria, nos marcadores (`VisitorPositions`, `ElevatorRoutes`, `ApproachPoint`/`EntryPoint`/
   `CabinStopPoint`), na velocidade nem nos materiais para "fazer um teste passar". Velocidade dos NPCs e da Marta:
-  **3,6** na `reception_gameplay_test.tscn` (override no nó `VisitorMovement`, pedido do Gustavo em 02/11/2026); a sala
+  **3,6** na cena final e nos fixtures de teste (override no nó `VisitorMovement`, pedido do Gustavo em 02/11/2026); a sala
   experimental continua com 3 (padrão do `visitor_movement.gd`). A Marta copia a velocidade do visitante.
 - A tecla **P** é consumida pela orientação PAPER antes do `CheatMenu` nessas cenas (conflito conhecido).
 - `VisitorData.cena` (NPC feito como cena 2D) não é suportado no 2.5D: a visita é rejeitada (`UNSUPPORTED`). As
   agendas atuais só usam sprites.
-- O editor regrava a `reception_gameplay_test.tscn` (ids `unique_id`, `transform` no lugar de `position`): é só
+- O editor regrava as cenas 3D e seus fixtures (ids `unique_id`, `transform` no lugar de `position`): é só
   formato, mas confira o diff antes de commitar.
 
 
@@ -729,15 +732,27 @@ Design: `docs/superpowers/specs/2026-11-02-recepcao-25d-marta-e-erro-design.md`.
 
 ## 14. Recepção 3D — o jogo (desde 04/11/2026)
 
+**Referência para alterações visuais do jogo: `reception_3d.tscn` (F6).**
+A arquitetura definitiva da Etapa C e o histórico das decisões estão no início de
+`src/gameplay/reception_25d/README.md`. A cena final herda diretamente a base.
+O layout final do balcão é definido nos oito marcadores de `ReceptionDesk/ServiceObjects`
+em `reception.tscn`; os construtores visuais apenas leem esses transforms.
+O fixture de chegada conserva overrides do layout provisório somente para testes.
+
 Cenas em `src/gameplay/reception_25d/scenes/`:
-- `reception_3d.tscn`: **herda** `reception_gameplay_test.tscn` (mesma sessão, regras, Marta e saídas já testadas) e
-  troca o script raiz por `scripts/reception_3d.gd` (que `extends reception_presentation.gd`). Tem o `Pause`.
+- `reception_3d.tscn`: **herda diretamente `reception.tscn` desde a Etapa B (07/11/2026)**,
+  declara sua `ReceptionSession` e usa `scripts/reception_3d.gd` (que `extends reception_presentation.gd`).
+  Conserva os mesmos controladores I2–I6, narrativa, HUD e `Pause`.
+- Os fixtures `tests/reception_arrival_fixture.tscn` e `tests/reception_service_fixture.tscn`
+  reutilizam a base e o adaptador compartilhado; a intermediária foi removida na Etapa C.
 - `tutorial_3d.tscn`: herda `reception_3d.tscn` com `tutorial_mode = true`: toca o `tutorial_intro.tres` na mesma
   sala (narração em tela preta, a Marta entra pela porta, cada fala destaca o objeto em vermelho: livro, prancheta,
   crachá, painel). Esc pula. No fim a luz apaga, ela some e abre o "Dia 1".
 
-**Não altere `reception_gameplay_test.tscn` nem `reception.tscn` para mudar o jogo**: os testes I2–I6 usam essas
-cenas. Tudo o que é só do jogo fica nos scripts novos abaixo (criados em código, sem `.tscn` próprios):
+**Posições compartilhadas dos objetos: edite os marcadores da base `reception.tscn`.**
+Os fixtures isolados de I2–I6 em `tests/` conservam o layout provisório para seus contratos.
+A cena intermediária foi removida após a migração e validação desses testes na Etapa C.
+Configurações exclusivas do gameplay pertencem a `reception_3d.tscn` e aos scripts abaixo:
 
 | Script | O que faz |
 |---|---|
@@ -749,8 +764,9 @@ cenas. Tudo o que é só do jogo fica nos scripts novos abaixo (criados em códi
 | `shaders/room_post.gdshader` | Pós-efeito só da imagem 3D (`RoomView`): vinheta, grão, aberração cromática, distorção e pulso vermelho. |
 
 Mudanças em scripts compartilhados (todas desligadas por padrão, os testes antigos não mudam):
-`paper_dialogue.gd: screen_space` (fala no `Dialogue` global, ao lado da cabeça de quem fala, na faixa de cima da
-tela), `reception_camera.gd: keyboard_look/edge_hold/effect_rotation`, `visitor_orientation.gd: allow_mode_key`
+`reception_presentation.gd: fixed_paper` (ligado apenas na cena final e propagado às instâncias de
+`paper_dialogue.gd`: balão no mundo, fixo ao NPC, sem billboard; o modo experimental é preservado),
+`reception_camera.gd: keyboard_look/edge_hold/effect_rotation`, `visitor_orientation.gd: allow_mode_key`
 (desligado no jogo: o **P** volta a abrir o cheat).
 
 **Terror (`horror_director.gd`), crescendo por dia (`DAY_LOOK`):**
@@ -777,8 +793,11 @@ Não há teste automático de áudio: o volume do ambiente (`ambience.gd: volume
 
 ### 14.1 Mecânicas e história da 3D (desde 04/11/2026)
 
-**Sem música no gameplay** (`reception_3d.gd` chama `Audio.stop_music()`): o som é o ambiente procedural, o telefone
-e o elevador. O menu e os créditos continuam com música.
+**Áudio — revisão da Etapa A (07/11/2026):** a configuração anterior parava a trilha do gameplay,
+mas deixava o autoplay de `MusicMenu` ativo ao abrir com F6. Agora `reception_presentation.gd`
+para `MusicMenu` e mantém somente a trilha do dia no player único de `Audio`; o tutorial para ambas.
+Ambiência procedural, telefone e elevador continuam independentes no bus SFX.
+A herança e o plano dos marcadores para a Etapa B estão no início do README da recepção 2.5D.
 
 Referências usadas: FNAF (regras e lore por telefone; a voz confiável que depois liga de onde não deveria),
 Doki Doki Literature Club (a personagem simpática que racha aos poucos) e Papers, Please (regras acumuladas,

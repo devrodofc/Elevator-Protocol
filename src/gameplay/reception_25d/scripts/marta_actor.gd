@@ -57,6 +57,7 @@ func setup(owner_scene: Node2D) -> void:
 	# Only the visitor's orientation reads P; this one follows it, so the key is never consumed twice.
 	orientation.set_process_input(false)
 	paper = Paper.new()
+	paper.fixed_to_actor = presentation.fixed_paper
 	ground.add_child(paper)
 
 
@@ -178,6 +179,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _follow(route: Array[Marker3D]) -> void:
 	movement.follow_route(route)
+
+
+## Same exact movement completion used by leave_into_cabin, including hidden cabin occupants.
+func is_in_cabin() -> bool:
+	return is_instance_valid(ground) and is_instance_valid(cabin) and _at(cabin.cabin_stop_point)
 
 
 func _at(target: Marker3D) -> bool:

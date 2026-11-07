@@ -55,6 +55,7 @@ func _ready() -> void:
 	book.activated.connect(func(): _open("book"))
 	clipboard.activated.connect(func(): _open("rules"))
 	paper = Paper.new()
+	paper.fixed_to_actor = presentation.fixed_paper
 	presentation.actor.add_child(paper)
 	transfer = Transfer.new()
 	transfer.badge = badge

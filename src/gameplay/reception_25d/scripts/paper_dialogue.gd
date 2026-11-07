@@ -1,7 +1,7 @@
 extends Node3D
 ## A local instance of the original Dialogue, rendered onto paper in the world.
-## screen_space (static, set by the 3D game scene): uses the global Dialogue instead, drawn in the 2D
-## canvas at window resolution (sharp text) and placed beside the speaker's head every frame.
+## Optional legacy canvas mode; the final game uses the world sprite with fixed_to_actor instead.
+## Experimental scenes keep the world sprite's billboard by default.
 
 ## Off by default: the experimental scenes and their tests keep the paper in the world.
 static var screen_space: bool = false
@@ -14,6 +14,8 @@ var paper: Sprite3D
 var actor: Node3D
 var camera: Camera3D
 var modal: bool = false
+## Set before entering the tree; experimental scenes keep their billboard presentation.
+var fixed_to_actor: bool = false
 var _head_height: float = 2.4
 var _board: Control
 var _board_home: Vector2
@@ -30,18 +32,32 @@ func _ready() -> void:
 	viewport.size = Vector2i(189, 113)
 	viewport.transparent_bg = true
 	viewport.disable_3d = true
+	viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport.gui_disable_input = true
 	add_child(viewport)
 	dialogue = load("res://autoload/dialogue/dialogue.tscn").instantiate()
 	viewport.add_child(dialogue)
 	dialogue.get_node("Board").position = Vector2.ZERO
+	if fixed_to_actor:
+		# Remove grayscale coverage before it is baked into the small viewport texture.
+		# Duplicate the fonts so the original 2D dialogue and its layout stay untouched.
+		for name in ["NameLabel", "TextLabel", "SkipHint"]:
+			var label: Label = dialogue.get_node("Board/" + name)
+			var original: FontFile = label.get("theme_override_fonts/font")
+			var pixel_font := original.duplicate() as FontFile
+			pixel_font.antialiasing = TextServer.FONT_ANTIALIASING_NONE
+			pixel_font.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
+			pixel_font.oversampling = 1.0
+			label.add_theme_font_override("font", pixel_font)
 	dialogue.set_process_unhandled_input(false)
 	paper = Sprite3D.new()
 	paper.texture = viewport.get_texture()
-	paper.pixel_size = 0.014
+	paper.pixel_size = 0.011 if fixed_to_actor else 0.014
 	paper.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
-	paper.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	paper.billboard = (
+		BaseMaterial3D.BILLBOARD_DISABLED if fixed_to_actor else BaseMaterial3D.BILLBOARD_ENABLED
+	)
 	paper.shaded = false
 	add_child(paper)
 	hide()
@@ -54,6 +70,8 @@ func present(entry: Dictionary, visitor: Node3D, sprite: Sprite3D, view_camera: 
 	var head: float = sprite.position.y + (sprite.texture.get_height() * 0.5 - used.position.y) * sprite.pixel_size * sprite.scale.y
 	_head_height = head
 	position = Vector3(1.55, maxf(2.55, head + 0.35), 0)
+	if fixed_to_actor:
+		position = Vector3(1.2, head + 0.2, 0.05)
 	var speech: NPCDialogue = entry.get("dialogue")
 	Dialogue.clear_dialogue()
 	if screen_space:

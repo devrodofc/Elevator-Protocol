@@ -1,5 +1,11 @@
 # I3 — atendimento por objetos no balcão
 
+> Registro histórico: a cena intermediária citada neste documento foi removida na Etapa C (07/11/2026).
+> Os testes atuais usam `tests/reception_arrival_fixture.tscn` (I2) e `tests/reception_service_fixture.tscn`
+> (I3–I6), sob `src/gameplay/reception_25d/`, sem os sistemas narrativos do jogo final.
+> A arquitetura atual e os resultados da migração estão no README da recepção 2.5D.
+
+
 Implementado em 25/10/2026, branch `feat/2.5d-experiment`, Godot
 4.7.2.stable.official.ed1daf0bf. Esta entrega segue a especificação revisada
 pelo desenvolvedor: objetos físicos, consultas modais e diálogo PAPER.

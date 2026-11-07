@@ -1,5 +1,11 @@
 # I4 — aplicar o resultado e concluir a visita
 
+> Registro histórico: a cena intermediária citada neste documento foi removida na Etapa C (07/11/2026).
+> Os testes atuais usam `tests/reception_arrival_fixture.tscn` (I2) e `tests/reception_service_fixture.tscn`
+> (I3–I6), sob `src/gameplay/reception_25d/`, sem os sistemas narrativos do jogo final.
+> A arquitetura atual e os resultados da migração estão no README da recepção 2.5D.
+
+
 Implementado em 02/11/2026, branch local `gustavo` (a partir da `develop` em `7206e6a`), Godot
 4.7.2-stable. Segue as recomendações da auditoria (seção 10.2) para as três decisões pendentes
 antes da I4. Não implementa Marta, regras anunciadas, falha com reload, fim do dia nem progressão.
@@ -86,8 +92,8 @@ pela porta, giro do sprite nas curvas). Fazer o roteiro abaixo.
 
 ### Roteiro F6
 
-1. Recarregue o projeto sem salvar. Abra `scenes/reception_gameplay_test.tscn`, deixe `Enable Service` e
-   `Enable Departure` ligados, escolha dia/entrada e use F6.
+1. Recarregue o projeto sem salvar. Abra `tests/reception_service_fixture.tscn`, deixe `Enable Service` e
+   `Enable Departure` ligados e `Enable Marta` desligado, escolha dia/entrada e use F6.
 2. Atenda corretamente: o crachá volta, o NPC anda até a cabine 1, a porta abre, ele entra e a porta fecha.
    Só então o próximo entra pela porta de entrada.
 3. Recusa (X): nas agendas atuais nenhum visitante deve ser recusado sem as regras da Marta, então na F6

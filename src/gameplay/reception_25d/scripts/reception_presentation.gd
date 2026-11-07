@@ -38,6 +38,8 @@ static var dia_em_andamento: DayScheduleConfig = null
 @export var enable_departure: bool = false
 ## I5/I6 (requires enable_departure): full day as in 2D, with Marta's intro, rules, failure and end of day.
 @export var enable_marta: bool = false
+## World-space dialogue without camera-facing rotation (final game only).
+@export var fixed_paper: bool = false
 
 @export_range(1, 3, 1) var test_day: int = 1
 @export_enum("Esquerda", "Direita") var initial_entrance: int = 0
@@ -72,6 +74,7 @@ var _pending_result: Dictionary = {}
 
 
 func _ready() -> void:
+	MusicMenu.stop_music()
 	_incoming_transition = SceneTransition.is_busy()
 	actor.hide()
 	var day: DayScheduleConfig = DAYS[clampi(test_day, 1, 3) - 1]

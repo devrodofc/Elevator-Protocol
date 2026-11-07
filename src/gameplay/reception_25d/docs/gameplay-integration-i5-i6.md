@@ -1,5 +1,11 @@
 # I5 + I6 — Marta, erro e fim do dia
 
+> Registro histórico: a cena intermediária citada neste documento foi removida na Etapa C (07/11/2026).
+> Os testes atuais usam `tests/reception_arrival_fixture.tscn` (I2) e `tests/reception_service_fixture.tscn`
+> (I3–I6), sob `src/gameplay/reception_25d/`, sem os sistemas narrativos do jogo final.
+> A arquitetura atual e os resultados da migração estão no README da recepção 2.5D.
+
+
 Implementado em 02/11/2026, branch local `gustavo`, Godot 4.7.2-stable. Design aprovado pelo Gustavo:
 `docs/superpowers/specs/2026-11-02-recepcao-25d-marta-e-erro-design.md`; plano:
 `docs/superpowers/plans/2026-11-02-recepcao-25d-marta-e-erro.md`. A cena continua fora do fluxo do jogo
@@ -59,7 +65,7 @@ volume dos sons).
 
 ## Roteiro F6
 
-1. Recarregue o projeto sem salvar. Abra `scenes/reception_gameplay_test.tscn`, com os quatro `Enable` ligados.
+1. Recarregue o projeto sem salvar. Abra `tests/reception_service_fixture.tscn`, com `Enable Service`, `Enable Departure` e `Enable Marta` ligados.
 2. A Marta entra pela porta, fala (Espaço) e entra na cabine 2. O primeiro visitante entra.
 3. Atenda dois visitantes certos: a cabine 2 abre, a Marta dita a regra e a prancheta abre sozinha.
 4. Erre um andar: tela vermelha, o visitante sai pela porta, a Marta chega com raiva e o dia recomeça.

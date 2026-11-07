@@ -1,4 +1,226 @@
-# Recepção 2.5D experimental
+# Recepção 3D — cena principal e bases de teste
+
+## Cena de referência do jogo
+
+Abra **`scenes/reception_3d.tscn`** na Godot **4.7.2** e use **F6** para conferir
+alterações do jogo. O fluxo real é `menu.tscn` → `tutorial_3d.tscn` →
+`reception_3d.tscn`; o cheat também aponta para esta última.
+A recepção 2D em `src/gameplay/reception/` é independente desta cadeia.
+
+### Arquitetura definitiva — Etapa C (07/11/2026)
+
+```text
+reception.tscn
+├── reception_3d.tscn
+│   └── tutorial_3d.tscn
+└── tests/reception_arrival_fixture.tscn
+	└── tests/reception_service_fixture.tscn
+```
+
+| Cena | Responsabilidade atual |
+| --- | --- |
+| `reception.tscn` | Ambiente, câmera, NPC experimental, portas, elevadores, rotas e os oito marcadores definitivos em `ReceptionDesk/ServiceObjects`. Não possui `ReceptionSession` nem inicia o atendimento. |
+| `reception_3d.tscn` | Herda diretamente a base; declara `ReceptionSession`, flags I2–I6, velocidade 3,6, configuração do NPC, bloqueio dos controles experimentais, `fixed_paper` e Pause. O script existente cria Marta, HUD, narrativa e os componentes visuais/interativos. |
+| `tests/reception_arrival_fixture.tscn` | Herda diretamente a base e configura a apresentação compartilhada, sessão local e layout provisório dos testes. `enable_service = false` mantém o contrato I2, inclusive no reload. |
+| `tests/reception_service_fixture.tscn` | Herda o fixture de chegada e define somente `enable_service = true`, preservando os defaults de reload de I3–I6. Não carrega narrativa, HUD ou terror do jogo final. |
+
+`reception_3d.gd` continua estendendo `reception_presentation.gd`: chegada I2,
+atendimento I3, decisões, Marta, saída e progressão reutilizam os mesmos scripts,
+sem copiar rotinas. A cena final e seu grafo de recursos não dependem dos fixtures
+de teste. A cena intermediária e seu UID foram removidos na Etapa C.
+A referência direta à base conserva `uid://g33k8dvq7w1h`.
+
+### Onde ajustar o balcão do jogo
+
+**Edite somente as transformações dos marcadores na cena base `reception.tscn`.**
+As posições e rotações foram capturadas do layout aprovado em runtime antes da
+migração e comparadas depois, incluindo os modelos: nenhuma diferença numérica.
+
+| Marcador em `ReceptionDesk/ServiceObjects` | Componente que utiliza o ponto |
+| --- | --- |
+| `BadgeRest`, `BookRest`, `ClipboardRest` | `desk_service.gd`/`desk_models.gd` criam uma instância interativa sob cada marcador. |
+| `PanelRest` | `desk_service.gd` cria o painel; `desk_dressing.gd` aplica sua apresentação e layout interno. |
+| `MonitorRest` | `desk_dressing.gd: _build_monitor`. |
+| `PhoneRest`, `AlarmRest` | `desk_devices.gd: build`. |
+| `SixthFloorNoteRest` | `sixth_floor_note.gd: build`. |
+
+Os construtores existentes continuam gerando os visuais quando o serviço é
+ativado, agora sob os marcadores, com transformação local identidade. Não há
+segunda cópia dos modelos na base. `desk_dressing.gd` não reposiciona mais os
+marcadores; telefone, botão, monitor e papel não possuem posições externas
+codificadas nos scripts. Permanecem apenas os offsets internos dos modelos,
+o hover da prancheta e os tweens de entrega/recolhimento do crachá.
+O acabamento do tampo, materiais, luzes e câmera do jogo não foram alterados.
+
+O balão PAPER mantém a solução da Etapa A: Sprite3D fixo relativo a cada NPC,
+sem billboard no jogo; o modo experimental dos testes permanece independente.
+O `RoomView` final utiliza a `ViewportTexture_room` existente na base, que aponta
+para `RoomViewport`; não foi criada outra instância do viewport da sala.
+
+### Encaminhamentos incorretos no jogo 3D
+
+A sessão habilita `allow_wrong_dispatches` somente no gameplay final; o padrão
+continua sendo falha imediata para a recepção 2D e os fixtures antigos.
+`RuleValidator` continua decidindo se o destino confirmado é correto. Somente
+resultados incorretos com destino 1–6 ou subsolo incrementam `wrong_dispatches`;
+recusas, seleções sem confirmação e comandos rejeitados não contam.
+O contador reinicia em `start_day`, independente das advertências da narrativa.
+
+O HUD mostra `Encaminhamentos incorretos: 0/3` abaixo das advertências.
+Os dois primeiros erros seguem o embarque normal e mantêm as regras e aparições
+programadas de Marta. No terceiro, a apresentação bloqueia o balcão, cancela
+as ações narrativas/movimentos pendentes e traz Marta pela cabine 2 para uma
+reclamação própria, sem substituir suas falas habituais. O PAPER espera o jogador
+concluir a fala, sem timeout. O mesmo fluxo de retry (`dia_em_andamento`,
+`_retry_day`, `begin_transition` e reload) reinicia o mesmo dia com o contador zerado.
+
+Teste direcionado: `godot --headless --fixed-fps 60 --path <projeto> -s res://src/gameplay/reception_25d/tests/reception_wrong_dispatch_test.gd`.
+Validação: 39 verificações aprovadas em cada dia (argumento `-- 1`, `-- 2` ou
+`-- 3`), incluindo reclamação e reload real; I3 existente: 250/250. Sintaxe e
+`git diff --check` aprovados. A revisão visual/interativa final fica para F6.
+Para F6, confirme três destinos errados (incluindo subsolo quando incorreto),
+acompanhe 1/3, 2/3, 3/3, conclua a reclamação com Espaço/Enter e confira o mesmo
+dia em 0/3. Recusar ou apenas selecionar/cancelar não altera esse contador.
+
+### Botão vermelho — ocupação e cooldown
+
+O alarme só fica disponível com um visitante comum da sessão confirmado no
+`CabinStopPoint`, usando o término de movimento do I4. Marta e Godofredo são
+instâncias separadas de `MartaActor` e não contam para liberar o botão.
+Durante a viagem no monitor, utiliza `riding` e a presença do passageiro existente
+no feed. Não há contador ou estado de ocupação adicional.
+
+No nó raiz de `reception_3d.tscn`, o Inspector expõe **Alarm Hold Seconds**
+(`alarm_hold_seconds`, padrão 5,0 s). Cada ativação válida executa a consequência
+original uma única vez, abaixa a cúpula em 0,1 s, mantém-na abaixada pelo tempo
+configurado e retorna em 0,15 s. Um único Tween bloqueia novas ativações até o
+retorno; a ocupação é consultada novamente antes de liberar o botão.
+O balão ativo de Marta ou Godofredo também bloqueia o alarme até a última
+página ser concluída pelo jogador. Esse bloqueio não interrompe o Tween; ao
+retornar, o botão continua indisponível enquanto houver fala ativa.
+Remover o componente ou trocar de cena cancela a animação. Telefone e outros
+sistemas continuam processando normalmente durante o cooldown.
+
+Teste direcionado (Godot 4.7.2, em cópia temporária):
+`godot --headless --fixed-fps 60 --path <projeto> -s res://src/gameplay/reception_25d/tests/reception_alarm_test.gd`.
+59 verificações aprovadas na Godot 4.7.2. Cobre cabines vazias, aproximação/entrada, chegada confirmada, cliques rápidos,
+retenção/retorno, saída durante cooldown, cabines 2/3, salvamento, advertências,
+configuração de duração e cancelamento ao remover/trocar a cena.
+
+### Limpeza da Etapa C
+
+A auditoria de 06/11/2026 preservou a cadeia base → intermediária → final.
+A Etapa B retirou a dependência do jogo final e foi aprovada manualmente com F6.
+Na Etapa C, `scenes/reception_gameplay_test.tscn` foi removida após os testes
+passarem em uma cópia do projeto na qual esse arquivo já estava ausente.
+
+O fixture I2 existente agora herda diretamente a base e conserva as configurações
+que antes recebia da intermediária. O novo fixture de atendimento, com uma única
+flag, distingue os defaults necessários no reload sem duplicar controladores:
+
+- `reception_arrival_test.gd`: continua usando `reception_arrival_fixture.tscn`.
+- `reception_desk_test.gd`, `reception_dispatch_test.gd` e `reception_marta_test.gd`:
+  utilizam `reception_service_fixture.tscn`. As verificações e a lógica dos três
+  scripts foram preservadas byte a byte; mudou somente a constante de caminho.
+- I3 desliga saída e I4 desliga Marta antes de instanciar na árvore, como antes.
+  I5/I6 conserva Marta, regras, falha, reload e progressão como parte do próprio teste.
+  Nenhum fixture usa `reception_3d.gd`, Story, HorrorDirector, HUD ou DeskDressing.
+
+A base e a cena final, seus scripts, layout, câmera, PAPER, música e recursos
+artísticos não foram modificados nesta etapa. A base mantém os controles
+experimentais, que continuam desligados no jogo final.
+
+Validação da Etapa C: Godot 4.7.2, `--headless --fixed-fps 60`, em cópia temporária.
+I2 359/359; I3 250/250; I4 512/512 (24 embarques e 4 recusas); I5/I6 62/62,
+com as cinco seções completas e os mesmos resultados anteriores à migração.
+A checagem de carga, isolamento, sinais, NodePaths e UIDs passou 190 verificações
+em 40 dependências, sem recorrer ao arquivo nem ao UID aposentado.
+`gdparse` e `git diff --check` passaram; lint/formatação mantêm pendências anteriores.
+Mensagens de recursos não liberados no encerramento também existiam na baseline.
+Não foram executadas suítes não relacionadas.
+
+### Registro da validação da Etapa B
+
+Validação da Etapa B em cópia temporária, Godot 4.7.2, `--headless --fixed-fps 60`:
+I2 359/359, I3 250/250, modos/diálogo/dependências 140/140 e atendimento real da
+cena final 70/70. Esse último percorreu a introdução da Marta, chegada, crachá,
+raycasts dos objetos/botões, hover, confirmação, saída e próxima visita; também
+verificou que o grafo de recursos final não contém a intermediária.
+O snapshot dos oito objetos/modelos, câmera e configuração do viewport apresentou
+diferença numérica zero antes/depois. `gdparse` e `git diff --check` passaram;
+lint/formatação mantêm pendências anteriores, sem achados novos. Persistem avisos
+anteriores de recursos ao encerrar testes. A regressão inteira não foi executada.
+Na entrega da Etapa B, a revisão com F6 ficou pendente; o usuário confirmou sua aprovação antes da Etapa C.
+
+### Etapa A — preparação da base (07/11/2026)
+
+Registro histórico da Etapa A, anterior às consolidações B/C descritas acima.
+A cadeia base → intermediária → final foi preservada naquela etapa. Nenhum objeto ou controlador foi duplicado,
+e o layout do balcão foi preservado. A cena final desativa `DebugFreeCamera`
+também no recurso; a base continua permitindo F e os controles experimentais.
+`fixed_paper` é configurado na cena final e passado às instâncias de diálogo do
+visitante, Marta e Godofredo. Elas usam a arte de `Dialogue` em SubViewport,
+sem billboard ou projeção por câmera; os testes mantêm o modo experimental.
+
+O autoplay de `MusicMenu` persistia ao abrir o gameplay com F6, enquanto
+`reception_presentation.gd` iniciava `Audio` e a cena final depois parava apenas
+este último. Agora a apresentação encerra `MusicMenu` antes do atendimento e
+mantém a trilha do dia no player único de `Audio`, cujo `play_music` já é
+idempotente. O tutorial para ambas as músicas; ambiência procedural, narração,
+telefone e demais efeitos continuam independentes em SFX.
+
+#### Fonte das posições e destino recomendado para a Etapa B
+
+| Elemento | Criação e posição atuais | Futuro ponto de referência na base |
+| --- | --- | --- |
+| Monitor | `desk_dressing.gd: _build_monitor` cria e posiciona o suporte. | `ServiceObjects/MonitorRest`. |
+| Telefone e botão vermelho | `desk_devices.gd: build` passa as posições a `_build_phone/_build_alarm`. | `ServiceObjects/PhoneRest` e `AlarmRest`. |
+| Livro, prancheta e crachá | `desk_service.gd` usa `desk_models.gd: object_at`; os marcadores vêm da cena intermediária, mas `desk_dressing.gd: _place` define as posições finais. | `ServiceObjects/BookRest`, `ClipboardRest` e `BadgeRest`, com os valores finais atuais do jogo. |
+| Papel do 6º andar | `sixth_floor_note.gd: build` cria e posiciona o corpo. | `ServiceObjects/SixthFloorNoteRest`. |
+| Painel | `desk_service.gd: _build_panel` cria o conjunto; `desk_dressing.gd` posiciona `PanelRest` e aplica o desenho e as áreas dos botões. | `ServiceObjects/PanelRest`; o layout interno dos botões continua no componente. |
+| Balão PAPER | `desk_service.gd` e `marta_actor.gd` criam `paper_dialogue.gd`; `present` determina o deslocamento relativo ao ator. | Ponto `PaperPoint` relativo a cada NPC, compartilhando a mesma configuração visual. |
+
+Os pontos que ainda não existem são apenas destinos propostos, não foram
+criados nesta etapa. Na Etapa B, os marcadores devem ser a fonte única de
+posição/rotação externa: os construtores leem seus transforms e criam os
+visuais uma única vez, sem reposicionar depois em outro script.
+O hover local da prancheta e os tweens do crachá continuam nos componentes.
+
+Dependências concretas ainda fornecidas por `reception_gameplay_test.tscn`:
+
+- `ReceptionDesk/ServiceObjects` e seus quatro Marker3D: mover à base, preservando
+  os NodePaths e usando as posições finais de `desk_dressing.gd`, não o layout provisório.
+- `ReceptionSession`: declarar na cena final e nos fixtures necessários; sua autoridade
+  de gameplay não pertence ao ambiente visual compartilhado.
+- Flags `enable_service`, `enable_departure`, `enable_marta`, velocidade 3,6,
+  `TestVisitor.source_texture = null` e desativação de `VisitorMovementTest`/
+  `ElevatorSelection`: tornar configurações explícitas da cena final/fixtures.
+- Override de `RoomView.texture` (`ViewportTexture` → `RoomViewport`): preservar
+  ou comprovar equivalência com a textura da base ao retirar a herança intermediária.
+- Script raiz `reception_presentation.gd`: continuar reutilizado pelo `extends`
+  de `reception_3d.gd`; não copiar suas rotinas para outro controlador.
+- Fixture I2 e cargas diretas dos testes I3/I4/I5–I6: adaptar suas configurações
+  antes de uma exclusão posterior. Conservar câmera experimental e PAPER com billboard
+  nos fixtures que verificam esse contrato.
+
+A montagem visual hoje chamada por `reception_3d.gd: _create_desk` ainda precisa
+ser reutilizada na base na Etapa B. Os três construtores visuais já existentes
+podem ler os marcadores; não é necessário criar outro controlador intermediário.
+
+Validação da Etapa A: Godot 4.7.2 em cópia temporária, com `--headless --fixed-fps 60`.
+`tests/reception_desk_test.gd`: 250 verificações, zero falhas.
+`tests/debug_free_camera_test.gd`: zero falhas. Verificação temporária direcionada:
+138 verificações, zero falhas, incluindo carga das três cenas e do tutorial,
+39 dependências/caminhos/UIDs, música única, reload, controles, sinais/NodePaths,
+PAPER sem movimento por câmera, enquadramento, digitação, Espaço/Enter e consultas.
+`gdparse` e `git diff --check` passaram; lint/formatação mantêm pendências anteriores,
+sem achados novos. Persistem avisos anteriores de recursos ao encerrar alguns testes.
+A conferência visual/auditiva com F6 continua pendente; não foi executada a regressão inteira.
+
+## Histórico do experimento 2.5D
+
+As instruções abaixo descrevem a base experimental `reception.tscn`, não a
+apresentação final do jogo. Preserve-as como histórico técnico e roteiro dos testes.
 
 Abra `scenes/reception.tscn` no Godot **4.7.2** e pressione **F6**
 (Executar cena atual). F5 continua executando a cena principal do projeto.

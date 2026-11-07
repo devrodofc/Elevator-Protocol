@@ -29,6 +29,7 @@ var _narration_done: bool = false
 var _advance: bool = false
 var _hint_time: float = 14.0
 var warnings_label: Label
+var wrong_dispatches_label: Label
 var _call_box: PanelContainer
 var _call_title: Label
 var _call_text: Label
@@ -88,8 +89,12 @@ func _ready() -> void:
 	warnings_label = _label(FONT_BOLD, 8, Color(1.0, 0.45, 0.35))
 	warnings_label.position = Vector2(8, 32)
 	add_child(warnings_label)
+	wrong_dispatches_label = _label(FONT_BOLD, 8, Color(1.0, 0.45, 0.35))
+	wrong_dispatches_label.position = Vector2(8, 44)
+	add_child(wrong_dispatches_label)
+	set_wrong_dispatches(0)
 	_call_box = _pill(Color(0.06, 0.02, 0.02, 0.88))
-	_call_box.position = Vector2(8, 46)
+	_call_box.position = Vector2(8, 58)
 	var call_list := VBoxContainer.new()
 	call_list.add_theme_constant_override("separation", 1)
 	call_list.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -298,3 +303,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_typed()
 	else:
 		_advance = true
+
+
+func set_wrong_dispatches(count: int) -> void:
+	wrong_dispatches_label.text = "Encaminhamentos incorretos: %d/3" % count if count > 0 else ""

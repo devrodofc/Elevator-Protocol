@@ -1,6 +1,46 @@
 [gd_scene format=3 uid="uid://ba3wsiwfxc3la"]
 
-[ext_resource type="PackedScene" path="res://src/gameplay/reception_25d/scenes/reception_gameplay_test.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://g33k8dvq7w1h" path="res://src/gameplay/reception_25d/scenes/reception.tscn" id="1"]
+[ext_resource type="Script" uid="uid://cymta17trsjej" path="res://src/gameplay/reception_25d/scripts/reception_presentation.gd" id="2_presentation"]
+[ext_resource type="Script" uid="uid://c441c63n1hito" path="res://src/gameplay/scripts/reception_session.gd" id="3_session"]
 
-[node name="ReceptionArrivalFixture" instance=ExtResource("1")]
+[sub_resource type="ViewportTexture" id="ViewportTexture_px574"]
+viewport_path = NodePath("RoomViewport")
+
+[node name="ReceptionArrivalFixture" unique_id=2098443249 instance=ExtResource("1")]
+script = ExtResource("2_presentation")
 enable_service = false
+enable_departure = true
+enable_marta = true
+
+[node name="RoomView" parent="." index="0" unique_id=20399849]
+texture = SubResource("ViewportTexture_px574")
+
+[node name="ServiceObjects" parent="RoomViewport/Room/ReceptionDesk" parent_id_path=PackedInt32Array(1271229008) index="2" unique_id=472098477]
+
+[node name="BadgeRest" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" index="0" unique_id=1562139043]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17, 0.18)
+
+[node name="BookRest" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" index="1" unique_id=465052916]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 1.19, 0.98)
+
+[node name="ClipboardRest" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" index="2" unique_id=1477899374]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27, 1.17, 0.98)
+
+[node name="PanelRest" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" index="3" unique_id=1743861178]
+transform = Transform3D(1, 0, 0, 0, 0.5735765, 0.819152, 0, -0.819152, 0.5735765, 1.25, 1.42, 0.98)
+
+[node name="TestVisitor" parent="RoomViewport/Room/VisitorGround" parent_id_path=PackedInt32Array(655563280) index="0" unique_id=1751512308]
+source_texture = null
+
+[node name="VisitorMovement" parent="." index="2" unique_id=768934271]
+movement_speed = 3.6
+
+[node name="VisitorMovementTest" parent="." index="3" unique_id=1110715786]
+enabled = false
+
+[node name="ElevatorSelection" parent="." index="5" unique_id=1764697406]
+enabled = false
+
+[node name="ReceptionSession" type="Node" parent="." index="8" unique_id=1666425337]
+script = ExtResource("3_session")

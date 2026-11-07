@@ -1,5 +1,11 @@
 # Etapa 11 — auditoria e plano de integração 2D → 2.5D
 
+> Registro histórico: a cena intermediária citada neste documento foi removida na Etapa C (07/11/2026).
+> Os testes atuais usam `tests/reception_arrival_fixture.tscn` (I2) e `tests/reception_service_fixture.tscn`
+> (I3–I6), sob `src/gameplay/reception_25d/`, sem os sistemas narrativos do jogo final.
+> A arquitetura atual e os resultados da migração estão no README da recepção 2.5D.
+
+
 ## 1. Resumo executivo
 
 Auditoria de 24/10/2026, branch `feat/2.5d-experiment`, Godot **4.7.2-stable

@@ -1,6 +1,24 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dbf38k2sm2mhq"]
 
 [ext_resource type="PackedScene" path="res://src/gameplay/reception_25d/scenes/reception_3d.tscn" id="1_game"]
 
-[node name="Tutorial3D" instance=ExtResource("1_game")]
+[sub_resource type="ViewportTexture" id="ViewportTexture_fxkmt"]
+viewport_path = NodePath("RoomViewport")
+
+[node name="Tutorial3D" unique_id=1695172107 instance=ExtResource("1_game")]
 tutorial_mode = true
+
+[node name="RoomView" parent="." index="0" unique_id=20399849]
+texture = SubResource("ViewportTexture_fxkmt")
+
+[node name="ClipboardRest" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" parent_id_path=PackedInt32Array(472098477) index="2" unique_id=1477899374]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, -0.5, 0, 0.5, 0.8660254, -0.235, 1.097, 1.08)
+
+[node name="PhoneRest" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" parent_id_path=PackedInt32Array(472098477) index="5"]
+transform = Transform3D(0.95105654, 0, 0.309017, 0, 1, 0, -0.309017, 0, 0.95105654, -1.02, 0.935, 1.42)
+
+[node name="AlarmRest" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" parent_id_path=PackedInt32Array(472098477) index="6"]
+transform = Transform3D(0.95105654, 0, -0.309017, 0, 1, 0, 0.309017, 0, 0.95105654, -1.25, 0.935, 1.03)
+
+[node name="SixthFloorNoteRest" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" parent_id_path=PackedInt32Array(472098477) index="7"]
+transform = Transform3D(0.9975641, -0.053436555, -0.044838596, 0, 0.64278764, -0.76604444, 0.06975647, 0.7641784, 0.6412219, 0.5, 1.04, 1.52)
