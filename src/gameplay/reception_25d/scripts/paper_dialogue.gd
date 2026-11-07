@@ -32,12 +32,24 @@ func _ready() -> void:
 	viewport.size = Vector2i(189, 113)
 	viewport.transparent_bg = true
 	viewport.disable_3d = true
+	viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport.gui_disable_input = true
 	add_child(viewport)
 	dialogue = load("res://autoload/dialogue/dialogue.tscn").instantiate()
 	viewport.add_child(dialogue)
 	dialogue.get_node("Board").position = Vector2.ZERO
+	if fixed_to_actor:
+		# Remove grayscale coverage before it is baked into the small viewport texture.
+		# Duplicate the fonts so the original 2D dialogue and its layout stay untouched.
+		for name in ["NameLabel", "TextLabel", "SkipHint"]:
+			var label: Label = dialogue.get_node("Board/" + name)
+			var original: FontFile = label.get("theme_override_fonts/font")
+			var pixel_font := original.duplicate() as FontFile
+			pixel_font.antialiasing = TextServer.FONT_ANTIALIASING_NONE
+			pixel_font.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
+			pixel_font.oversampling = 1.0
+			label.add_theme_font_override("font", pixel_font)
 	dialogue.set_process_unhandled_input(false)
 	paper = Sprite3D.new()
 	paper.texture = viewport.get_texture()

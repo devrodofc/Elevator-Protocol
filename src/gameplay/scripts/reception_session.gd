@@ -11,6 +11,9 @@ var _active_rules: Array[MartaRule] = []
 var _rules: Array[MartaRule] = []
 var _pending_rule: MartaRule
 var _rule_activated: bool = false
+## Opt-in for the final 3D game; legacy presentations keep immediate failure.
+var allow_wrong_dispatches: bool = false
+var wrong_dispatches: int = 0
 var _served: int = 0
 var _next_rule: int = 0
 var _state: State = State.IDLE
@@ -76,6 +79,7 @@ func start_day(config: DayScheduleConfig) -> void:
 	_pending_rule = null
 	_rule_activated = false
 	_served = 0
+	wrong_dispatches = 0
 	_next_rule = 0
 	_visit_id = ""
 	if config:
@@ -150,7 +154,11 @@ func submit_decision(visit_id: String, floor_code: int) -> Dictionary:
 	var visitor: VisitorData = _entry["visitor"]
 	var dialogue: NPCDialogue = _entry.get("dialogue")
 	var correct: bool = RuleValidator.validar_decisao(visitor, dialogue, floor_code, day_number, _active_rules, _entry)
-	_state = State.RESOLVED if correct else State.FAILED
+	var tolerated := false
+	if allow_wrong_dispatches and not correct and floor_code != RuleValidator.DENY_ACTION:
+		wrong_dispatches += 1
+		tolerated = wrong_dispatches < 3
+	_state = State.RESOLVED if correct or tolerated else State.FAILED
 	return {"visit_id": visit_id, "floor_code": floor_code, "correct": correct}
 
 

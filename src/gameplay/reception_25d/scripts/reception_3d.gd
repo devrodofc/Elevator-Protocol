@@ -44,6 +44,7 @@ var retrying: bool = false
 
 
 func _ready() -> void:
+	session.allow_wrong_dispatches = not tutorial_mode
 	PaperScript.screen_space = false
 	_setup_view()
 	visual.shaded = true
@@ -194,6 +195,7 @@ func _process(delta: float) -> void:
 		status = "O telefone está tocando  ·  clique nele para atender"
 	hud.set_status(status)
 	hud.set_warnings(story.warnings, story.MAX_WARNINGS)
+	hud.set_wrong_dispatches(session.wrong_dispatches)
 	# The next boarding needs cabin 1: a ride still running ends now.
 	if stage == Stage.TO_CABIN and watch.riding:
 		watch.finish_now()
@@ -302,6 +304,17 @@ func _on_rule_announced(rule: MartaRule) -> void:
 
 
 func _on_decision_processed(result: Dictionary) -> void:
+	if stage != Stage.AT_SERVICE or result.get("visit_id") != visit_id:
+		return
+	if not result.get("correct", false) and result.get("floor_code") != RuleValidator.DENY_ACTION:
+		hud.set_wrong_dispatches(session.wrong_dispatches)
+		if session.wrong_dispatches >= 3:
+			_run_dispatch_failure()
+		elif session.complete_visit(visit_id):
+			_last_floor = result.floor_code
+			_pending_result = result
+			Audio.play_sfx(Audio.ERRO)
+		return
 	if result.get("visit_id") == visit_id and result.get("correct", false):
 		_last_floor = result.get("floor_code", 0)
 	super(result)
@@ -314,7 +327,37 @@ func _release() -> void:
 	super()
 
 
-## Three warnings: Godofredo fires you... and Marta "gets your job back". The same day starts over.
+## Third confirmed wrong destination: a dedicated, player-completed complaint.
+func _run_dispatch_failure() -> void:
+	if stage in [Stage.FAILING, Stage.LEAVING_SCENE, Stage.CANCELLED, Stage.CONCLUDING]:
+		return
+	var generation: int = session.generation
+	stage = Stage.FAILING
+	desk.cancel()
+	watch.cancel()
+	story.set_process(false)
+	story.cancel()
+	story.godofredo.cancel()
+	movement.set_process(false)
+	actor.hide()
+	marta.cancel()
+	if not await marta.arrive_from_cabin(MartaActor.ANGER_SPRITE):
+		return
+	if not await marta.speak(
+		"Marta",
+		"Três visitantes no lugar errado! Preste atenção aos andares. Vamos recomeçar este dia."
+	):
+		return
+	if not _still(generation):
+		return
+	dia_em_andamento = session.schedule_config
+	_retry_day = session.day_number
+	stage = Stage.LEAVING_SCENE
+	session.begin_transition()
+	get_tree().reload_current_scene()
+
+
+## Three warnings retain their existing, independent failure flow.
 func _run_fired() -> void:
 	if stage in [Stage.LEAVING_SCENE, Stage.CANCELLED, Stage.FAILING, Stage.CONCLUDING]:
 		return

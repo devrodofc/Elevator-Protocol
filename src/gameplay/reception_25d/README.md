@@ -57,6 +57,31 @@ sem billboard no jogo; o modo experimental dos testes permanece independente.
 O `RoomView` final utiliza a `ViewportTexture_room` existente na base, que aponta
 para `RoomViewport`; não foi criada outra instância do viewport da sala.
 
+### Encaminhamentos incorretos no jogo 3D
+
+A sessão habilita `allow_wrong_dispatches` somente no gameplay final; o padrão
+continua sendo falha imediata para a recepção 2D e os fixtures antigos.
+`RuleValidator` continua decidindo se o destino confirmado é correto. Somente
+resultados incorretos com destino 1–6 ou subsolo incrementam `wrong_dispatches`;
+recusas, seleções sem confirmação e comandos rejeitados não contam.
+O contador reinicia em `start_day`, independente das advertências da narrativa.
+
+O HUD mostra `Encaminhamentos incorretos: 0/3` abaixo das advertências.
+Os dois primeiros erros seguem o embarque normal e mantêm as regras e aparições
+programadas de Marta. No terceiro, a apresentação bloqueia o balcão, cancela
+as ações narrativas/movimentos pendentes e traz Marta pela cabine 2 para uma
+reclamação própria, sem substituir suas falas habituais. O PAPER espera o jogador
+concluir a fala, sem timeout. O mesmo fluxo de retry (`dia_em_andamento`,
+`_retry_day`, `begin_transition` e reload) reinicia o mesmo dia com o contador zerado.
+
+Teste direcionado: `godot --headless --fixed-fps 60 --path <projeto> -s res://src/gameplay/reception_25d/tests/reception_wrong_dispatch_test.gd`.
+Validação: 39 verificações aprovadas em cada dia (argumento `-- 1`, `-- 2` ou
+`-- 3`), incluindo reclamação e reload real; I3 existente: 250/250. Sintaxe e
+`git diff --check` aprovados. A revisão visual/interativa final fica para F6.
+Para F6, confirme três destinos errados (incluindo subsolo quando incorreto),
+acompanhe 1/3, 2/3, 3/3, conclua a reclamação com Espaço/Enter e confira o mesmo
+dia em 0/3. Recusar ou apenas selecionar/cancelar não altera esse contador.
+
 ### Botão vermelho — ocupação e cooldown
 
 O alarme só fica disponível com um visitante comum da sessão confirmado no
