@@ -271,6 +271,11 @@ func _taken(version: int, sabotage: bool) -> void:
 
 
 ## ALARM pressed. Returns true when it stopped a descending cabin.
+## The passenger exits the feed before the ride's final UI delay is over.
+func has_passenger() -> bool:
+	return riding and is_instance_valid(_rider_holder) and _rider_holder.visible
+
+
 func press_alarm() -> bool:
 	if not riding or not alarm_open:
 		return false

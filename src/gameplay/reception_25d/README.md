@@ -57,6 +57,31 @@ sem billboard no jogo; o modo experimental dos testes permanece independente.
 O `RoomView` final utiliza a `ViewportTexture_room` existente na base, que aponta
 para `RoomViewport`; não foi criada outra instância do viewport da sala.
 
+### Botão vermelho — ocupação e cooldown
+
+O alarme só fica disponível com um visitante comum da sessão confirmado no
+`CabinStopPoint`, usando o término de movimento do I4. Marta e Godofredo são
+instâncias separadas de `MartaActor` e não contam para liberar o botão.
+Durante a viagem no monitor, utiliza `riding` e a presença do passageiro existente
+no feed. Não há contador ou estado de ocupação adicional.
+
+No nó raiz de `reception_3d.tscn`, o Inspector expõe **Alarm Hold Seconds**
+(`alarm_hold_seconds`, padrão 5,0 s). Cada ativação válida executa a consequência
+original uma única vez, abaixa a cúpula em 0,1 s, mantém-na abaixada pelo tempo
+configurado e retorna em 0,15 s. Um único Tween bloqueia novas ativações até o
+retorno; a ocupação é consultada novamente antes de liberar o botão.
+O balão ativo de Marta ou Godofredo também bloqueia o alarme até a última
+página ser concluída pelo jogador. Esse bloqueio não interrompe o Tween; ao
+retornar, o botão continua indisponível enquanto houver fala ativa.
+Remover o componente ou trocar de cena cancela a animação. Telefone e outros
+sistemas continuam processando normalmente durante o cooldown.
+
+Teste direcionado (Godot 4.7.2, em cópia temporária):
+`godot --headless --fixed-fps 60 --path <projeto> -s res://src/gameplay/reception_25d/tests/reception_alarm_test.gd`.
+59 verificações aprovadas na Godot 4.7.2. Cobre cabines vazias, aproximação/entrada, chegada confirmada, cliques rápidos,
+retenção/retorno, saída durante cooldown, cabines 2/3, salvamento, advertências,
+configuração de duração e cancelamento ao remover/trocar a cena.
+
 ### Limpeza da Etapa C
 
 A auditoria de 06/11/2026 preservou a cadeia base → intermediária → final.

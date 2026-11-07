@@ -23,6 +23,8 @@ const CAMERA_POSITION := Vector3(0.0, 1.62, 2.4)
 
 ## Plays tutorial_intro.tres in this room instead of a day, then opens Day 1.
 @export var tutorial_mode: bool = false
+## Time the alarm remains down, excluding its press and return animations.
+@export_range(0.0, 60.0, 0.1, "or_greater", "suffix:s") var alarm_hold_seconds: float = 5.0
 
 var dressing: DressingScript
 var director: DirectorScript
@@ -95,6 +97,9 @@ func _create_desk() -> void:
 	devices = DevicesScript.new()
 	devices.name = "DeskDevices"
 	add_child(devices)
+	devices.alarm_hold_seconds = alarm_hold_seconds
+	devices.cabin_occupied = _has_elevator_occupant
+	devices.dialogue_active = _alarm_dialogue_active
 	devices.build($RoomViewport/Room)
 	note = NoteScript.new()
 	note.name = "SixthFloorNote"
@@ -136,6 +141,21 @@ func _finish_setup() -> void:
 	var indicator := get_node_or_null("ElevatorUI/ExplorationIndicator") as CanvasItem
 	if indicator:
 		indicator.hide()
+
+
+func _alarm_dialogue_active() -> bool:
+	if marta and marta.paper and marta.paper.visible:
+		return true
+	return story != null and story.godofredo.paper.visible
+
+
+func _has_elevator_occupant() -> bool:
+	if not is_inside_tree() or stage in [Stage.CANCELLED, Stage.UNSUPPORTED, Stage.LEAVING_SCENE]:
+		return false
+	if watch and watch.has_passenger():
+		return true
+	# Only the session's visitor boards through I4; named actors use separate MartaActor instances.
+	return stage == Stage.ENTERING_CABIN and _route_finished(cabin.cabin_stop_point)
 
 
 func _process(delta: float) -> void:

@@ -14,13 +14,17 @@ var phone: Interactable
 var alarm: Interactable
 var ringing: bool = false
 var off_hook: bool = false
+var alarm_hold_seconds: float = 5.0
+## Reads the existing boarding/ride state; no occupancy is stored here.
+var cabin_occupied: Callable
+var dialogue_active: Callable
 var _handset: Node3D
 var _handset_rest: Vector3
 var _led: MeshInstance3D
 var _dome: MeshInstance3D
 var _alarm_light: OmniLight3D
 var _alarm_flash: float = 0.0
-var _press: float = 0.0
+var _alarm_motion: Tween
 var _t: float = 0.0
 
 
@@ -118,10 +122,42 @@ func _build_alarm(anchor: Node3D) -> void:
 	_alarm_light.position = Vector3(0, 0.25, 0)
 	visual.add_child(_alarm_light)
 	alarm.configure(visual, Vector3(0.24, 0.16, 0.24))
-	alarm.activated.connect(func():
-		_press = 1.0
-		alarm_clicked.emit()
+	alarm.set_available(false)
+	alarm.activated.connect(_on_alarm_activated)
+
+
+func _can_press_alarm() -> bool:
+	return (
+		_alarm_motion == null
+		and cabin_occupied.is_valid()
+		and cabin_occupied.call()
+		and not (dialogue_active.is_valid() and dialogue_active.call())
 	)
+
+
+func _refresh_alarm_available() -> void:
+	var available := _can_press_alarm()
+	if alarm.available != available:
+		alarm.set_available(available)
+
+
+func _on_alarm_activated() -> void:
+	# Recheck even if the picker sampled availability before this NPC left the cabin.
+	if not _can_press_alarm():
+		return
+	alarm.set_available(false)
+	_alarm_motion = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_alarm_motion.tween_property(_dome, "position:y", 0.075, 0.1)
+	_alarm_motion.tween_interval(maxf(0.0, alarm_hold_seconds))
+	_alarm_motion.tween_property(_dome, "position:y", 0.095, 0.15)
+	_alarm_motion.tween_callback(_alarm_returned)
+	# The lock is already in place if a listener emits another activation synchronously.
+	alarm_clicked.emit()
+
+
+func _alarm_returned() -> void:
+	_alarm_motion = null
+	_refresh_alarm_available()
 
 
 func set_ringing(value: bool) -> void:
@@ -156,8 +192,7 @@ func _process(delta: float) -> void:
 		_handset.rotation.z = lerpf(_handset.rotation.z, tilt, clampf(delta * 14.0, 0.0, 1.0))
 		_led.visible = ringing and fmod(_t, 0.5) < 0.25
 	if is_instance_valid(_dome):
-		_press = maxf(0.0, _press - delta * 5.0)
-		_dome.position.y = 0.095 - _press * 0.02
+		_refresh_alarm_available()
 		var mat := _dome.material_override as StandardMaterial3D
 		if _alarm_flash > 0.0:
 			_alarm_flash -= delta
@@ -167,3 +202,13 @@ func _process(delta: float) -> void:
 		else:
 			mat.emission_energy_multiplier = 0.4 + (0.8 if alarm.hovered else 0.0)
 			_alarm_light.light_energy = 0.0
+
+
+func _exit_tree() -> void:
+	if _alarm_motion:
+		_alarm_motion.kill()
+		_alarm_motion = null
+	if is_instance_valid(alarm):
+		alarm.set_available(false)
+	if is_instance_valid(_dome):
+		_dome.position.y = 0.095

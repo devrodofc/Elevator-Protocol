@@ -181,6 +181,11 @@ func _follow(route: Array[Marker3D]) -> void:
 	movement.follow_route(route)
 
 
+## Same exact movement completion used by leave_into_cabin, including hidden cabin occupants.
+func is_in_cabin() -> bool:
+	return is_instance_valid(ground) and is_instance_valid(cabin) and _at(cabin.cabin_stop_point)
+
+
 func _at(target: Marker3D) -> bool:
 	var at := ground.global_position
 	var goal := target.global_position
