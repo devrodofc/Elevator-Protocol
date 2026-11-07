@@ -1,7 +1,7 @@
 extends Node3D
 ## A local instance of the original Dialogue, rendered onto paper in the world.
-## screen_space (static, set by the 3D game scene): uses the global Dialogue instead, drawn in the 2D
-## canvas at window resolution (sharp text) and placed beside the speaker's head every frame.
+## Optional legacy canvas mode; the final game uses the world sprite with fixed_to_actor instead.
+## Experimental scenes keep the world sprite's billboard by default.
 
 ## Off by default: the experimental scenes and their tests keep the paper in the world.
 static var screen_space: bool = false
@@ -14,6 +14,8 @@ var paper: Sprite3D
 var actor: Node3D
 var camera: Camera3D
 var modal: bool = false
+## Set before entering the tree; experimental scenes keep their billboard presentation.
+var fixed_to_actor: bool = false
 var _head_height: float = 2.4
 var _board: Control
 var _board_home: Vector2
@@ -39,9 +41,11 @@ func _ready() -> void:
 	dialogue.set_process_unhandled_input(false)
 	paper = Sprite3D.new()
 	paper.texture = viewport.get_texture()
-	paper.pixel_size = 0.014
+	paper.pixel_size = 0.011 if fixed_to_actor else 0.014
 	paper.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
-	paper.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	paper.billboard = (
+		BaseMaterial3D.BILLBOARD_DISABLED if fixed_to_actor else BaseMaterial3D.BILLBOARD_ENABLED
+	)
 	paper.shaded = false
 	add_child(paper)
 	hide()
@@ -54,6 +58,8 @@ func present(entry: Dictionary, visitor: Node3D, sprite: Sprite3D, view_camera: 
 	var head: float = sprite.position.y + (sprite.texture.get_height() * 0.5 - used.position.y) * sprite.pixel_size * sprite.scale.y
 	_head_height = head
 	position = Vector3(1.55, maxf(2.55, head + 0.35), 0)
+	if fixed_to_actor:
+		position = Vector3(1.2, head + 0.2, 0.05)
 	var speech: NPCDialogue = entry.get("dialogue")
 	Dialogue.clear_dialogue()
 	if screen_space:

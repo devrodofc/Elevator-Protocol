@@ -24,10 +24,10 @@ var _press: float = 0.0
 var _t: float = 0.0
 
 
-func build(room: Node3D, desk_top: float) -> void:
-	var desk: Node3D = room.get_node("ReceptionDesk")
-	_build_phone(desk, Vector3(-1.5, desk_top + 0.005, 1.05))
-	_build_alarm(desk, Vector3(1.26, desk_top + 0.005, 1.0))
+func build(room: Node3D) -> void:
+	var anchors: Node3D = room.get_node("ReceptionDesk/ServiceObjects")
+	_build_phone(anchors.get_node("PhoneRest"))
+	_build_alarm(anchors.get_node("AlarmRest"))
 
 
 func _box(parent: Node3D, size: Vector3, at: Vector3, color: Color, emission: float = 0.0) -> MeshInstance3D:
@@ -48,12 +48,10 @@ func _box(parent: Node3D, size: Vector3, at: Vector3, color: Color, emission: fl
 	return node
 
 
-func _build_phone(desk: Node3D, at: Vector3) -> void:
+func _build_phone(anchor: Node3D) -> void:
 	phone = Interactable.new()
 	phone.name = "DeskPhone"
-	phone.position = at
-	phone.rotation.y = deg_to_rad(18)
-	desk.add_child(phone)
+	anchor.add_child(phone)
 	var visual := Node3D.new()
 	phone.add_child(visual)
 	# Body with a sloped front, keypad and cradle.
@@ -76,12 +74,10 @@ func _build_phone(desk: Node3D, at: Vector3) -> void:
 	phone.activated.connect(func(): phone_clicked.emit())
 
 
-func _build_alarm(desk: Node3D, at: Vector3) -> void:
+func _build_alarm(anchor: Node3D) -> void:
 	alarm = Interactable.new()
 	alarm.name = "AlarmButton"
-	alarm.position = at
-	alarm.rotation.y = deg_to_rad(-18)
-	desk.add_child(alarm)
+	anchor.add_child(alarm)
 	var visual := Node3D.new()
 	alarm.add_child(visual)
 	# Yellow/black hazard base, red dome, label.

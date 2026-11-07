@@ -57,6 +57,7 @@ func setup(owner_scene: Node2D) -> void:
 	# Only the visitor's orientation reads P; this one follows it, so the key is never consumed twice.
 	orientation.set_process_input(false)
 	paper = Paper.new()
+	paper.fixed_to_actor = presentation.fixed_paper
 	ground.add_child(paper)
 
 

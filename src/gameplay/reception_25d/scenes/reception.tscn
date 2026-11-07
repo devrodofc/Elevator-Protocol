@@ -215,6 +215,32 @@ mesh = SubResource("Mesh_desk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.075, 0.6)
 mesh = SubResource("Mesh_counter")
 
+[node name="ServiceObjects" type="Node3D" parent="RoomViewport/Room/ReceptionDesk" parent_id_path=PackedInt32Array(1271229008) index="2" unique_id=472098477]
+
+[node name="BadgeRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" index="0" unique_id=1562139043]
+transform = Transform3D(1, 0, 0, 0, 0.96126169, -0.275637358, 0, 0.275637358, 0.96126169, 0, 0.996614695, 0.379999995)
+
+[node name="BookRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" index="1" unique_id=465052916]
+transform = Transform3D(1, 0, 0, 0, 0.939692616, -0.342020124, 0, 0.342020124, 0.939692616, 0.5, 1.04276562, 1.08000004)
+
+[node name="ClipboardRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" index="2" unique_id=1477899374]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.134656, 0.958, 1.046528)
+
+[node name="PanelRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects" index="3" unique_id=1743861178]
+transform = Transform3D(1, 0, 0, 0, 0.669130564, -0.74314487, 0, 0.74314487, 0.669130564, 1.16999996, 1.24240005, 1.12)
+
+[node name="MonitorRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects"]
+transform = Transform3D(0.965925813, 0, 0.258819044, 0, 1, 0, -0.258819044, 0, 0.965925813, -1.25, 0.935000002, 0.379999995)
+
+[node name="PhoneRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects"]
+transform = Transform3D(0.95105654, 0, 0.309017003, 0, 1, 0, -0.309017003, 0, 0.95105654, -0.718972, 0.935000002, 1.536455)
+
+[node name="AlarmRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects"]
+transform = Transform3D(0.95105654, 0, -0.309017003, 0, 1, 0, 0.309017003, 0, 0.95105654, -0.903945, 0.935000002, 0.899242)
+
+[node name="SixthFloorNoteRest" type="Marker3D" parent="RoomViewport/Room/ReceptionDesk/ServiceObjects"]
+transform = Transform3D(0.997564077, -0.0180543028, -0.0673795789, 0, 0.965925813, -0.258819044, 0.0697564706, 0.258188576, 0.963572919, 0.703426, 0.969941, 1.638389)
+
 [node name="VisitorGround" type="Node3D" parent="RoomViewport/Room" unique_id=655563280]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
 

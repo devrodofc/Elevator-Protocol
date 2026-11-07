@@ -1,6 +1,6 @@
 extends SceneTree
 ## I5/I6: Marta's actor, screen effects, intro, rules, failure, end of day and day progression.
-const SCENE = "res://src/gameplay/reception_25d/scenes/reception_gameplay_test.tscn"
+const SCENE = "res://src/gameplay/reception_25d/tests/reception_service_fixture.tscn"
 const Session = preload("res://src/gameplay/scripts/reception_session.gd")
 const Validator = preload("res://src/shared/scripts/rule_validator.gd")
 const Cabin = preload("res://src/gameplay/reception_25d/scripts/elevator_door.gd")

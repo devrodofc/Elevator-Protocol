@@ -1,5 +1,11 @@
 # I2 — primeira visita real no balcão 2.5D
 
+> Registro histórico: a cena intermediária citada neste documento foi removida na Etapa C (07/11/2026).
+> Os testes atuais usam `tests/reception_arrival_fixture.tscn` (I2) e `tests/reception_service_fixture.tscn`
+> (I3–I6), sob `src/gameplay/reception_25d/`, sem os sistemas narrativos do jogo final.
+> A arquitetura atual e os resultados da migração estão no README da recepção 2.5D.
+
+
 Entrega em 25/10/2026, branch `feat/2.5d-experiment`, Godot
 **4.7.2.stable.official.ed1daf0bf**, sem .NET, conforme `.godotrc`.
 Implementa somente chegada de uma visita. A revisão visual/interativa F6
@@ -150,7 +156,7 @@ sete execuções e os dois testes I1, depois:
 ## Roteiro F6 e preparação para I3
 
 1. Recarregar o projeto sem salvar recursos antigos. Abrir
-   `scenes/reception_gameplay_test.tscn`; no nó raiz escolher `Test Day = 1`
+   `tests/reception_arrival_fixture.tscn`; no nó raiz escolher `Test Day = 1`
    e `Initial Entrance = Esquerda`. Executar F6: configuração e entrada são
    automáticas, sem pressionar 1.
 2. Observar porta abrindo antes da caminhada, giro PAPER, pés/sombra no piso,

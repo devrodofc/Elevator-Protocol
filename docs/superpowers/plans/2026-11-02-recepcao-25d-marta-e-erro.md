@@ -1,5 +1,11 @@
 # Recepção 2.5D — Marta, erro e fim do dia: plano de implementação
 
+> Registro histórico: a cena intermediária citada neste documento foi removida na Etapa C (07/11/2026).
+> Os testes atuais usam `tests/reception_arrival_fixture.tscn` (I2) e `tests/reception_service_fixture.tscn`
+> (I3–I6), sob `src/gameplay/reception_25d/`, sem os sistemas narrativos do jogo final.
+> A arquitetura atual e os resultados da migração estão no README da recepção 2.5D.
+
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Na cena `reception_gameplay_test.tscn`, a Marta faz a introdução, dita as regras depois do 2º e do 4º

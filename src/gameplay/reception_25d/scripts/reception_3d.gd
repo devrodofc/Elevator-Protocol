@@ -1,7 +1,7 @@
 extends "res://src/gameplay/reception_25d/scripts/reception_presentation.gd"
 ## The game's reception, in 3D (main flow: menu → tutorial_3d → reception_3d, days 1 → 2 → 3 → end screen).
 ## Built on the tested 2.5D presentation (session, rules, Marta, departures); this layer adds:
-## - full-resolution 3D and screen-space speech (sharp text), a 2D HUD, better framing and camera controls;
+## - full-resolution 3D, fixed world-space speech, a 2D HUD and gameplay camera controls;
 ## - the desk dressed with the HUD art (desk_dressing.gd) and the horror layer (horror_director.gd);
 ## - the failure jump scare, the end of day with the indicator rising from the basement, the final scene;
 ## - tutorial_mode: the tutorial script played in the same room; F9 skips the day (test hack, like the 2D).
@@ -42,7 +42,7 @@ var retrying: bool = false
 
 
 func _ready() -> void:
-	PaperScript.screen_space = true
+	PaperScript.screen_space = false
 	_setup_view()
 	visual.shaded = true
 	# Human size (the 256 px art at 0.01 m/px made everyone ~2.3 m tall) and no odd sprite shadows.
@@ -95,11 +95,11 @@ func _create_desk() -> void:
 	devices = DevicesScript.new()
 	devices.name = "DeskDevices"
 	add_child(devices)
-	devices.build($RoomViewport/Room, DressingScript.DESK_TOP)
+	devices.build($RoomViewport/Room)
 	note = NoteScript.new()
 	note.name = "SixthFloorNote"
 	add_child(note)
-	note.build($RoomViewport/Room, DressingScript.DESK_TOP)
+	note.build($RoomViewport/Room)
 	_names = {desk.book: "Livro de andares", desk.clipboard: "Regras do dia", desk.badge: "Crachá do visitante",
 		desk.confirm: "Confirmar", devices.phone: "Telefone", devices.alarm: "ALARME do elevador",
 		note.body: "Quem pode subir ao 6º andar"}
@@ -130,8 +130,6 @@ func _finish_setup() -> void:
 		add_child(story)
 		story.setup(self)
 		watch.anomaly_started.connect(story.on_anomaly)
-		# No gameplay music: the room hum, the phone and the elevator are the soundtrack.
-		Audio.stop_music()
 	_day_total = session.queue_data.size()
 	if not rule_announced.is_connected(_on_rule_announced):
 		rule_announced.connect(_on_rule_announced)
@@ -145,8 +143,15 @@ func _process(delta: float) -> void:
 	if hud == null or desk == null:
 		return
 	# A consultation (book, rules, badge) hides the speech balloon instead of fighting it for space.
-	var board := Dialogue.get_node("Board") as CanvasItem
-	board.modulate.a = move_toward(board.modulate.a, 0.0 if not desk.modal.kind.is_empty() else 1.0, delta * 8.0)
+	var papers: Array = [desk.paper]
+	if marta:
+		papers.append(marta.paper)
+	if story:
+		papers.append(story.godofredo.paper)
+	for balloon in papers:
+		var board: CanvasItem = balloon.dialogue.get_node("Board")
+		var target_alpha := 0.0 if not desk.modal.kind.is_empty() else 1.0
+		board.modulate.a = move_toward(board.modulate.a, target_alpha, delta * 8.0)
 	var hovered: Node = desk.picker.hovered if is_instance_valid(desk.picker.hovered) else null
 	hud.set_tooltip(_names.get(hovered, "") if hovered else "")
 	$RoomViewport/Room/ReceptionCamera.edge_hold = hovered != null
@@ -475,6 +480,8 @@ func _finale(generation: int) -> void:
 # --- tutorial --------------------------------------------------------------------------------------
 
 func _ready_tutorial() -> void:
+	MusicMenu.stop_music()
+	Audio.stop_music()
 	dia_em_andamento = null
 	_retry_day = 0
 	DirectorScript.victims.clear()
